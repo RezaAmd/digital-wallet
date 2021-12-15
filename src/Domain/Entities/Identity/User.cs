@@ -21,7 +21,7 @@ namespace Domain.Entities.Identity
             PhoneNumber = phoneNumber;
 
             JoinedDate = DateTime.Now;
-            isBanned = false;
+            IsBanned = false;
         }
 
         #endregion

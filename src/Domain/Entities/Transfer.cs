@@ -1,10 +1,9 @@
-﻿using Domain.Entities.Identity;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class TransactionHistory
+    public class Transfer
     {
         public string Id { get; set; }
         public double Amount { get; set; }
