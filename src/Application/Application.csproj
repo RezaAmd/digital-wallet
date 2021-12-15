@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="C:\Users\Reza\.nuget\packages\rest.service\1.0.4\contentFiles\any\net5.0\favicon.ico" />
     <Content Remove="C:\Users\Vatandar Developer\.nuget\packages\rest.service\1.0.4\contentFiles\any\net5.0\favicon.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
