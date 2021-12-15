@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces.Context;
+using Domain.Entities;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +18,10 @@ namespace Infrastructure.Persistence.Context
         }
 
         #region Custom tables
-        // public virtual DbSet<Model> Name { get; set; }
+        public virtual DbSet<Wallet> Wallets { get; set; }
+        public virtual DbSet<Deposit> Deposits { get; set; }
+        public virtual DbSet<Transfer> Transfers { get; set; }
+
         #endregion
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

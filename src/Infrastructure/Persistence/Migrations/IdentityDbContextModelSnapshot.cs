@@ -16,94 +16,8 @@ namespace Infrastructure.Persistence.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.12")
+                .HasAnnotation("ProductVersion", "5.0.13")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Domain.Entities.Identity.Branch", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Branches");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.ClubTransaction", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<long>("Amount")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("CurrentScore")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("ClubTransactions");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.Merchant", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("JoinedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("OwnerId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("SecretKey")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("isBanned")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.HasIndex("OwnerId");
-
-                    b.ToTable("Merchants");
-                });
 
             modelBuilder.Entity("Domain.Entities.Identity.Role", b =>
                 {
@@ -168,12 +82,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("BranchId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -185,22 +93,11 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("FathersName")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<int>("Gender")
-                        .HasColumnType("int");
-
-                    b.Property<string>("IdentityLetter")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                    b.Property<bool>("IsBanned")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("JoinedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Language")
-                        .HasColumnType("int");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -230,14 +127,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ReferralCode")
-                        .HasMaxLength(5)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<int>("RegionCode")
-                        .HasColumnType("int");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -248,26 +137,11 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<string>("WalletId")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.Property<bool>("isBanned")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("parentId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("BranchId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -276,8 +150,6 @@ namespace Infrastructure.Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Users");
                 });
@@ -362,28 +234,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Identity.ClubTransaction", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.User", "User")
-                        .WithMany("ClubTransactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.Merchant", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.User", "Owner")
-                        .WithMany("Merchantes")
-                        .HasForeignKey("OwnerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Owner");
-                });
-
             modelBuilder.Entity("Domain.Entities.Identity.RoleClaim", b =>
                 {
                     b.HasOne("Domain.Entities.Identity.Role", "Role")
@@ -393,19 +243,6 @@ namespace Infrastructure.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Identity.User", b =>
-                {
-                    b.HasOne("Domain.Entities.Identity.Branch", "Branch")
-                        .WithMany("Employees")
-                        .HasForeignKey("BranchId");
-
-                    b.HasOne("Domain.Entities.Identity.User", null)
-                        .WithMany("Children")
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Branch");
                 });
 
             modelBuilder.Entity("Domain.Entities.Identity.UserClaim", b =>
@@ -460,11 +297,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Identity.Branch", b =>
-                {
-                    b.Navigation("Employees");
-                });
-
             modelBuilder.Entity("Domain.Entities.Identity.Role", b =>
                 {
                     b.Navigation("RoleClaims");
@@ -474,15 +306,9 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Domain.Entities.Identity.User", b =>
                 {
-                    b.Navigation("Children");
-
                     b.Navigation("Claims");
 
-                    b.Navigation("ClubTransactions");
-
                     b.Navigation("Logins");
-
-                    b.Navigation("Merchantes");
 
                     b.Navigation("Tokens");
 
