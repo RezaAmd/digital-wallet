@@ -10,13 +10,15 @@ namespace Domain.Entities
         public double Amount { get; set; }
         public double Balance { get; set; }
         public DateTime DateTime { get; set; }
-
+        public string Description { get; set; }
+#nullable enable
         [ForeignKey("Origin")]
-        public string OriginId { get; set; }
+        public string? OriginId { get; set; }
+#nullable disable
         [ForeignKey("Destination")]
         public string DestinationId { get; set; }
 
-        public virtual User Origin { get; set; }
-        public virtual User Destination { get; set; }
+        public virtual Wallet Origin { get; set; }
+        public virtual Wallet Destination { get; set; }
     }
 }
