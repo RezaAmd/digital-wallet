@@ -17,11 +17,20 @@ namespace Application.Services
         }
         #endregion
 
+        /// <summary>
+        /// Find wallet by id.
+        /// </summary>
+        /// <param name="id">Wallet id</param>
+        /// <returns>Wallet model object.</returns>
         public async Task<Wallet> FindByIdAsync(string id)
         {
             return await context.Wallets.FindAsync(id);
         }
 
+        /// <summary>
+        /// Create a new wallet.
+        /// </summary>
+        /// <param name="wallet">New wallet model object.</param>
         public async Task<Result> CreateAsync(Wallet wallet, CancellationToken cancellationToken = default)
         {
             await context.Wallets.AddAsync(wallet);
@@ -30,6 +39,10 @@ namespace Application.Services
             return Result.Failed();
         }
 
+        /// <summary>
+        /// Update wallet object.
+        /// </summary>
+        /// <param name="wallet">Wallet model object.</param>
         public async Task<Result> UpdateAsync(Wallet wallet, CancellationToken cancellationToken = default)
         {
             context.Wallets.Update(wallet);
@@ -38,6 +51,10 @@ namespace Application.Services
             return Result.Failed();
         }
 
+        /// <summary>
+        /// Delete a wallet.
+        /// </summary>
+        /// <param name="wallet">Wallet model object.</param>
         public async Task<Result> DeleteAsync(Wallet wallet, CancellationToken cancellationToken = default)
         {
             context.Wallets.Remove(wallet);
