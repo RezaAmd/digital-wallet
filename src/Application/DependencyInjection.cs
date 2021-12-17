@@ -8,10 +8,11 @@ namespace Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services)
+        public static IServiceCollection AddLogicServices(this IServiceCollection services)
         {
             // Identity Service Life Time
             services.AddScoped<ErrorDescriber>()
+                .AddScoped<ISignInService, SignInService>()
                 .AddScoped<IUserService, UserService>()
                 .AddScoped<RoleService>()
                 .AddTransient<IMapper, Mapper>();
