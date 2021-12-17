@@ -1,3 +1,4 @@
+using Application;
 using Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,7 @@ namespace IdentityApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructure();
+            services.AddLogicServices();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
