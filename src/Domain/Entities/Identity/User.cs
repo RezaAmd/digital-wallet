@@ -4,20 +4,18 @@ using System.Collections.Generic;
 
 namespace Domain.Entities.Identity
 {
-    public class User : IdentityUser
+    public class User
     {
         #region Constructors
         User() { }
         public User(string username)
         {
             UserName = username;
-            NormalizedUserName = username.ToUpper();
         }
 
         public User(string username, string phoneNumber)
         {
             UserName = username;
-            NormalizedUserName = username.ToUpper();
             PhoneNumber = phoneNumber;
 
             JoinedDate = DateTime.Now;
@@ -26,6 +24,13 @@ namespace Domain.Entities.Identity
 
         #endregion
 
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string Password { get; set; }
+        public string Email { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
 #nullable enable
         public string? Name { get; set; }
         public string? Surname { get; set; }

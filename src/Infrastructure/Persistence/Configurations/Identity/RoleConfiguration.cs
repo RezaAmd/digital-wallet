@@ -15,12 +15,6 @@ namespace Infrastructure.Persistence.Configurations.Identity
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
 
-            // Each Role can have many associated RoleClaims
-            b.HasMany(e => e.RoleClaims)
-                .WithOne(e => e.Role)
-                .HasForeignKey(rc => rc.RoleId)
-                .IsRequired();
-
             b.HasIndex(r => r.Name)
                 .IsUnique();
         }
