@@ -78,8 +78,8 @@ namespace Application.Services.Identity
                 init = init.AsNoTracking();
             // search
             if (!string.IsNullOrEmpty(keyword))
-                init = init.Where(u => keyword.Contains(u.NormalizedUserName) || keyword.Contains(u.Name)
-                 || keyword.Contains(u.Surname));
+                init = init.Where(u => keyword.Contains(u.UserName) || keyword.Contains(u.Name)
+                 || keyword.Contains(u.Surname) || keyword.Contains(u.Email));
 
             // include roles
             if (withRoles)
@@ -89,19 +89,20 @@ namespace Application.Services.Identity
             return await init
                 .ProjectToType<TDestination>(config)
                 .PaginatedListAsync(page, pageSize, cancellationToken);
+
         }
 
         /// <summary>
-        /// Find by (Username or Phone number or Email)
+        /// Find user by identity (Username or Phone number or Email)
         /// </summary>
         /// <param name="identity">identity for find</param>
-        /// <returns>user</returns>
         public async Task<User> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
-            bool withClaims = false, bool withTokens = false, TypeAdapterConfig config = null)
+            TypeAdapterConfig config = null)
         {
-            var init = context.Users.Where(u => u.NormalizedUserName == identity.ToUpper()
+            identity = identity.ToLower();
+            var init = context.Users.Where(u => u.UserName == identity
             || u.PhoneNumber == identity
-            || u.NormalizedEmail == identity.ToUpper()
+            || u.Email == identity
             || u.Id == identity);
             #region include's
             if (asNoTracking)
@@ -109,10 +110,6 @@ namespace Application.Services.Identity
             if (withRoles)
                 init = init.Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role);
-            if (withClaims)
-                init = init.Include(u => u.Claims);
-            if (withTokens)
-                init = init.Include(u => u.Tokens);
             #endregion
             return await init.FirstOrDefaultAsync();
         }
@@ -129,11 +126,6 @@ namespace Application.Services.Identity
                 }
             var jwtResult = jwtService.GenerateToken(claims, expire);
             return jwtResult;
-        }
-
-        Task<PasswordVerificationResult> IUserService.VerifyPasswordAsync(IUserPasswordStore<User> store, User user, string password)
-        {
-            return VerifyPasswordAsync(store, user, password);
         }
 
         #region Otp and verify
