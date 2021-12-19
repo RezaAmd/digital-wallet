@@ -8,10 +8,9 @@ namespace Application.Interfaces.Context
 {
     public interface IDbContext
     {
-        #region Identity
         DbSet<User> Users { get; set; }
         DbSet<Role> Roles { get; set; }
-        #endregion
+        DbSet<Bank> Banks { get; set; }
         DbSet<Wallet> Wallets { get; set; }
         DbSet<Deposit> Deposits { get; set; }
         DbSet<Transfer> Transfers { get; set; }

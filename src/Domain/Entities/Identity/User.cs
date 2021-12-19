@@ -40,6 +40,7 @@ namespace Domain.Entities.Identity
 
         #region Relation
         public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<Bank> Banks { get; set; }
         #endregion
     }
 }

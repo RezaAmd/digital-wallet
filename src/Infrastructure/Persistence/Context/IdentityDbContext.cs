@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence.Context
 
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Bank> Banks { get; set; }
         public virtual DbSet<Wallet> Wallets { get; set; }
         public virtual DbSet<Deposit> Deposits { get; set; }
         public virtual DbSet<Transfer> Transfers { get; set; }

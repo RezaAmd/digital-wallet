@@ -50,11 +50,6 @@ namespace Infrastructure
             });
             #endregion
 
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<IdentityDbContext>()
-                .AddErrorDescriber<ErrorDescriber>()
-                .AddDefaultTokenProviders();
-
             services.AddScoped<IDbContext, IdentityDbContext>()
                 .AddRestServices();
 
