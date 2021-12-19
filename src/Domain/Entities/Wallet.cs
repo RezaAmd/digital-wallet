@@ -23,7 +23,10 @@ namespace Domain.Entities
 #nullable enable
         [ForeignKey("Owner")]
         public string? OwnerId { get; set; }
+        [ForeignKey("Bank")]
+        public string? BankId { get; set; }
 #nullable disable
+        public virtual Bank Bank { get; set; }
         public virtual User Owner { get; set; }
     }
 }
