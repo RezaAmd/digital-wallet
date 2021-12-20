@@ -1,8 +1,10 @@
-﻿using Application.Interfaces;
+﻿using Application.Extentions;
+using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +19,19 @@ namespace Application.Services
             context = _context;
         }
         #endregion
+
+        /// <summary>
+        /// Get all wallets.
+        /// </summary>
+        /// <param name="bankId">Bank id for get wallets of specific bank.</param>
+        public async Task<PaginatedList<Wallet>> GetAllAsync(string bankId = null, int page = 1, int pageSize = 10,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            var wallets = context.Wallets.AsQueryable();
+            if (!string.IsNullOrEmpty(bankId))
+                wallets = wallets.Where(b => b.BankId == bankId);
+            return await wallets.PaginatedListAsync(page, pageSize, cancellationToken);
+        }
 
         /// <summary>
         /// Find wallet by id.
@@ -47,7 +62,7 @@ namespace Application.Services
         public async Task<Result> UpdateAsync(Wallet wallet, CancellationToken cancellationToken = default)
         {
             context.Wallets.Update(wallet);
-            if(Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+            if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
                 return Result.Success;
             return Result.Failed();
         }
