@@ -1,4 +1,5 @@
 ﻿using Application.Extentions;
+using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class TransferService
+    public class TransferService : ITransferService
     {
         #region Constructor
         private readonly IDbContext context;

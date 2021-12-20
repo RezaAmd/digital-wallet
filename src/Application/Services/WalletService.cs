@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Context;
+﻿using Application.Interfaces;
+using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
 using System;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class WalletService
+    public class WalletService : IWalletService
     {
         #region Dependency Injection
         private readonly IDbContext context;

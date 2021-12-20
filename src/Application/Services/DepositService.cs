@@ -1,4 +1,5 @@
 ﻿using Application.Extentions;
+using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class DepositService
+    public class DepositService : IDepositService
     {
         #region Initialize
         private readonly IDbContext context;
