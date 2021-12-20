@@ -1,9 +1,8 @@
-﻿using Application.Interfaces.Context;
+﻿using Application.Extentions;
+using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
-using Domain.Entities.Identity;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Threading;
@@ -28,18 +27,31 @@ namespace Application.Services
         public async Task<Result> CreateAsync(Bank bank, CancellationToken cancellationToken = new CancellationToken())
         {
             await context.Banks.AddAsync(bank);
-            if(Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+            if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
                 return Result.Success;
             return Result.Failed();
+        }
+
+        public async Task<PaginatedList<Bank>> GetAllAsync(string userId = null, int page = 1, int pageSize = 10, string keyword = null,
+            CancellationToken cancellationToken = new CancellationToken())
+        {
+            var banks = context.Banks.AsQueryable();
+            #region Filters
+            if (userId == null)
+                banks = banks.Where(b => b.OwnerId == userId);
+            if (!string.IsNullOrEmpty(userId))
+                banks = banks.Where(b => keyword.Contains(b.Name));
+            #endregion
+            return await banks.PaginatedListAsync(page, pageSize, cancellationToken);
         }
 
         /// <summary>
         /// Find a specific bank in general banks.
         /// </summary>
         /// <param name="id">Bank id to find.</param>
-        public async Task<Bank> FindByIdAsync(string id)
+        public async Task<Bank> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken())
         {
-            return await context.Banks.FindAsync(id);
+            return await context.Banks.FindAsync(id, cancellationToken);
         }
 
         /// <summary>
@@ -48,9 +60,12 @@ namespace Application.Services
         /// <param name="userId"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Bank> FindByIdAsync(string userId, string id)
+        public async Task<Bank> FindByIdAsync(string id, string userId = null, CancellationToken cancellationToken = new CancellationToken())
         {
-            return await context.Banks.Where(b=>b.Id == id && b.OwnerId == userId).FirstOrDefaultAsync();
+            var banks = context.Banks.Where(b => b.Id == id);
+            if (!string.IsNullOrEmpty(userId)) // Fetch bank for special owner.
+                banks = banks.Where(b => b.OwnerId == userId);
+            return await banks.FirstOrDefaultAsync(cancellationToken);
         }
 
         /// <summary>
@@ -60,7 +75,7 @@ namespace Application.Services
         public async Task<Result> UpdateAsync(Bank bank, CancellationToken cancellationToken = new CancellationToken())
         {
             context.Banks.Update(bank);
-            if(Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+            if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
                 return Result.Success;
             return Result.Failed();
         }
