@@ -1,4 +1,5 @@
 ﻿using Application.Extentions;
+using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class BankService
+    public class BankService : IBankService
     {
         #region Initialize
         private readonly IDbContext context;
@@ -32,6 +33,13 @@ namespace Application.Services
             return Result.Failed();
         }
 
+        /// <summary>
+        /// Get all banks as paginated.
+        /// </summary>
+        /// <param name="userId">Filter for for specific owner.</param>
+        /// <param name="page">Number of page.</param>
+        /// <param name="pageSize">Current page items count.</param>
+        /// <param name="keyword">Keyword for search in bank name.</param>
         public async Task<PaginatedList<Bank>> GetAllAsync(string userId = null, int page = 1, int pageSize = 10, string keyword = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
@@ -43,15 +51,6 @@ namespace Application.Services
                 banks = banks.Where(b => keyword.Contains(b.Name));
             #endregion
             return await banks.PaginatedListAsync(page, pageSize, cancellationToken);
-        }
-
-        /// <summary>
-        /// Find a specific bank in general banks.
-        /// </summary>
-        /// <param name="id">Bank id to find.</param>
-        public async Task<Bank> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken())
-        {
-            return await context.Banks.FindAsync(id, cancellationToken);
         }
 
         /// <summary>
