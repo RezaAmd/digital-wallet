@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity
 {
@@ -43,11 +44,14 @@ namespace Domain.Entities.Identity
 #nullable enable
         public string? Name { get; set; }
         public string? Surname { get; set; }
+        [ForeignKey("Wallet")]
+        public string? WalletId { get; set; }
 #nullable disable
         public DateTime JoinedDate { get; set; }
         public bool IsBanned { get; set; }
 
         #region Relation
+        public virtual Wallet Wallet { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<Bank> Banks { get; set; }
         #endregion
