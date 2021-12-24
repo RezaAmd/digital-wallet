@@ -33,10 +33,13 @@ namespace IdentityApi.Areas.Manage.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<object>> GetAll(int page = 1)
+        public async Task<ApiResult<object>> GetAll(string bankId = null, int page = 1, CancellationToken cancellationToken = new CancellationToken())
         {
             int pageSize = 10;
-            var banks = await walletService.
+            var wallets = await walletService.GetAllAsync(bankId, page, pageSize);
+            if (wallets.totalCount > 0)
+                return Ok(wallets);
+            return NotFound(wallets);
         }
     }
 }
