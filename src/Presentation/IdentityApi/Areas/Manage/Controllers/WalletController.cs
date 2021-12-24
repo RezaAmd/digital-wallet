@@ -1,5 +1,6 @@
 ﻿using Application.Extentions;
 using Application.Interfaces;
+using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities;
 using IdentityApi.Areas.Manage.Models;
@@ -19,9 +20,12 @@ namespace IdentityApi.Areas.Manage.Controllers
     {
         #region Dependency Injection
         private readonly IWalletService walletService;
-        public WalletController(IWalletService _walletService)
+        private readonly IUserService userService;
+        public WalletController(IWalletService _walletService,
+            IUserService _userService)
         {
             walletService = _walletService;
+            userService = _userService;
         }
         #endregion
 
@@ -29,10 +33,10 @@ namespace IdentityApi.Areas.Manage.Controllers
         [ModelStateValidate]
         public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = new CancellationToken())
         {
-            var newWallet = new Wallet(model.seed, model.userId, model.bankId);
+            var newWallet = new Wallet(model.seed, model.bankId);
             var result = await walletService.CreateAsync(newWallet, cancellationToken);
             if (result.Succeeded)
-                return Ok(newWallet.Id);
+                return Ok("Wallet " + newWallet.Id + " Successfully created.");
             return BadRequest();
         }
 
@@ -40,19 +44,19 @@ namespace IdentityApi.Areas.Manage.Controllers
         public async Task<ApiResult<object>> GetAll(string bankId = null, int page = 1, CancellationToken cancellationToken = new CancellationToken())
         {
             int pageSize = 10;
-            var wallets = await walletService.GetAllAsync(bankId, page, pageSize);
+            var wallets = await walletService.GetAllAsync(bankId, page, pageSize, cancellationToken);
             if (wallets.totalCount > 0)
                 return Ok(wallets);
             return NotFound(wallets);
         }
 
         [HttpGet]
-        public async Task<ApiResult<object>> Delete(string id)
+        public async Task<ApiResult<object>> Delete(string id, CancellationToken cancellationToken = new CancellationToken())
         {
             var wallet = await walletService.FindByIdAsync(id);
             if (wallet != null)
             {
-                var result = await walletService.DeleteAsync(wallet);
+                var result = await walletService.DeleteAsync(wallet, cancellationToken);
                 if (result.Succeeded)
                     return Ok("Wallet deleted successfully!");
                 return BadRequest(result.Errors);

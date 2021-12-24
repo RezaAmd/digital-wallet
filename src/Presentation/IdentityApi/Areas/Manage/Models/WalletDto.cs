@@ -8,7 +8,6 @@ namespace IdentityApi.Areas.Manage.Models
         public string seed { get; set; }
 #nullable enable
         public string? bankId { get; set; }
-        public string? userId { get; set; }
 #nullable disable
     }
 }
