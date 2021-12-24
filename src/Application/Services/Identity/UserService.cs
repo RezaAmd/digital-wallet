@@ -35,6 +35,11 @@ namespace Application.Services.Identity
         }
         #endregion
 
+        public async Task<User> FindByIdAsync(string id)
+        {
+            return await context.Users.FindAsync(id);
+        }
+
         /// <summary>
         /// Create a new user.
         /// </summary>
@@ -49,6 +54,18 @@ namespace Application.Services.Identity
                 if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
                     return Result.Success;
             }
+            return Result.Failed();
+        }
+
+        /// <summary>
+        /// Update an specific user.
+        /// </summary>
+        /// <param name="user">Modified user you want to update.</param>
+        public async Task<Result> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+        {
+            context.Users.Update(user);
+            if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+                return Result.Success;
             return Result.Failed();
         }
 

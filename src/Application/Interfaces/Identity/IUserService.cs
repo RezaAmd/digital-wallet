@@ -9,11 +9,18 @@ namespace Application.Interfaces.Identity
 {
     public interface IUserService
     {
+        Task<User> FindByIdAsync(string id);
         /// <summary>
         /// Create a new user.
         /// </summary>
         /// <param name="user">New user object model.</param>
         Task<Result> CreateAsync(User user, string password, CancellationToken cancellationToken = new CancellationToken());
+
+        /// <summary>
+        /// Update an specific user.
+        /// </summary>
+        /// <param name="user">Modified user you want to update.</param>
+        Task<Result> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Get All Users List as Paginated List.
