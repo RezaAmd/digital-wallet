@@ -3,6 +3,8 @@ using Application.Interfaces;
 using Application.Models;
 using Domain.Entities;
 using IdentityApi.Areas.Manage.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,7 +12,9 @@ using System.Threading.Tasks;
 namespace IdentityApi.Areas.Manage.Controllers
 {
     [ApiController]
+    [Area("Manage")]
     [Route("[area]/[controller]/[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
@@ -25,7 +29,7 @@ namespace IdentityApi.Areas.Manage.Controllers
         [ModelStateValidate]
         public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = new CancellationToken())
         {
-            var newWallet = new Wallet(model.seed);
+            var newWallet = new Wallet(model.seed, model.userId, model.bankId);
             var result = await walletService.CreateAsync(newWallet, cancellationToken);
             if (result.Succeeded)
                 return Ok(newWallet.Id);

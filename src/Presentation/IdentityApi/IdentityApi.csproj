@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
-    <Folder Include="Areas\Identity\Models\" />
     <Folder Include="Areas\Manage\Views\" />
     <Folder Include="Controllers\" />
   </ItemGroup>
