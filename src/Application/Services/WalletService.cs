@@ -30,6 +30,8 @@ namespace Application.Services
             var wallets = context.Wallets.AsQueryable();
             if (!string.IsNullOrEmpty(bankId))
                 wallets = wallets.Where(b => b.BankId == bankId);
+            else
+                wallets = wallets.Where(w => w.BankId == null);
             return await wallets.PaginatedListAsync(page, pageSize, cancellationToken);
         }
 

@@ -8,6 +8,12 @@ namespace Application.Interfaces
     public interface IWalletService
     {
         /// <summary>
+        /// Get all wallets.
+        /// </summary>
+        /// <param name="bankId">Bank id for get wallets of specific bank.</param>
+        Task<PaginatedList<Wallet>> GetAllAsync(string bankId = null, int page = 1, int pageSize = 10,
+            CancellationToken cancellationToken = new CancellationToken());
+        /// <summary>
         /// Find wallet by id.
         /// </summary>
         /// <param name="id">Wallet id</param>
