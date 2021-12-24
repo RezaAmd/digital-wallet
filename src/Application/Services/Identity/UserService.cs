@@ -1,69 +1,59 @@
 ﻿using Application.Extentions;
-using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities.Identity;
 using Mapster;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Application.Services.Identity
 {
-    public class UserService : UserManager<User>, IUserService
+    public class UserService : IUserService
     {
         #region Constructor
-        private readonly IUserStore<User> store;
-        private readonly IOptions<IdentityOptions> options;
-        private readonly IPasswordHasher<User> passwordHasher;
-        private readonly IEnumerable<IUserValidator<User>> userValidators;
-        private readonly IEnumerable<IPasswordValidator<User>> passwordValidators;
-        private readonly ILookupNormalizer normalizer;
-        private readonly ErrorDescriber errors;
-        private readonly IServiceProvider serviceProvider;
-        private readonly ILogger<UserManager<User>> logger;
+        //private readonly IUserStore<User> store;
+        //private readonly IOptions<IdentityOptions> options;
+        //private readonly IPasswordHasher<User> passwordHasher;
+        //private readonly IEnumerable<IUserValidator<User>> userValidators;
+        //private readonly IEnumerable<IPasswordValidator<User>> passwordValidators;
+        //private readonly ILookupNormalizer normalizer;
+        //private readonly ErrorDescriber errors;
+        //private readonly IServiceProvider serviceProvider;
+        //private readonly ILogger<UserManager<User>> logger;
+        //private readonly IJwtService jwtService;
+        private readonly string passwordEncryptionSalt = "950922";
         private readonly IDbContext context;
-        private readonly IJwtService jwtService;
 
-        public UserService(IUserStore<User> _store,
-            IOptions<IdentityOptions> _options,
-            IPasswordHasher<User> _passwordHasher,
-            IEnumerable<IUserValidator<User>> _userValidators,
-            IEnumerable<IPasswordValidator<User>> _passwordValidators,
-            ILookupNormalizer _normalizer,
-            ErrorDescriber _errors,
-            IServiceProvider _serviceProvider,
-            ILogger<UserManager<User>> _logger,
-            IDbContext _context,
-            IJwtService _jwtService)
-            : base(_store, _options, _passwordHasher, _userValidators, _passwordValidators,
-                _normalizer, _errors, _serviceProvider, _logger)
+        public UserService(IDbContext _context)
         {
-            store = _store;
-            options = _options;
-            passwordHasher = _passwordHasher;
-            userValidators = _userValidators;
-            passwordValidators = _passwordValidators;
-            normalizer = _normalizer;
-            errors = _errors;
-            serviceProvider = _serviceProvider;
-            logger = _logger;
             context = _context;
-            jwtService = _jwtService;
         }
         #endregion
 
         /// <summary>
-        /// 
+        /// Create a new user.
+        /// </summary>
+        /// <param name="user">New user object model.</param>
+        public async Task<Result> CreateAsync(User user, string password, CancellationToken cancellationToken = new CancellationToken())
+        {
+            if (user != null)
+            {
+                if (password != null)
+                    user.Password = password.Encrypt(passwordEncryptionSalt);
+                await context.Users.AddAsync(user);
+                if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+                    return Result.Success;
+            }
+            return Result.Failed();
+        }
+
+        /// <summary>
+        /// Get All Users List as Paginated List.
         /// </summary>
         /// <param name="keyword">Search to username, name, surname, fathersName and identityLetter.</param>
         /// <param name="gender">Fillter as gender.</param>
@@ -114,18 +104,18 @@ namespace Application.Services.Identity
             return await init.FirstOrDefaultAsync();
         }
 
-        public (Result Status, string Token) GenerateJwtToken(User user, DateTime? expire = default)
+        /// <summary>
+        /// Check user password is correct or not.
+        /// </summary>
+        /// <param name="user">User model object with password.</param>
+        /// <param name="password">The password you want to check.</param>
+        /// <returns>true/false</returns>
+        public bool CheckPassword(User user, string password)
         {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
-            if (user.UserRoles != null)
-                foreach (var role in user.UserRoles)
-                {
-                    claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
-                }
-            var jwtResult = jwtService.GenerateToken(claims, expire);
-            return jwtResult;
+            string encryptedPassword = password.Encrypt(passwordEncryptionSalt);
+            if (user.Password == encryptedPassword)
+                return true;
+            return false;
         }
 
         #region Otp and verify

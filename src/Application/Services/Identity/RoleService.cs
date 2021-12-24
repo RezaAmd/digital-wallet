@@ -13,32 +13,17 @@ using System.Threading.Tasks;
 
 namespace Application.Services.Identity
 {
-    public class RoleService : RoleManager<Role>
+    public class RoleService
     {
         #region Constructor
-        private readonly IRoleStore<Role> roleStore;
-        private readonly IEnumerable<IRoleValidator<Role>> roleValidator;
-        private readonly ILookupNormalizer keyNormalizer;
-        private readonly ErrorDescriber error;
-        private readonly ILogger<RoleManager<Role>> logger;
+        //private readonly IRoleStore<Role> roleStore;
+        //private readonly IEnumerable<IRoleValidator<Role>> roleValidator;
+        //private readonly ILookupNormalizer keyNormalizer;
+        //private readonly ErrorDescriber error;
+        //private readonly ILogger<RoleManager<Role>> logger;
         private readonly IDbContext context;
-        public RoleService(IRoleStore<Role> _roleStore,
-            IEnumerable<IRoleValidator<Role>> _roleValidator,
-            ILookupNormalizer _keyNormalizer,
-            ErrorDescriber _error,
-            ILogger<RoleManager<Role>> _logger,
-            IDbContext _context)
-            : base(_roleStore,
-                  _roleValidator,
-                  _keyNormalizer,
-                  _error,
-                  _logger)
+        public RoleService(IDbContext _context)
         {
-            roleStore = _roleStore;
-            roleValidator = _roleValidator;
-            keyNormalizer = _keyNormalizer;
-            error = _error;
-            logger = _logger;
             context = _context;
         }
 
