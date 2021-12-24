@@ -41,5 +41,19 @@ namespace IdentityApi.Areas.Manage.Controllers
                 return Ok(wallets);
             return NotFound(wallets);
         }
+
+        [HttpGet]
+        public async Task<ApiResult<object>> Delete(string id)
+        {
+            var wallet = await walletService.FindByIdAsync(id);
+            if (wallet != null)
+            {
+                var result = await walletService.DeleteAsync(wallet);
+                if (result.Succeeded)
+                    return Ok("Wallet deleted successfully!");
+                return BadRequest(result.Errors);
+            }
+            return NotFound("Wallet not found.");
+        }
     }
 }
