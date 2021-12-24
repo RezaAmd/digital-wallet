@@ -1,5 +1,7 @@
-﻿using Application.Interfaces.Identity;
+﻿using Application.Interfaces;
+using Application.Interfaces.Identity;
 using Application.Models;
+using Application.Services;
 using Application.Services.Identity;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +14,13 @@ namespace Application
         {
             // Identity Service Life Time
             services.AddScoped<ErrorDescriber>()
-                .AddScoped<ISignInService, SignInService>()
+                .AddHttpContextAccessor()
                 .AddScoped<IUserService, UserService>()
+                .AddTransient<ISignInService, SignInService>()
                 .AddScoped<RoleService>()
+                .AddScoped<IWalletService, WalletService>()
+                .AddScoped<ITransferService, TransferService>()
+                .AddScoped<IDepositService, DepositService>()
                 .AddTransient<IMapper, Mapper>();
 
             services.AddControllers().AddNewtonsoftJson(options =>
