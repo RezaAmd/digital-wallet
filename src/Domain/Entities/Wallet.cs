@@ -8,11 +8,15 @@ namespace Domain.Entities
     {
         #region Constructors
         Wallet() { }
-        public Wallet(string seed)
+        public Wallet(string seed, string userId = null, string bankId = null)
         {
             Id = DateTime.Now.ToString("fffffmmssHHMM");
             Seed = seed;
             CreatedDateTime = DateTime.Now;
+            if(!string.IsNullOrEmpty(userId))
+                OwnerId = userId;
+            if(!string.IsNullOrEmpty(bankId))
+                BankId = bankId;
         }
         #endregion
 

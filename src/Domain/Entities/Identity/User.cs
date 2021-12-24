@@ -13,11 +13,20 @@ namespace Domain.Entities.Identity
             UserName = username;
         }
 
-        public User(string username, string phoneNumber)
+        public User(string username, string phoneNumber, string email = null, string name = null, string surname = null,
+            bool phoneNumberConfirmed = false, bool emailConfirmed = false)
         {
+            Id = Guid.NewGuid().ToString();
             UserName = username;
             PhoneNumber = phoneNumber;
-
+            PhoneNumberConfirmed = phoneNumberConfirmed;
+            if (!string.IsNullOrEmpty(email))
+            {
+                Email = email;
+                EmailConfirmed = emailConfirmed;
+            }
+            Name = name;
+            Surname = surname;
             JoinedDate = DateTime.Now;
             IsBanned = false;
         }
