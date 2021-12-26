@@ -3,6 +3,7 @@ using Application.Interfaces.Identity;
 using Application.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 using System.Threading.Tasks;
 using WebApi.Models;
 
@@ -38,10 +39,10 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<object>> GetBalance([FromRoute] string id)
+        public async Task<ApiResult<object>> GetBalance([FromRoute] string id, CancellationToken cancellationToken)
         {
-
-            return Ok(new GetBalanceVM(0));
+            var balance = await transferService.GetBalanceAsync(id, cancellationToken);
+            return Ok(new GetBalanceVM(balance));
         }
 
         [HttpPut]
