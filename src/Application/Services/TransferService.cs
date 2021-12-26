@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -55,6 +56,17 @@ namespace Application.Services
             #endregion
 
             return await transfers.PaginatedListAsync(page, pageSize, cancellationToken);
+        }
+
+        public async Task<double> GetBalanceAsync(string walletId, CancellationToken cancellationToken = default)
+        {
+            var transfer = await context.Transfers
+                .Where(t => t.OriginId == walletId || t.DestinationId == walletId)
+                .OrderBy(t => t.DateTime)
+                .LastOrDefaultAsync(cancellationToken);
+            if (transfer != null)
+                return transfer.Balance;
+            return 0;
         }
 
         /// <summary>

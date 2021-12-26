@@ -28,6 +28,12 @@ namespace Application.Interfaces
             CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get wallet balance from last transaction.
+        /// </summary>
+        /// <param name="walletId">Wallet id for get balance.</param>
+        Task<double> GetBalanceAsync(string walletId, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Create a new transfer history.
         /// </summary>
         /// <param name="transfer">New transfer history model object.</param>
