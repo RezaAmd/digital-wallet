@@ -80,7 +80,7 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<object>> GetAll(string keyword, int page = 1, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new CancellationToken())
         {
             int pageSize = 20;
             var users = await userService.GetAllAsync<UserThumbailVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
