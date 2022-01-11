@@ -70,6 +70,18 @@ namespace Application.Services.Identity
         }
 
         /// <summary>
+        /// Delete a specific user.
+        /// </summary>
+        /// <param name="user">User model object.</param>
+        public async Task<Result> DeleteAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+        {
+            context.Users.Remove(user);
+            if(Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+                return Result.Success;
+            return Result.Failed();
+        }
+
+        /// <summary>
         /// Get All Users List as Paginated List.
         /// </summary>
         /// <param name="keyword">Search to username, name, surname, fathersName and identityLetter.</param>

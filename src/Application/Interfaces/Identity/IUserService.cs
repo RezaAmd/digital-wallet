@@ -23,6 +23,12 @@ namespace Application.Interfaces.Identity
         Task<Result> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
+        /// Delete a specific user.
+        /// </summary>
+        /// <param name="user">User model object.</param>
+        Task<Result> DeleteAsync(User user, CancellationToken cancellationToken = new CancellationToken());
+
+        /// <summary>
         /// Get All Users List as Paginated List.
         /// </summary>
         /// <param name="keyword">Search to username, name, surname, fathersName and identityLetter.</param>
