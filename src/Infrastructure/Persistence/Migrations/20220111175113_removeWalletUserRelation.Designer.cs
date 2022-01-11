@@ -4,14 +4,16 @@ using Infrastructure.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    partial class IdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220111175113_removeWalletUserRelation")]
+    partial class removeWalletUserRelation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +121,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WalletId")
@@ -127,7 +129,9 @@ namespace Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("WalletId");
+                    b.HasIndex("WalletId")
+                        .IsUnique()
+                        .HasFilter("[WalletId] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
@@ -191,7 +195,7 @@ namespace Infrastructure.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("OwnerId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Seed")
                         .HasColumnType("nvarchar(max)");
@@ -199,8 +203,6 @@ namespace Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("BankId");
-
-                    b.HasIndex("OwnerId");
 
                     b.ToTable("Wallets");
                 });
@@ -226,8 +228,8 @@ namespace Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Domain.Entities.Identity.User", b =>
                 {
                     b.HasOne("Domain.Entities.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId");
+                        .WithOne("Owner")
+                        .HasForeignKey("Domain.Entities.Identity.User", "WalletId");
 
                     b.Navigation("Wallet");
                 });
@@ -272,13 +274,7 @@ namespace Infrastructure.Persistence.Migrations
                         .WithMany("Wallets")
                         .HasForeignKey("BankId");
 
-                    b.HasOne("Domain.Entities.Identity.User", "Owner")
-                        .WithMany()
-                        .HasForeignKey("OwnerId");
-
                     b.Navigation("Bank");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("Domain.Entities.Bank", b =>
@@ -296,6 +292,11 @@ namespace Infrastructure.Persistence.Migrations
                     b.Navigation("Banks");
 
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Wallet", b =>
+                {
+                    b.Navigation("Owner");
                 });
 #pragma warning restore 612, 618
         }
