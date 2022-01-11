@@ -97,7 +97,7 @@ namespace Application.Services.Identity
                 init = init.AsNoTracking();
             // search
             if (!string.IsNullOrEmpty(keyword))
-                init = init.Where(u => keyword.Contains(u.UserName) || keyword.Contains(u.Name)
+                init = init.Where(u => keyword.Contains(u.Username) || keyword.Contains(u.Name)
                  || keyword.Contains(u.Surname) || keyword.Contains(u.Email));
 
             // include roles
@@ -119,7 +119,7 @@ namespace Application.Services.Identity
             TypeAdapterConfig config = null)
         {
             identity = identity.ToLower();
-            var init = context.Users.Where(u => u.UserName == identity
+            var init = context.Users.Where(u => u.Username == identity
             || u.PhoneNumber == identity
             || u.Email == identity
             || u.Id == identity);

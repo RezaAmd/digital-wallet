@@ -13,7 +13,7 @@ namespace Domain.Entities
             Id = DateTime.Now.ToString("fffffmmssHHMM");
             Seed = seed;
             CreatedDateTime = DateTime.Now;
-            if(!string.IsNullOrEmpty(bankId))
+            if (!string.IsNullOrEmpty(bankId))
                 BankId = bankId;
         }
         #endregion

@@ -11,15 +11,16 @@ namespace Domain.Entities.Identity
         User() { }
         public User(string username)
         {
-            UserName = username;
+            Username = username;
         }
 
         public User(string username, string phoneNumber, string email = null, string name = null, string surname = null,
-            bool phoneNumberConfirmed = false, bool emailConfirmed = false)
+            bool phoneNumberConfirmed = false, bool emailConfirmed = false, string walletId = null)
         {
             Id = Guid.NewGuid().ToString();
-            UserName = username;
+            Username = username;
             PhoneNumber = phoneNumber;
+
             PhoneNumberConfirmed = phoneNumberConfirmed;
             if (!string.IsNullOrEmpty(email))
             {
@@ -30,12 +31,15 @@ namespace Domain.Entities.Identity
             Surname = surname;
             JoinedDate = DateTime.Now;
             IsBanned = false;
+
+            if (!string.IsNullOrEmpty(walletId))
+                WalletId = walletId;
         }
 
         #endregion
 
         public string Id { get; set; }
-        public string UserName { get; set; }
+        public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
         public bool EmailConfirmed { get; set; }
@@ -44,6 +48,7 @@ namespace Domain.Entities.Identity
 #nullable enable
         public string? Name { get; set; }
         public string? Surname { get; set; }
+
         [ForeignKey("Wallet")]
         public string? WalletId { get; set; }
 #nullable disable

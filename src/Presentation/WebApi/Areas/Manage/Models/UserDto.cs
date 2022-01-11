@@ -9,7 +9,7 @@ namespace WebApi.Areas.Manage.Models
         public string username { get; set; }
 
         [Required(ErrorMessage = "رمز ورود اجباری میباشد.")]
-        [StringLength(20, ErrorMessage = "رمز ورود باید بین 6 تا 20 کارکتر باشد.", MinimumLength = 6)]
+        [StringLength(20, ErrorMessage = "رمز ورود باید بین 4 تا 20 کارکتر باشد.", MinimumLength = 4)]
         public string password { get; set; }
 
         [Required(ErrorMessage = "رمز ورود اجباری میباشد.")]

@@ -37,7 +37,7 @@ namespace Application.Services.Identity
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.Username),
             };
             #region Roles
             foreach (var userRole in user.UserRoles)
@@ -66,7 +66,7 @@ namespace Application.Services.Identity
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
-            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Name, user.Username));
             if (user.UserRoles != null)
                 foreach (var role in user.UserRoles)
                 {
@@ -86,7 +86,7 @@ namespace Application.Services.Identity
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, user.Username),
             };
             #region Roles
             foreach (var userRole in user.UserRoles)
