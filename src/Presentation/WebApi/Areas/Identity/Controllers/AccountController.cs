@@ -1,10 +1,9 @@
 ﻿using Application.Interfaces.Identity;
 using Application.Models;
-using Domain.Entities.Identity;
-using WebApi.Areas.Identity.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
+using WebApi.Areas.Identity.Models;
 
 namespace WebApi.Areas.Identity.Controllers
 {
@@ -38,16 +37,6 @@ namespace WebApi.Areas.Identity.Controllers
                         return Ok(new SignInVM(JwtBearer.Token));
                 }
             }
-            return BadRequest();
-        }
-
-        [HttpGet]
-        public async Task<ApiResult<object>> Seed()
-        {
-            var newUser = new User("RezaAmd", "09058089095", "rezaahmadidvlp@gmail.com", "Reza", "Ahmadi", true, true);
-            var result = await userService.CreateAsync(newUser, "r78a2552ar");
-            if (result.Succeeded)
-                return Ok(newUser);
             return BadRequest();
         }
     }
