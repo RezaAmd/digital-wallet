@@ -1,8 +1,11 @@
 ﻿using Application.Extentions;
+using Application.Interfaces;
 using Application.Interfaces.Identity;
 using Application.Models;
+using Domain.Entities;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApi.Areas.Manage.Models;
@@ -16,29 +19,75 @@ namespace WebApi.Areas.Manage.Controllers
     {
         #region DI
         private readonly IUserService userService;
+        private readonly IWalletService walletService;
+        private readonly ILogger<UserController> logger;
+
+        public UserController(IUserService _userService,
+            IWalletService _walletService,
+            ILogger<UserController> _logger)
+        {
+            userService = _userService;
+            walletService = _walletService;
+            logger = _logger;
+        }
         #endregion
 
         [HttpPost]
         [ModelStateValidate]
         public async Task<ApiResult<object>> Create([FromBody] CreateUserDto model, CancellationToken cancellationToken = new CancellationToken())
         {
-            var newUser = new User(model.username, model.phoneNumber, model.email, model.name, model.surname, false, false);
+            #region Create wallet
+            // Create new wallet.
+            var newWallet = new Wallet(model.phoneNumber);
+            var createWalletResult = await walletService.CreateAsync(newWallet);
+            #endregion
+
+            #region Create user
+            // Create new user.
+            var newUser = new User(model.username, model.phoneNumber, model.email,
+                model.name, model.surname, false, false, createWalletResult.Succeeded ? newWallet.Id : null);
             var createUserResult = await userService.CreateAsync(newUser, model.password, cancellationToken);
             if (createUserResult.Succeeded)
+            {
+                // If the user was created, update wallet.
+                newWallet.OwnerId = newUser.Id;
+                var walletUpdateResult = await walletService.UpdateAsync(newWallet);
+                if (!walletUpdateResult.Succeeded)
+                    logger.LogError($"Wallet {newWallet.Id} has not been updated.");
                 return Ok(new CreateUserVM(newUser.Id));
+            }
+            #endregion
+
+            logger.LogError("Failed to create new user.");
+
+            #region Delete Wallet
+            // If user was not created so delete the wallet.
+            var deleteWalletResult = await walletService.DeleteAsync(newWallet, cancellationToken);
+            if (!deleteWalletResult.Succeeded)
+                logger.LogError($"Wallet {newWallet.Id} has not been deleted.");
+            #endregion
+
             return BadRequest(createUserResult.Errors);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ApiResult<object>> Get([FromRoute] string id)
+        {
+            var user = await userService.FindByIdAsync(id);
+            if (user != null)
+                return Ok(new UserThumbailVM(user.Id, user.Username, user.PhoneNumber, user.Email, user.Name, user.Surname));
+            return NotFound("کاربر مورد نظر یافت نشد.");
         }
 
         [HttpGet]
         public async Task<ApiResult<object>> GetAll(string keyword, int page = 1, CancellationToken cancellationToken = new CancellationToken())
         {
             int pageSize = 20;
-            var users = await userService.GetAllAsync<UserThumbailVM>(keyword: keyword, page: page, pageSize: pageSize);
+            var users = await userService.GetAllAsync<UserThumbailVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
             if (users.totalCount > 0)
                 return Ok(users);
             return NotFound(users);
         }
-
 
         [HttpPost]
         public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserDto model, CancellationToken cancellationToken = new CancellationToken())
@@ -49,10 +98,10 @@ namespace WebApi.Areas.Manage.Controllers
                 bool hasChanged = false;
 
                 #region Validate
-                if (model.username.ToLower() != user.UserName.ToLower())
+                if (model.username.ToLower() != user.Username.ToLower())
                 {
                     hasChanged = true;
-                    user.UserName = model.username;
+                    user.Username = model.username;
                 }
 
                 if (model.phoneNumber.ToLower() != user.PhoneNumber.ToLower())
@@ -96,11 +145,12 @@ namespace WebApi.Areas.Manage.Controllers
         public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken = new CancellationToken())
         {
             var user = await userService.FindByIdAsync(id);
-            if(user != null)
+            if (user != null)
             {
+                user.Wallet = null;
                 var deleteResult = await userService.DeleteAsync(user, cancellationToken);
                 if (deleteResult.Succeeded)
-                    return Ok("کاربر " + user.UserName + " با موفقیت حذف گردید.");
+                    return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
                 return BadRequest(deleteResult.Errors);
             }
             return NotFound("کاربر مورد نظر پیدا نشد.");
