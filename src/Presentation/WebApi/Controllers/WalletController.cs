@@ -55,16 +55,20 @@ namespace WebApi.Controllers
         public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model, CancellationToken cancellationToken = default)
         {
             string originId = "";
-            var transfermResult = await transferService.CreateAsync(new Transfer(), cancellationToken);
+            var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount, 0, originId, model.WalletId), cancellationToken);
             if (transfermResult.Succeeded)
                 return Ok(new IncreaseResult());
+            return BadRequest();
         }
 
         [HttpPut]
-        public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model)
+        public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model, CancellationToken cancellationToken = default)
         {
-
-            return Ok(new DecreaseResult());
+            string destinationId = "";
+            var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount, 0, model.WalletId, destinationId), cancellationToken);
+            if (transfermResult.Succeeded)
+                return Ok(new DecreaseResult());
+            return BadRequest();
         }
     }
 }
