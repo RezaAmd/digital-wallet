@@ -52,10 +52,12 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model)
+        public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model, CancellationToken cancellationToken = default)
         {
-
-            return Ok(new IncreaseResult());
+            string originId = "";
+            var transfermResult = await transferService.CreateAsync(new Transfer(), cancellationToken);
+            if (transfermResult.Succeeded)
+                return Ok(new IncreaseResult());
         }
 
         [HttpPut]
