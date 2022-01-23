@@ -1,6 +1,8 @@
-﻿using Application.Interfaces;
+﻿using Application.Extentions;
+using Application.Interfaces;
 using Application.Interfaces.Identity;
 using Application.Models;
+using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
@@ -9,9 +11,9 @@ using WebApi.Models;
 
 namespace WebApi.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Bearer")]
     [ApiController]
     [Route("[controller]/[action]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
@@ -32,10 +34,14 @@ namespace WebApi.Controllers
         #endregion
 
         [HttpPost]
+        [ModelStateValidate]
         public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model)
         {
-
-            return Ok(new NewWalletVM("WALLET_ID"));
+            var newWallet = new Wallet(model.Seed, model.BankId);
+            var createWalletResult = await walletService.CreateAsync(newWallet);
+            if (createWalletResult.Succeeded)
+                return Ok(new NewWalletVM(newWallet.Id));
+            return BadRequest();
         }
 
         [HttpGet]
