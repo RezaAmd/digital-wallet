@@ -1,12 +1,13 @@
 ﻿using Domain.Enums;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity
 {
     public class Role
     {
-        #region Constructors
+        #region Ctor
         Role() { }
 
         public Role(string slug, string name = null,
@@ -34,5 +35,6 @@ namespace Domain.Entities.Identity
 #nullable disable
 
         public virtual Bank Bank { get; set; }
+        public virtual ICollection<UserRole> UserRoles { get; set; }
     }
 }
