@@ -7,7 +7,7 @@ namespace Domain.Entities
 {
     public class Bank
     {
-        #region Constructors
+        #region Ctor
         Bank() { }
 
         /// <summary>
@@ -33,5 +33,6 @@ namespace Domain.Entities
         public virtual User Owner { get; set; }
 
         public virtual ICollection<Wallet> Wallets { get; set; }
+        public virtual ICollection<Permission> Permissions { get; set; }
     }
 }
