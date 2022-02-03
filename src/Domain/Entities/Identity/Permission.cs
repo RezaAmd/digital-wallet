@@ -26,7 +26,6 @@ namespace Domain.Entities.Identity
 #nullable enable
         public string? Name { get; set; }
         public string? Description { get; set; }
-
 #nullable disable
 
         #region Relations
