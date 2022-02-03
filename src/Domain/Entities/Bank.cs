@@ -25,6 +25,7 @@ namespace Domain.Entities
         #endregion
 
         public string Id { get; set; }
+        public string Slug { get; set; }
         public string Name { get; set; }
         public DateTime CreatedDateTime { get; set; }
 
@@ -33,6 +34,6 @@ namespace Domain.Entities
         public virtual User Owner { get; set; }
 
         public virtual ICollection<Wallet> Wallets { get; set; }
-        public virtual ICollection<Permission> Permissions { get; set; }
+        public virtual ICollection<PermissionRole> PermissionRoles { get; set; }
     }
 }
