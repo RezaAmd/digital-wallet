@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums
 {
-    public enum RoleType
+    public enum RelatedPermissionType
     {
         General,
         Bank

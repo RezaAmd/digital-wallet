@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Enums;
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity
@@ -15,6 +16,10 @@ namespace Domain.Entities.Identity
         #endregion
 
         public DateTime AssignedDateTime { get; set; }
+        public RelatedPermissionType Type { get; set; }
+#nullable enable
+        public string? RelatedToId { get; set; }
+#nullable disable
 
         [ForeignKey("User")]
         public string UserId { get; set; }
