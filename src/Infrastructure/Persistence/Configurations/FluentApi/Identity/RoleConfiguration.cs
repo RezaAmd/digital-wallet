@@ -16,7 +16,7 @@ namespace Infrastructure.Persistence.Configurations.FluentApi.Identity
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
 
-            b.HasIndex(r => r.Slug)
+            b.HasIndex(r => r.Name)
                 .IsUnique();
         }
     }
