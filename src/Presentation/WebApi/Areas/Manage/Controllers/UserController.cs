@@ -4,6 +4,8 @@ using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities;
 using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -15,6 +17,7 @@ namespace WebApi.Areas.Manage.Controllers
     [ApiController]
     [Area("Manage")]
     [Route("[area]/[controller]/[action]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         #region DI

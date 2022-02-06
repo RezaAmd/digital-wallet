@@ -9,9 +9,13 @@ namespace Domain.Entities.Identity
         #region Ctor
         UserPermission() { }
 
-        public UserPermission(string userId, string permissionId)
+        public UserPermission(string userId, string permissionId,
+            RelatedPermissionType type = RelatedPermissionType.General)
         {
-
+            UserId = userId;
+            PermissionId = permissionId;
+            AssignedDateTime = DateTime.Now;
+            Type = type;
         }
         #endregion
 

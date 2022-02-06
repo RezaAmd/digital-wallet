@@ -11,13 +11,12 @@ namespace Domain.Entities.Identity
         Role() { }
 
         public Role(string slug, string name = null,
-            string description = null, RelatedPermissionType type = RelatedPermissionType.General)
+            string description = null)
         {
             Id = Guid.NewGuid().ToString();
             Slug = slug;
             Name = name;
             Description = description;
-            Type = type;
             CreatedDateTime = DateTime.Now;
         }
         #endregion
