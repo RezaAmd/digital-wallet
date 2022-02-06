@@ -1,10 +1,9 @@
 ﻿using Application.Extentions;
 using Application.Interfaces.Context;
+using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities.Identity;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services.Identity
 {
-    public class RoleService
+    public class RoleService : BaseService<Role>, IRoleService
     {
         #region Constructor
         //private readonly IRoleStore<Role> roleStore;
@@ -22,7 +21,7 @@ namespace Application.Services.Identity
         //private readonly ErrorDescriber error;
         //private readonly ILogger<RoleManager<Role>> logger;
         private readonly IDbContext context;
-        public RoleService(IDbContext _context)
+        public RoleService(IDbContext _context) : base(_context)
         {
             context = _context;
         }

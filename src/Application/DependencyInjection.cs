@@ -17,7 +17,7 @@ namespace Application
                 .AddHttpContextAccessor()
                 .AddScoped<IUserService, UserService>()
                 .AddTransient<ISignInService, SignInService>()
-                .AddScoped<RoleService>()
+                .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IWalletService, WalletService>()
                 .AddScoped<ITransferService, TransferService>()
                 .AddScoped<IDepositService, DepositService>()
