@@ -8,13 +8,14 @@ namespace Domain.Entities
     {
         #region Constructors
         Wallet() { }
+
         public Wallet(string seed, string bankId = null)
         {
             Id = DateTime.Now.ToString("fffffmmssHHMM");
             Seed = seed;
-            CreatedDateTime = DateTime.Now;
             if (!string.IsNullOrEmpty(bankId))
                 BankId = bankId;
+            CreatedDateTime = DateTime.Now;
         }
         #endregion
 
@@ -25,8 +26,9 @@ namespace Domain.Entities
 #nullable enable
         [ForeignKey("Owner")]
         public string? OwnerId { get; set; }
+
         [ForeignKey("Bank")]
-        public string? BankId { get; set; }
+        public string? BankId { get; set; } // Empty bank id is a sign that the wallet is public.
 #nullable disable
         public virtual Bank Bank { get; set; }
         public virtual User Owner { get; set; }
