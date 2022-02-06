@@ -27,7 +27,7 @@ namespace WebApi.Areas.Manage.Controllers
         [ModelStateValidate]
         public async Task<ApiResult<object>> CreateAsync([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = new())
         {
-            var newRole = new Role(model.slug, model.name, model.description);
+            var newRole = new Role(model.name, model.title, model.description);
             var result = await roleService.CreateAsync(newRole, cancellationToken);
             if (result.Succeeded)
                 return Ok(newRole.Id);

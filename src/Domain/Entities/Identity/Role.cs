@@ -8,22 +8,22 @@ namespace Domain.Entities.Identity
         #region Ctor
         Role() { }
 
-        public Role(string slug, string name = null,
+        public Role(string name, string title = null,
             string description = null)
         {
             Id = Guid.NewGuid().ToString();
-            Slug = slug;
             Name = name;
+            Name = title;
             Description = description;
             CreatedDateTime = DateTime.Now;
         }
         #endregion
 
         public string Id { get; set; }
-        public string Slug { get; set; }
+        public string Name { get; set; }
         public DateTime CreatedDateTime { get; set; }
 #nullable enable
-        public string? Name { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
 
 #nullable disable
