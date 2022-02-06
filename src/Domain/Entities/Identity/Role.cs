@@ -1,11 +1,9 @@
-﻿using Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity
 {
-    public class Role
+    public class Role : BaseEntity
     {
         #region Ctor
         Role() { }

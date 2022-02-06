@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Bank
+    public class Bank : BaseEntity
     {
         #region Ctor
         Bank() { }

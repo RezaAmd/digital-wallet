@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Wallet
+    public class Wallet : BaseEntity
     {
         #region Constructors
         Wallet() { }

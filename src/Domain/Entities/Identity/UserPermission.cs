@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity
 {
-    public class UserPermission
+    public class UserPermission : BaseEntity
     {
         #region Ctor
         UserPermission() { }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Deposit
+    public class Deposit : BaseEntity
     {
         public string Id { get; set; }
         public string TraceId { get; set; } // Transaction id, identity, identify, refence or ...

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.Identity
 {
-    public class UserRole
+    public class UserRole : BaseEntity
     {
         public DateTime AssignedDateTime { get; set; }
         public RelatedPermissionType Type { get; set; }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
-    public class Transfer
+    public class Transfer : BaseEntity
     {
         #region Constructors
         public Transfer(double amount, double balance,
