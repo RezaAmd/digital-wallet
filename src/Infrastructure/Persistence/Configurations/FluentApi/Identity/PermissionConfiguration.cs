@@ -9,8 +9,7 @@ namespace Infrastructure.Persistence.Configurations.FluentApi.Identity
         public void Configure(EntityTypeBuilder<Permission> b)
         {
             b.ToTable("Permissions");
-
-            b.HasIndex(r => r.Slug)
+            b.HasIndex(r => r.Name)
                 .IsUnique();
         }
     }

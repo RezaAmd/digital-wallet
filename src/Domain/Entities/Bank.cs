@@ -1,7 +1,5 @@
-﻿using Domain.Entities.Identity;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
 {
@@ -13,27 +11,24 @@ namespace Domain.Entities
         /// <summary>
         /// Bank object model.
         /// </summary>
-        /// <param name="name">Name of the bank</param>
-        /// <param name="userId">The user id is owner of this bank.</param>
-        public Bank(string name, string userId)
+        /// <param name="name">Name of the bank. must be unique.</param>
+        /// <param name="title">A title is nullable for display name of bank.</param>
+        public Bank(string name, string title = null)
         {
             Id = Guid.NewGuid().ToString();
             Name = name;
-            OwnerId = userId;
+            Title = title;
             CreatedDateTime = DateTime.Now;
         }
         #endregion
 
         public string Id { get; set; }
-        public string Slug { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } // Unique name.
         public DateTime CreatedDateTime { get; set; }
-
-        [ForeignKey("Owner")]
-        public string OwnerId { get; set; }
-        public virtual User Owner { get; set; }
+#nullable enable
+        public string? Title { get; set; } // Display name.
+#nullable disable
 
         public virtual ICollection<Wallet> Wallets { get; set; }
-        public virtual ICollection<PermissionRole> PermissionRoles { get; set; }
     }
 }

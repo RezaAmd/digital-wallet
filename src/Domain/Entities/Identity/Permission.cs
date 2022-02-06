@@ -9,27 +9,24 @@ namespace Domain.Entities.Identity
         #region Ctor
         Permission() { }
 
-        public Permission(string slug, string name = null, string description = null)
+        public Permission(string name, string title = null, string description = null)
         {
             Id = Guid.NewGuid().ToString();
-            Slug = slug;
             Name = name;
+            Title = title;
             Description = description;
             CreatedDate = DateTime.Now;
         }
         #endregion
 
         public string Id { get; set; }
-        public string Slug { get; set; }
+        public string Name { get; set; } // Unique name.
         public DateTime CreatedDate { get; set; }
-
 #nullable enable
-        public string? Name { get; set; }
+        public string? Title { get; set; }
         public string? Description { get; set; }
 #nullable disable
 
-        #region Relations
         public virtual ICollection<PermissionRole> PermissionRoles { get; set; }
-        #endregion
     }
 }

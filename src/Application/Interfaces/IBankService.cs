@@ -16,19 +16,17 @@ namespace Application.Interfaces
         /// <summary>
         /// Get all banks as paginated.
         /// </summary>
-        /// <param name="userId">Filter for for specific owner.</param>
         /// <param name="page">Number of page.</param>
         /// <param name="pageSize">Current page items count.</param>
         /// <param name="keyword">Keyword for search in bank name.</param>
-        Task<PaginatedList<Bank>> GetAllAsync(string userId = null, int page = 1, int pageSize = 10, string keyword = null,
+        Task<PaginatedList<Bank>> GetAllAsync( int page = 1, int pageSize = 10, string keyword = null,
             CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Find a specific bank of a user.
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="id"></param>
-        Task<Bank> FindByIdAsync(string id, string userId = null, CancellationToken cancellationToken = new CancellationToken());
+        Task<Bank> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Update a specific bank.

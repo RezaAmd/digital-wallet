@@ -40,14 +40,12 @@ namespace Application.Services
         /// <param name="page">Number of page.</param>
         /// <param name="pageSize">Current page items count.</param>
         /// <param name="keyword">Keyword for search in bank name.</param>
-        public async Task<PaginatedList<Bank>> GetAllAsync(string userId = null, int page = 1, int pageSize = 10, string keyword = null,
+        public async Task<PaginatedList<Bank>> GetAllAsync(int page = 1, int pageSize = 10, string keyword = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
             var banks = context.Banks.AsQueryable();
             #region Filters
-            if (userId == null)
-                banks = banks.Where(b => b.OwnerId == userId);
-            if (!string.IsNullOrEmpty(userId))
+            if (!string.IsNullOrEmpty(keyword))
                 banks = banks.Where(b => keyword.Contains(b.Name));
             #endregion
             return await banks.PaginatedListAsync(page, pageSize, cancellationToken);
@@ -59,11 +57,9 @@ namespace Application.Services
         /// <param name="userId"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Bank> FindByIdAsync(string id, string userId = null, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Bank> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken())
         {
             var banks = context.Banks.Where(b => b.Id == id);
-            if (!string.IsNullOrEmpty(userId)) // Fetch bank for special owner.
-                banks = banks.Where(b => b.OwnerId == userId);
             return await banks.FirstOrDefaultAsync(cancellationToken);
         }
 
