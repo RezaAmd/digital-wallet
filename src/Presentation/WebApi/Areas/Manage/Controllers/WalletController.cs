@@ -3,12 +3,12 @@ using Application.Interfaces;
 using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities;
-using WebApi.Areas.Manage.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
+using WebApi.Areas.Manage.Models;
 
 namespace WebApi.Areas.Manage.Controllers
 {
@@ -31,7 +31,7 @@ namespace WebApi.Areas.Manage.Controllers
 
         [HttpPost]
         [ModelStateValidate]
-        public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> Create([FromBody] CreateWalletMDto model, CancellationToken cancellationToken = new CancellationToken())
         {
             var newWallet = new Wallet(model.seed, model.bankId);
             var result = await walletService.CreateAsync(newWallet, cancellationToken);

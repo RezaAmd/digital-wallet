@@ -2,7 +2,7 @@
 
 namespace WebApi.Areas.Manage.Models
 {
-    public class CreateUserDto
+    public class CreateUserMDto
     {
         [Required(ErrorMessage = "نام کاربری اجباری میباشد.")]
         [StringLength(20, ErrorMessage = "نام کاربری باید بین 3 تا 20 کارکتر باشد.", MinimumLength = 3)]
@@ -27,7 +27,7 @@ namespace WebApi.Areas.Manage.Models
         public string surname { get; set; }
     }
 
-    public class EditUserDto
+    public class EditUserMDto
     {
         public string username { get; set; }
         public string phoneNumber { get; set; }

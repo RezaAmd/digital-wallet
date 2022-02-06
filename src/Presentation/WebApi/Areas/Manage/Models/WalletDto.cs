@@ -2,7 +2,7 @@
 
 namespace WebApi.Areas.Manage.Models
 {
-    public class CreateWalletDto
+    public class CreateWalletMDto
     {
         [Required(ErrorMessage = "انتخاب یک مقدار اولیه ضروری است.")]
         public string seed { get; set; }

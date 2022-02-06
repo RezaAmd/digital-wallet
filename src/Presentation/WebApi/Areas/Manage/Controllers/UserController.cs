@@ -37,7 +37,7 @@ namespace WebApi.Areas.Manage.Controllers
 
         [HttpPost]
         [ModelStateValidate]
-        public async Task<ApiResult<object>> Create([FromBody] CreateUserDto model, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> Create([FromBody] CreateUserMDto model, CancellationToken cancellationToken = new CancellationToken())
         {
             #region Create wallet
             // Create new wallet.
@@ -57,7 +57,7 @@ namespace WebApi.Areas.Manage.Controllers
                 var walletUpdateResult = await walletService.UpdateAsync(newWallet);
                 if (!walletUpdateResult.Succeeded)
                     logger.LogError($"Wallet {newWallet.Id} has not been updated.");
-                return Ok(new CreateUserVM(newUser.Id));
+                return Ok(new CreateUserMVM(newUser.Id));
             }
             #endregion
 
@@ -78,7 +78,7 @@ namespace WebApi.Areas.Manage.Controllers
         {
             var user = await userService.FindByIdAsync(id);
             if (user != null)
-                return Ok(new UserThumbailVM(user.Id, user.Username, user.PhoneNumber, user.Email, user.Name, user.Surname));
+                return Ok(new UserThumbailMVM(user.Id, user.Username, user.PhoneNumber, user.Email, user.Name, user.Surname));
             return NotFound("کاربر مورد نظر یافت نشد.");
         }
 
@@ -86,14 +86,14 @@ namespace WebApi.Areas.Manage.Controllers
         public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new CancellationToken())
         {
             int pageSize = 20;
-            var users = await userService.GetAllAsync<UserThumbailVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
+            var users = await userService.GetAllAsync<UserThumbailMVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
             if (users.totalCount > 0)
                 return Ok(users);
             return NotFound(users);
         }
 
         [HttpPost]
-        public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserDto model, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserMDto model, CancellationToken cancellationToken = new CancellationToken())
         {
             var user = await userService.FindByIdAsync(id);
             if (user != null)

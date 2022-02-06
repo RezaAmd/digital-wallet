@@ -1,17 +1,17 @@
 ﻿namespace WebApi.Areas.Manage.Models
 {
-    public class CreateUserVM
+    public class CreateUserMVM
     {
-        public CreateUserVM(string id)
+        public CreateUserMVM(string id)
         {
             Id = id;
         }
         public string Id { get; set; }
     }
 
-    public class UserThumbailVM
+    public class UserThumbailMVM
     {
-        public UserThumbailVM(string id, string username, string phoneNumber, string email, string name, string surname)
+        public UserThumbailMVM(string id, string username, string phoneNumber, string email, string name, string surname)
         {
             Id = id;
             Username = username;

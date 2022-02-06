@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{BE07DC40-024D-4A7C-B910-AC83F28C11FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApi", "src\Presentation\WebApi\WebApi.csproj", "{1DDF6A18-B143-4544-9574-77361F667008}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Presentation\WebApi\WebApi.csproj", "{1DDF6A18-B143-4544-9574-77361F667008}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
