@@ -15,5 +15,6 @@ namespace Application.Interfaces.Context
         DbSet<Deposit> Deposits { get; set; }
         DbSet<Transfer> Transfers { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        DbSet<TEntity> Set<TEntity>() where TEntity : class;
     }
 }
