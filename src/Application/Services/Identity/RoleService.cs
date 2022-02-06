@@ -28,6 +28,18 @@ namespace Application.Services.Identity
 
         #endregion
 
+        public async Task<IList<Role>> GetAllAsync(int page = 1, int? pageSize = default)
+        {
+            var roles = context.Roles.AsQueryable();
+            #region Filter
+            if (pageSize.HasValue)
+            {
+                roles = roles.Skip((page - 1) * pageSize.Value).Take(pageSize.Value);
+            }
+            #endregion
+            return await roles.ToListAsync();
+        }
+
         public async Task<Result> CreateRangeAsync(List<Role> roles)
         {
             try
@@ -41,11 +53,6 @@ namespace Application.Services.Identity
                 return Result.Failed(new() { ex.HandleDbExtentionFilter() });
             }
             return Result.Failed();
-        }
-
-        public async Task<IList<Role>> GetAllAsync(int page = 1, int pageSize = 25)
-        {
-            return await context.Roles.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
         }
     }
 }

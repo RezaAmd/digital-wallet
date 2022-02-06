@@ -1,7 +1,9 @@
 ﻿using Application.Extentions;
 using Application.Interfaces.Identity;
 using Application.Models;
+using Application.Models.Dto;
 using Domain.Entities.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,8 +25,16 @@ namespace WebApi.Areas.Manage.Controllers
         }
         #endregion
 
+        [HttpGet]
+        public async Task<ApiResult<object>> GetAll([FromQuery] PageParam page)
+        {
+            var roles = await roleService.GetAllAsync(page.page.Value, page.pageSize);
+            return Ok(roles);
+        }
+
         [HttpPost]
         [ModelStateValidate]
+        //[Authorize(Roles = "CreateRole")]
         public async Task<ApiResult<object>> CreateAsync([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = new())
         {
             var newRole = new Role(model.name, model.title, model.description);
