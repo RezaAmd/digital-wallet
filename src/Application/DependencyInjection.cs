@@ -18,6 +18,7 @@ namespace Application
                 .AddScoped<IUserService, UserService>()
                 .AddTransient<ISignInService, SignInService>()
                 .AddScoped<IRoleService, RoleService>()
+                .AddScoped<IPermissionService, PermissionService>()
                 .AddScoped<IWalletService, WalletService>()
                 .AddScoped<ITransferService, TransferService>()
                 .AddScoped<IDepositService, DepositService>()
