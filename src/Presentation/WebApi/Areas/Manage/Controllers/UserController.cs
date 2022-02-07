@@ -4,6 +4,7 @@ using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities;
 using Domain.Entities.Identity;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,26 +18,30 @@ namespace WebApi.Areas.Manage.Controllers
     [ApiController]
     [Area("Manage")]
     [Route("[area]/[controller]/[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserController : ControllerBase
     {
         #region DI
         private readonly IUserService userService;
         private readonly IWalletService walletService;
+        private readonly IPermissionService permissionService;
         private readonly ILogger<UserController> logger;
 
         public UserController(IUserService _userService,
             IWalletService _walletService,
+            IPermissionService _permissionService,
             ILogger<UserController> _logger)
         {
             userService = _userService;
             walletService = _walletService;
             logger = _logger;
+            permissionService = _permissionService;
         }
         #endregion
 
         [HttpPost]
         [ModelStateValidate]
+        //[Authorize(Roles = "CreateUser")]
         public async Task<ApiResult<object>> Create([FromBody] CreateUserMDto model, CancellationToken cancellationToken = new CancellationToken())
         {
             #region Create wallet
@@ -93,6 +98,7 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpPost]
+        //[Authorize(Roles = "UpdateUser")]
         public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserMDto model, CancellationToken cancellationToken = new CancellationToken())
         {
             var user = await userService.FindByIdAsync(id);
@@ -145,6 +151,7 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpDelete]
+        //[Authorize(Roles = "DeleteUser")]
         public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken = new CancellationToken())
         {
             var user = await userService.FindByIdAsync(id);
@@ -155,6 +162,25 @@ namespace WebApi.Areas.Manage.Controllers
                 if (deleteResult.Succeeded)
                     return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
                 return BadRequest(deleteResult.Errors);
+            }
+            return NotFound("کاربر مورد نظر پیدا نشد.");
+        }
+
+        [HttpGet]
+        public async Task<ApiResult<object>> AssignPermission(string userId, string permissionId)
+        {
+            var user = await userService.FindByIdAsync(userId);
+            if(user != null)
+            {
+                var permission = await permissionService.FindByIdAsync(permissionId);
+                if(permission != null)
+                {
+                    var assignResult = await userService.AddToPermissionAsync(user, permission);
+                    if (assignResult.Succeeded)
+                        return Ok($"نقش {permission.Title} با موفقیت به کاربر {user.Name} {user.Surname} اختصاص داده شد.");
+                    return BadRequest(assignResult.Errors);
+                }
+                return NotFound("نقش مورد نظر پیدا نشد.");
             }
             return NotFound("کاربر مورد نظر پیدا نشد.");
         }

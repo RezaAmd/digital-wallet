@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Domain.Entities.Identity;
+using Domain.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using System.Threading;
@@ -9,7 +10,12 @@ namespace Application.Interfaces.Identity
 {
     public interface IUserService
     {
-        Task<User> FindByIdAsync(string id);
+        /// <summary>
+        /// Find a specific user by id.
+        /// </summary>
+        /// <param name="id">user id.</param>
+        Task<User> FindByIdAsync(string id, CancellationToken cancellationToken = new());
+
         /// <summary>
         /// Create a new user.
         /// </summary>
@@ -43,6 +49,7 @@ namespace Application.Interfaces.Identity
         /// </summary>
         /// <param name="identity">identity for find</param>
         Task<User> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
+            bool withPermissions = false,
             TypeAdapterConfig config = null);
 
         /// <summary>
@@ -67,5 +74,10 @@ namespace Application.Interfaces.Identity
         /// <param name="password">The password you want to check.</param>
         /// <returns>true/false</returns>
         bool CheckPassword(User user, string password);
+
+        #region Permission
+        Task<Result> AddToPermissionAsync(User user, Permission permission,
+            RelatedPermissionType type = RelatedPermissionType.General);
+        #endregion
     }
 }

@@ -3,6 +3,7 @@ using Application.Interfaces.Context;
 using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities.Identity;
+using Domain.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -35,9 +36,11 @@ namespace Application.Services.Identity
         }
         #endregion
 
-        public async Task<User> FindByIdAsync(string id)
+        public async Task<User> FindByIdAsync(string id, CancellationToken cancellationToken = new())
         {
-            return await context.Users.FindAsync(id);
+            return await context.Users
+                .Include(x=>x.Permissions)
+                .Where(u => u.Id == id).FirstOrDefaultAsync(cancellationToken);
         }
 
         /// <summary>
@@ -116,6 +119,7 @@ namespace Application.Services.Identity
         /// </summary>
         /// <param name="identity">identity for find</param>
         public async Task<User> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
+            bool withPermissions = false,
             TypeAdapterConfig config = null)
         {
             identity = identity.ToLower();
@@ -129,6 +133,9 @@ namespace Application.Services.Identity
             if (withRoles)
                 init = init.Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role);
+            if (withPermissions)
+                init = init.Include(u => u.Permissions)
+                    .ThenInclude(up => up.Permission);
             #endregion
             return await init.FirstOrDefaultAsync();
         }
@@ -169,6 +176,16 @@ namespace Application.Services.Identity
             return (Result.Failed(), null);
         }
 
+        #endregion
+
+
+        #region Permission
+        public async Task<Result> AddToPermissionAsync(User user, Permission permission,
+            RelatedPermissionType type = RelatedPermissionType.General)
+        {
+            user.Permissions.Add(new(user.Id, permission.Id, type));
+            return await UpdateAsync(user);
+        }
         #endregion
     }
 }

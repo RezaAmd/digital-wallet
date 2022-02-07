@@ -58,6 +58,7 @@ namespace Domain.Entities.Identity
         public virtual Wallet Wallet { get; set; }
         public virtual ICollection<UserRole> UserRoles { get; set; }
         public virtual ICollection<Bank> Banks { get; set; }
+        public virtual ICollection<UserPermission> Permissions { get; set; }
         #endregion
     }
 }

@@ -72,6 +72,11 @@ namespace Application.Services.Identity
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
                 }
+            //if(user.Permissions != null)
+            //    foreach (var permission in user.Permissions)
+            //    {
+            //        claims.Add(new Claim(ClaimTypes.Role, permission.ro));
+            //    }
             var jwtResult = jwtService.GenerateToken(claims, expire);
             return jwtResult;
         }

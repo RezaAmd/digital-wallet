@@ -26,7 +26,7 @@ namespace WebApi.Areas.Identity.Controllers
         [HttpPost]
         public async Task<ApiResult<object>> SignIn([FromBody] SignInDto model)
         {
-            var user = await userService.FindByIdentityAsync(model.username);
+            var user = await userService.FindByIdentityAsync(model.username, withPermissions: true);
             if (user != null)
             {
                 var passwordValidation = userService.CheckPassword(user, model.password);
