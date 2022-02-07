@@ -25,8 +25,8 @@ namespace Infrastructure
         {
             #region Introduction
             services.AddDbContext<IdentityDbContext>(options =>
-            options.UseSqlServer(ConnectionStrings.Identity,
-            b => b.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName)));
+                options.UseSqlServer(ConnectionStrings.Identity,
+                b => b.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName)));
             #endregion
 
             #region Options
