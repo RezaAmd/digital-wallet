@@ -10,6 +10,7 @@ namespace Application.Interfaces.Context
     {
         DbSet<User> Users { get; set; }
         DbSet<Role> Roles { get; set; }
+        DbSet<Permission> Permissions { get; set; }
         DbSet<Bank> Banks { get; set; }
         DbSet<Wallet> Wallets { get; set; }
         DbSet<Deposit> Deposits { get; set; }
