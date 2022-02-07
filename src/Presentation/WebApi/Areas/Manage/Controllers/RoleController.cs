@@ -1,9 +1,7 @@
 ﻿using Application.Extentions;
 using Application.Interfaces.Identity;
 using Application.Models;
-using Application.Models.Dto;
 using Domain.Entities.Identity;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,8 +9,8 @@ using WebApi.Areas.Manage.Models;
 
 namespace WebApi.Areas.Manage.Controllers
 {
-    [Area("Role")]
     [ApiController]
+    [Area("Manage")]
     [Route("[Area]/[controller]/[action]")]
     public class RoleController : ControllerBase
     {
@@ -26,16 +24,20 @@ namespace WebApi.Areas.Manage.Controllers
         #endregion
 
         [HttpGet]
-        public async Task<ApiResult<object>> GetAll([FromQuery] PageParam page)
+        //[Authorize(Roles = "ReadRole")]
+        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new())
         {
-            var roles = await roleService.GetAllAsync(page.page.Value, page.pageSize);
-            return Ok(roles);
+            int pageSize = 30;
+            var roles = await roleService.GetAllAsync(keyword, page, pageSize, cancellationToken);
+            if (roles.items.Count > 0)
+                return Ok(roles);
+            return NotFound(roles);
         }
 
         [HttpPost]
         [ModelStateValidate]
         //[Authorize(Roles = "CreateRole")]
-        public async Task<ApiResult<object>> CreateAsync([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = new())
+        public async Task<ApiResult<object>> Create([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = new())
         {
             var newRole = new Role(model.name, model.title, model.description);
             var result = await roleService.CreateAsync(newRole, cancellationToken);
@@ -44,6 +46,19 @@ namespace WebApi.Areas.Manage.Controllers
             return BadRequest(result.Errors);
         }
 
-
+        [HttpDelete("{id}")]
+        //[Authorize(Roles = "DeleteRole")]
+        public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken = new())
+        {
+            var role = await roleService.FindByIdAsync(id);
+            if (role != null)
+            {
+                var deleteResult = await roleService.DeleteAsync(role, cancellationToken);
+                if (deleteResult.Succeeded)
+                    return Ok($"مجوز {role.Name} با موفقیت حذف شد.");
+                return BadRequest(deleteResult.Errors);
+            }
+            return NotFound("مجوز مورد نظر پیدا نشد.");
+        }
     }
 }

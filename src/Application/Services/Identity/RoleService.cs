@@ -28,16 +28,18 @@ namespace Application.Services.Identity
 
         #endregion
 
-        public async Task<IList<Role>> GetAllAsync(int page = 1, int? pageSize = default)
+        public async Task<PaginatedList<Role>> GetAllAsync(string keyword, int page = 1, int pageSize = 30,
+            CancellationToken cancellationToken = new())
         {
             var roles = context.Roles.AsQueryable();
             #region Filter
-            if (pageSize.HasValue)
-            {
-                roles = roles.Skip((page - 1) * pageSize.Value).Take(pageSize.Value);
-            }
+            // Search with name, title, description
+            if(!string.IsNullOrEmpty(keyword))
+                roles = roles.Where(x => x.Name.Contains(keyword)
+                || x.Title.Contains(keyword)
+                || x.Description.Contains(keyword));
             #endregion
-            return await roles.ToListAsync();
+            return await roles.PaginatedListAsync(page, pageSize, cancellationToken);
         }
 
         public async Task<Result> CreateRangeAsync(List<Role> roles)

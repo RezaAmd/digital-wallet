@@ -32,7 +32,7 @@ namespace Application.Models
 
         public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int pageIndex, int pageSize, CancellationToken cancellationToken)
         {
-            pageIndex = pageIndex < 0 ? 0 : pageIndex;
+            pageIndex = pageIndex <= 0 ? 1 : pageIndex;
             pageSize = pageSize <= 0 ? 5 : pageSize;
 
             var count = await source.CountAsync();
