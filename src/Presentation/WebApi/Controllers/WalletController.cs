@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         [ModelStateValidate]
         public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = new())
         {
-            //Request.Headers.TryGetValue("x-bank-id", out var bankId); // Get bank id from header.
+            Request.Headers.TryGetValue("x-bank-id", out var bankId); // Get bank id from header.
 
             #region Find
             // Find wallet in database.
