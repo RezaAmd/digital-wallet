@@ -1,16 +1,17 @@
-﻿using System;
-
-namespace WebApi.Models
+﻿namespace WebApi.Models
 {
-    public class NewWalletVM
+    public class WalletDetailVM
     {
-        public NewWalletVM(string walletId, string bankId = null, string createdDateTime = null)
+        public WalletDetailVM() { }
+        public WalletDetailVM(string id, double balance = 0, string bankId = null, string createdDateTime = null)
         {
-            WalletId = walletId;
+            Id = id;
+            Balance = balance;
             BankId = bankId;
-            CreatedDateTime = !string.IsNullOrEmpty(createdDateTime) ? createdDateTime : DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
+            CreatedDateTime = !string.IsNullOrEmpty(createdDateTime) ? createdDateTime : PersianDateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
         }
-        public string WalletId { get; set; }
+        public string Id { get; set; }
+        public double Balance { get; set; }
         public string BankId { get; set; }
         public string CreatedDateTime { get; set; }
     }

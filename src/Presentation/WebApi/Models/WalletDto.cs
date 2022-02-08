@@ -7,8 +7,6 @@ namespace WebApi.Models
         [Required(ErrorMessage = "مقدار اولیه نمیتواند خالی باشد.")]
         public string Seed { get; set; }
 
-        [Required(ErrorMessage = "یکی از بانک های خود را مشخص کنید.")]
-        public string BankId { get; set; }
     }
 
     public class IncreaseDto

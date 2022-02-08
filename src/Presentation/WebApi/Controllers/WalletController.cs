@@ -5,8 +5,6 @@ using Application.Models;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApi.Models;
@@ -37,13 +35,38 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [ModelStateValidate]
-        public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model)
+        public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = new())
         {
-            var newWallet = new Wallet(model.Seed, model.BankId);
-            var createWalletResult = await walletService.CreateAsync(newWallet);
-            if (createWalletResult.Succeeded)
-                return Ok(new NewWalletVM(newWallet.Id));
-            return BadRequest();
+            //Request.Headers.TryGetValue("x-bank-id", out var bankId); // Get bank id from header.
+
+            #region Find
+            // Find wallet in database.
+            var wallet = await walletService.FindBySeedAsync(model.Seed, bankId);
+            double balance = 0;
+            if (wallet != null)
+                balance = await walletService.GetBalanceAsync(wallet, cancellationToken);
+            #endregion
+
+            #region Create
+            else
+            {
+                // Create a new wallet.
+                wallet = new Wallet(model.Seed, bankId);
+
+                var createWalletResult = await walletService.CreateAsync(wallet);
+                if (!createWalletResult.Succeeded)
+                    return BadRequest(createWalletResult.Errors);
+            }
+            #endregion
+
+            #region fill the result
+            var result = new WalletDetailVM();
+            result.Id = wallet.Id;
+            result.Balance = balance;
+            result.CreatedDateTime = new PersianDateTime(wallet.CreatedDateTime).ToString("dddd, dd MMMM yyyy");
+            #endregion
+
+            return Ok(result);
         }
 
         [HttpGet]
