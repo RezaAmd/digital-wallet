@@ -32,7 +32,7 @@ namespace WebApi.Areas.Identity.Controllers
                 var passwordValidation = userService.CheckPassword(user, model.password);
                 if (passwordValidation)
                 {
-                    var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddMinutes(10));
+                    var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3));
                     if (JwtBearer.Status.Succeeded)
                         return Ok(new SignInVM(JwtBearer.Token));
                 }
