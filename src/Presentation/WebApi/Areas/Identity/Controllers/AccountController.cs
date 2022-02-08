@@ -2,6 +2,8 @@
 using Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApi.Areas.Identity.Models;
 
@@ -32,7 +34,8 @@ namespace WebApi.Areas.Identity.Controllers
                 var passwordValidation = userService.CheckPassword(user, model.password);
                 if (passwordValidation)
                 {
-                    var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3));
+                    var extraClaims = new List<Claim> { new Claim("wallet-id", user.WalletId) };
+                    var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
                     if (JwtBearer.Status.Succeeded)
                         return Ok(new SignInVM(JwtBearer.Token));
                 }
