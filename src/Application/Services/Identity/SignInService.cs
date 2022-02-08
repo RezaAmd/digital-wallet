@@ -62,7 +62,7 @@ namespace Application.Services.Identity
                 authProperties);
         }
 
-        public (Result Status, string Token) GenerateJwtToken(User user, DateTime? expire = default)
+        public (Result Status, string Token) GenerateJwtToken(User user, DateTime? expire = default, List<Claim> extraClaims = null)
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
@@ -71,6 +71,11 @@ namespace Application.Services.Identity
                 foreach (var role in user.UserRoles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role.Role.Name));
+                }
+            if(extraClaims != null)
+                foreach (var claim in extraClaims)
+                {
+                    claims.Add(claim);
                 }
             //if(user.Permissions != null)
             //    foreach (var permission in user.Permissions)
