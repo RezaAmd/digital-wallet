@@ -2,6 +2,8 @@
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authentication;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Application.Interfaces.Identity
@@ -26,6 +28,6 @@ namespace Application.Interfaces.Identity
         /// Signs the current user out of the application
         /// </summary>
         Task SignOutAsync();
-        (Result Status, string Token) GenerateJwtToken(User user, DateTime? expire = default);
+        (Result Status, string Token) GenerateJwtToken(User user, DateTime? expire = default, List<Claim> extraClaims = null);
     }
 }
