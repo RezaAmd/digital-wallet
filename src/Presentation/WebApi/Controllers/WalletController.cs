@@ -76,10 +76,10 @@ namespace WebApi.Controllers
             return Ok(new GetBalanceVM(balance));
         }
 
-        [HttpPut]
+        [HttpPost]
         public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model, CancellationToken cancellationToken = default)
         {
-            string originId = "";
+            string originId = User.FindFirst("wallet-id").Value;
             var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount, 0, originId, model.WalletId), cancellationToken);
             if (transfermResult.Succeeded)
                 return Ok(new IncreaseResult());
