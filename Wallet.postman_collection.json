@@ -1,0 +1,318 @@
+{
+	"info": {
+		"_postman_id": "ea889905-2eb8-49cb-9840-92930517a63d",
+		"name": "Wallet",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Manage",
+			"item": [
+				{
+					"name": "User",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"Admin\",\r\n    \"password\": \"admin\",\r\n    \"phoneNumber\": \"09330838252\",\r\n    \"email\": \"reza3d75@gmail.com\",\r\n    \"name\": \"مدیر\",\r\n    \"surname\": \"سیستم\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}manage/user/create"
+							},
+							"response": []
+						},
+						{
+							"name": "Get all",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}manage/user/getAll?keyword=&page=1",
+									"host": [
+										"{{baseUrl}}manage"
+									],
+									"path": [
+										"user",
+										"getAll"
+									],
+									"query": [
+										{
+											"key": "keyword",
+											"value": ""
+										},
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{baseUrl}}manage/user/get/{{userId}}"
+							},
+							"response": []
+						},
+						{
+							"name": "Assign Permission",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}manage/user/assignPermission?userId=f8ebe028-62c0-490d-ac37-2b1ec90416d3&permissionId=ec9588af-9a0c-4053-9ced-e178a7ac0fd4",
+									"host": [
+										"{{baseUrl}}manage"
+									],
+									"path": [
+										"user",
+										"assignPermission"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "f8ebe028-62c0-490d-ac37-2b1ec90416d3"
+										},
+										{
+											"key": "permissionId",
+											"value": "ec9588af-9a0c-4053-9ced-e178a7ac0fd4"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Wallet",
+					"item": [
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"seed\": \"09058089095\",\r\n    \"bankId\": null\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}manage/wallet/create"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Role",
+					"item": [
+						{
+							"name": "Get All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}manage/role/getAll?page=1",
+									"host": [
+										"{{baseUrl}}manage"
+									],
+									"path": [
+										"role",
+										"getAll"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": {
+										"token": "{{token}}"
+									}
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"NAME\",\r\n    \"title\": \"عنوان\",\r\n    \"description\": \"توضیحات\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}manage/role/create"
+							},
+							"response": []
+						},
+						{
+							"name": "Delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "{{baseUrl}}manage/role/delete/0e6702f0-867b-4cd0-bcb0-dd79bdde0b02"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": {}
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Permission",
+					"item": [
+						{
+							"name": "Get All",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}manage/permission/getAll?page=1",
+									"host": [
+										"{{baseUrl}}manage"
+									],
+									"path": [
+										"permission",
+										"getAll"
+									],
+									"query": [
+										{
+											"key": "page",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"Admin\",\r\n    \"title\": \"مدیر کل\",\r\n    \"description\": \"به تمامی مجوز ها دسترسی دارد.\",\r\n    \"rolesId\": [\r\n        \"0428beba-777b-49f1-82ed-ce18413d7fb9\",\r\n        \"14656afb-55a2-4742-829e-9160d1418e72\",\r\n        \"269b4064-a54b-4926-a916-3adf6f0c03a6\",\r\n        \"55162411-b39a-4588-b77d-edf292eed1c5\",\r\n        \"5c7f3683-ffd8-4dbc-ac7e-e2cb3edff047\"\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}manage/permission/create"
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "{{token}}"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Identity",
+			"item": [
+				{
+					"name": "Account",
+					"item": [
+						{
+							"name": "Signin",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"username\": \"{{username}}\",\r\n    \"password\": \"{{password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}identity/account/signin"
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	]
+}
