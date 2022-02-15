@@ -5,6 +5,7 @@ using Application.Models;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using WebApi.Models;
@@ -79,17 +80,32 @@ namespace WebApi.Controllers
         [HttpPost]
         public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model, CancellationToken cancellationToken = default)
         {
-            string originId = User.FindFirst("wallet-id").Value;
-            var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount, 0, originId, model.WalletId), cancellationToken);
-            if (transfermResult.Succeeded)
-                return Ok(new IncreaseResult());
-            return BadRequest();
+            string originId = User.GetCurrentWalletId(); // Current user wallet id.
+            if (originId != null)
+            {
+                var originLatestTransfer = await transferService.GetLatestByWalletIdAsync(originId);
+                if (originLatestTransfer.Balance >= model.Amount)
+                {
+                    var destinationLatestTransfer = await transferService.GetLatestByWalletIdAsync(model.WalletId);
+
+                    // Create deposit history.
+                    var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount,
+                        destinationLatestTransfer.Balance + model.Amount
+                        , originId, model.WalletId, model.Description), cancellationToken);
+
+                    if (transfermResult.Succeeded)
+                        return Ok(new IncreaseResult());
+                    return BadRequest();
+                }
+                return BadRequest("موجودی ناکافی میباشد.");
+            }
+            return NotFound("هیچ کیف پولی به شما اختصاص نشده است.");
         }
 
         [HttpPut]
         public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model, CancellationToken cancellationToken = default)
         {
-            string destinationId = "";
+            string destinationId = User.GetCurrentWalletId(); // Current user wallet id.
             var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount, 0, model.WalletId, destinationId), cancellationToken);
             if (transfermResult.Succeeded)
                 return Ok(new DecreaseResult());
