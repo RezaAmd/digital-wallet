@@ -34,6 +34,13 @@ namespace Application.Interfaces
         Task<double> GetBalanceAsync(string walletId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Get latest transform history by wallet id.
+        /// </summary>
+        /// <param name="walletId">Wallet id.</param>
+        /// <returns>Transfer model object.</returns>
+        Task<Transfer> GetLatestByWalletIdAsync(string walletId, CancellationToken cancellationToken = new());
+
+        /// <summary>
         /// Create a new transfer history.
         /// </summary>
         /// <param name="transfer">New transfer history model object.</param>

@@ -32,6 +32,19 @@ namespace Application.Services
         }
 
         /// <summary>
+        /// Get latest transform history by wallet id.
+        /// </summary>
+        /// <param name="walletId">Wallet id.</param>
+        /// <returns>Transfer model object.</returns>
+        public async Task<Transfer> GetLatestByWalletIdAsync(string walletId, CancellationToken cancellationToken = new())
+        {
+            return await context.Transfers
+                .OrderBy(t => t.DateTime)
+                .Where(t => t.OriginId == walletId || t.DestinationId == walletId)
+                .LastOrDefaultAsync(cancellationToken);
+        }
+
+        /// <summary>
         /// Get transfer history by wallet id
         /// </summary>
         /// <param name="walletId">Wallet id</param>
@@ -57,6 +70,11 @@ namespace Application.Services
             return await transfers.PaginatedListAsync(page, pageSize, cancellationToken);
         }
 
+        /// <summary>
+        /// Get wallet balance from latest transfer.
+        /// </summary>
+        /// <param name="walletId">Wallet id.</param>
+        /// <returns>Wallet balance as double.</returns>
         public async Task<double> GetBalanceAsync(string walletId, CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers
