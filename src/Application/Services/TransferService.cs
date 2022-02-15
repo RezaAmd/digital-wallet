@@ -39,7 +39,7 @@ namespace Application.Services
         public async Task<Transfer> GetLatestByWalletIdAsync(string walletId, CancellationToken cancellationToken = new())
         {
             return await context.Transfers
-                .OrderBy(t => t.DateTime)
+                .OrderBy(t => t.CreatedDateTime)
                 .Where(t => t.OriginId == walletId || t.DestinationId == walletId)
                 .LastOrDefaultAsync(cancellationToken);
         }
@@ -62,9 +62,9 @@ namespace Application.Services
             if (!string.IsNullOrEmpty(walletId))
                 transfers = transfers.Where(t => t.OriginId == walletId || t.DestinationId == walletId);
             if (startDate != default)
-                transfers = transfers.Where(t => t.DateTime >= startDate);
+                transfers = transfers.Where(t => t.CreatedDateTime >= startDate);
             if (endDate != default)
-                transfers = transfers.Where(t => t.DateTime <= endDate);
+                transfers = transfers.Where(t => t.CreatedDateTime <= endDate);
             #endregion
 
             return await transfers.PaginatedListAsync(page, pageSize, cancellationToken);
@@ -79,7 +79,7 @@ namespace Application.Services
         {
             var transfer = await context.Transfers
                 .Where(t => t.OriginId == walletId || t.DestinationId == walletId)
-                .OrderBy(t => t.DateTime)
+                .OrderBy(t => t.CreatedDateTime)
                 .LastOrDefaultAsync(cancellationToken);
             if (transfer != null)
                 return transfer.Balance;

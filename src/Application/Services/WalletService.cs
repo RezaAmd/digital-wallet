@@ -107,7 +107,7 @@ namespace Application.Services
         {
             var lastTransfer = await context.Transfers
                 .Where(w => w.OriginId == wallet.Id || w.DestinationId == wallet.Id)
-                .OrderBy(t => t.DateTime)
+                .OrderBy(t => t.CreatedDateTime)
                 .FirstOrDefaultAsync(cancellationToken);
             if (lastTransfer != null)
                 return lastTransfer.Balance;

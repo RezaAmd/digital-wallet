@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -83,19 +84,33 @@ namespace WebApi.Controllers
             string originId = User.GetCurrentWalletId(); // Current user wallet id.
             if (originId != null)
             {
+                // Find origin wallet balance.
                 var originLatestTransfer = await transferService.GetLatestByWalletIdAsync(originId);
-                if (originLatestTransfer.Balance >= model.Amount)
+                var newTransfer = new Transfer(model.Amount, 0, originId, model.WalletId, model.Description);
+
+                var result = new IncreaseResult(newTransfer.Identify, model.Amount,
+                    new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy")
+                    , newTransfer.State, newTransfer.Balance);
+
+                if (originLatestTransfer != null)
                 {
-                    var destinationLatestTransfer = await transferService.GetLatestByWalletIdAsync(model.WalletId);
+                    if (originLatestTransfer.Balance >= model.Amount)
+                    {
+                        // Get destination wallet balance.
+                        var destinationLatestTransfer = await transferService.GetLatestByWalletIdAsync(model.WalletId);
+                        // Create deposit history.
+                        newTransfer.Balance = destinationLatestTransfer.Balance + model.Amount;
 
-                    // Create deposit history.
-                    var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount,
-                        destinationLatestTransfer.Balance + model.Amount
-                        , originId, model.WalletId, model.Description), cancellationToken);
+                        var transfermResult = await transferService.CreateAsync(newTransfer, cancellationToken);
 
-                    if (transfermResult.Succeeded)
-                        return Ok(new IncreaseResult());
-                    return BadRequest();
+
+                        if (transfermResult.Succeeded)
+                        {
+                            result.State = TransferState.Success;
+                            return Ok(result);
+                        }
+                        return BadRequest(result);
+                    }
                 }
                 return BadRequest("موجودی ناکافی میباشد.");
             }
@@ -106,9 +121,12 @@ namespace WebApi.Controllers
         public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model, CancellationToken cancellationToken = default)
         {
             string destinationId = User.GetCurrentWalletId(); // Current user wallet id.
-            var transfermResult = await transferService.CreateAsync(new Transfer(model.Amount, 0, model.WalletId, destinationId), cancellationToken);
+            var newTransfer = new Transfer(model.Amount, 0, model.WalletId, destinationId);
+            var transfermResult = await transferService.CreateAsync(newTransfer, cancellationToken);
             if (transfermResult.Succeeded)
-                return Ok(new DecreaseResult());
+                return Ok(new DecreaseResult(newTransfer.Identify, model.Amount,
+                    new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
+                    newTransfer.State, newTransfer.Balance));
             return BadRequest();
         }
     }
