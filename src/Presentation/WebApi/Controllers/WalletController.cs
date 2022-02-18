@@ -123,6 +123,7 @@ namespace WebApi.Controllers
             string destinationId = User.GetCurrentWalletId(); // Current user wallet id.
             var newTransfer = new Transfer(model.Amount, 0, model.WalletId, destinationId);
             var transfermResult = await transferService.CreateAsync(newTransfer, cancellationToken);
+
             if (transfermResult.Succeeded)
                 return Ok(new DecreaseResult(newTransfer.Identify, model.Amount,
                     new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
