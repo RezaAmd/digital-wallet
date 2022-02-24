@@ -1,5 +1,4 @@
 ﻿using Application.Extentions;
-using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Dao
 {
     public class WalletDao : IWalletDao
     {

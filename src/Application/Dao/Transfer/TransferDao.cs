@@ -1,5 +1,4 @@
 ﻿using Application.Extentions;
-using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -9,13 +8,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Dao
 {
-    public class TransferService : ITransferService
+    public class TransferDao : ITransferDao
     {
         #region Constructor
         private readonly IDbContext context;
-        public TransferService(IDbContext _context)
+        public TransferDao(IDbContext _context)
         {
             context = _context;
         }

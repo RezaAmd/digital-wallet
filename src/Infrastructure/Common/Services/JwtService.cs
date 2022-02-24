@@ -1,5 +1,6 @@
-﻿using Application.Models;
-using Application.Interfaces;
+﻿using Application.Interfaces.Services;
+using Application.Models;
+using Infrastructure.Common.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -47,11 +48,5 @@ namespace Infrastructure.Common.Services
                 return (Result.Failed(), null);
             }
         }
-    }
-
-    public static class JwtConfig
-    {
-        public static readonly string secretKey = "R6Z9a18$m27i9R63";
-        public static readonly string encryptionKey = "9i6r3@48Kh3d96m3";
     }
 }

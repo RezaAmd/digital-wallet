@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class DepositService : IDepositService
+    public class DepositDao : IDepositDao
     {
         #region Initialize
         private readonly IDbContext context;
-        public DepositService(IDbContext _context)
+        public DepositDao(IDbContext _context)
         {
             context = _context;
         }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.Identity
+namespace Application.Dao
 {
     public interface IUserService
     {

@@ -1,5 +1,5 @@
-﻿using Application.Extentions;
-using Application.Interfaces.Identity;
+﻿using Application.Dao;
+using Application.Extentions;
 using Application.Models;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -39,7 +39,7 @@ namespace WebApi.Areas.Manage.Controllers
         public async Task<ApiResult<object>> Create([FromBody] CreatePermissionMDto model)
         {
             var newPermission = new Permission(model.name, model.title, model.description);
-            if(model.rolesId.Count > 0)
+            if (model.rolesId.Count > 0)
             {
                 newPermission.PermissionRoles = new List<PermissionRole>();
                 foreach (var roleId in model.rolesId)
@@ -55,9 +55,9 @@ namespace WebApi.Areas.Manage.Controllers
 
         [HttpDelete("{id}")]
         //[Authorize(Roles = "DeletePermission")]
-        public async Task<ApiResult<object>> Delete(string id)
+        public async Task<ApiResult<object>> Delete(string id, CancellationToken cancellationToken)
         {
-            var permission = await permissionService.FindByIdAsync(id);
+            var permission = await permissionService.FindByIdAsync(id, cancellationToken);
             if (permission != null)
             {
                 var deleteResult = await permissionService.DeleteAsync(permission);

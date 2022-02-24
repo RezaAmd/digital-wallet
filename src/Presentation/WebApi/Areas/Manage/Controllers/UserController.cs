@@ -1,12 +1,8 @@
-﻿using Application.Extentions;
-using Application.Interfaces;
-using Application.Interfaces.Identity;
+﻿using Application.Dao;
+using Application.Extentions;
 using Application.Models;
 using Domain.Entities;
 using Domain.Entities.Identity;
-using Domain.Enums;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Threading;
@@ -88,7 +84,7 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new())
         {
             int pageSize = 20;
             var users = await userService.GetAllAsync<UserThumbailMVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
@@ -99,7 +95,7 @@ namespace WebApi.Areas.Manage.Controllers
 
         [HttpPost]
         //[Authorize(Roles = "UpdateUser")]
-        public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserMDto model, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserMDto model, CancellationToken cancellationToken)
         {
             var user = await userService.FindByIdAsync(id);
             if (user != null)
@@ -152,7 +148,7 @@ namespace WebApi.Areas.Manage.Controllers
 
         [HttpDelete]
         //[Authorize(Roles = "DeleteUser")]
-        public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken)
         {
             var user = await userService.FindByIdAsync(id);
             if (user != null)
@@ -167,13 +163,13 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpGet]
-        public async Task<ApiResult<object>> AssignPermission(string userId, string permissionId)
+        public async Task<ApiResult<object>> AssignPermission(string userId, string permissionId, CancellationToken cancellationToken)
         {
             var user = await userService.FindByIdAsync(userId);
-            if(user != null)
+            if (user != null)
             {
-                var permission = await permissionService.FindByIdAsync(permissionId);
-                if(permission != null)
+                var permission = await permissionService.FindByIdAsync(permissionId, cancellationToken);
+                if (permission != null)
                 {
                     var assignResult = await userService.AddToPermissionAsync(user, permission);
                     if (assignResult.Succeeded)

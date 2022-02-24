@@ -1,7 +1,5 @@
-﻿using Application.Interfaces;
-using Application.Interfaces.Context;
-using Application.Models;
-using Domain.Entities.Identity;
+﻿using Application.Interfaces.Context;
+using Application.Interfaces.Services;
 using Infrastructure.Common.Interfaces;
 using Infrastructure.Common.Models;
 using Infrastructure.Common.Services;

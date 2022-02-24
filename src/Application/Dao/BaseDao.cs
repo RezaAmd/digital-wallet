@@ -6,23 +6,23 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Dao
 {
-    public class BaseService<TEntity> where TEntity : BaseEntity
+    public class BaseDao<TEntity, TKey> where TEntity : BaseEntity
     {
         #region DI
         private readonly IDbContext context;
         private readonly DbSet<TEntity> entities;
-        public BaseService(IDbContext _context)
+        public BaseDao(IDbContext _context)
         {
             context = _context;
             entities = context.Set<TEntity>();
         }
         #endregion
 
-        public async Task<TEntity?> FindByIdAsync(params object?[]? id)
+        public async Task<TEntity?> FindByIdAsync(TKey id, CancellationToken cancellationToken = new())
         {
-            return await entities.FindAsync(id);
+            return await entities.FindAsync(id, cancellationToken);
         }
 
         public async Task<Result> CreateAsync(TEntity entry, CancellationToken cancellationToken = new CancellationToken())

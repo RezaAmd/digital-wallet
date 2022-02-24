@@ -1,5 +1,5 @@
-﻿using Application.Extentions;
-using Application.Interfaces.Identity;
+﻿using Application.Dao;
+using Application.Extentions;
 using Application.Models;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;

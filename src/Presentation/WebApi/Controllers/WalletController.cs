@@ -1,4 +1,5 @@
-﻿using Application.Extentions;
+﻿using Application.Dao;
+using Application.Extentions;
 using Application.Interfaces;
 using Application.Interfaces.Identity;
 using Application.Models;
@@ -20,12 +21,12 @@ namespace WebApi.Controllers
     {
         #region Dependency Injection
         private readonly IWalletDao walletService;
-        private readonly ITransferService transferService;
-        private readonly IDepositService depositService;
+        private readonly ITransferDao transferService;
+        private readonly IDepositDao depositService;
         private readonly IUserService userService;
         public WalletController(IWalletDao _walletService,
-            ITransferService _transferService,
-            IDepositService _depositService,
+            ITransferDao _transferService,
+            IDepositDao _depositService,
             IUserService _userService)
         {
             walletService = _walletService;

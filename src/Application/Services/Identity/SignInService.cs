@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Interfaces.Identity;
+using Application.Interfaces.Services;
 using Application.Models;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authentication;

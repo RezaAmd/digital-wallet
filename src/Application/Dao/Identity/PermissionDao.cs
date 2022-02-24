@@ -8,14 +8,14 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services.Identity
+namespace Application.Dao
 {
-    public class PermissionService : BaseService<Permission>, IPermissionService
+    public class PermissionDao : BaseDao<Permission, string>, IPermissionService
     {
         #region DI
         private readonly IDbContext context;
 
-        public PermissionService(IDbContext _context) : base(_context)
+        public PermissionDao(IDbContext _context) : base(_context)
         {
             context = _context;
         }

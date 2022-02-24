@@ -1,4 +1,5 @@
-﻿using Application.Interfaces.Identity;
+﻿using Application.Dao;
+using Application.Interfaces.Identity;
 using Application.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;

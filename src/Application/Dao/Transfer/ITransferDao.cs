@@ -4,9 +4,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Dao
 {
-    public interface ITransferService
+    public interface ITransferDao
     {
         /// <summary>
         /// Find a transfer history by id.

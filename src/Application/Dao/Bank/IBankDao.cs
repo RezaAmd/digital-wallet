@@ -3,9 +3,9 @@ using Domain.Entities;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces
+namespace Application.Dao
 {
-    public interface IBankService
+    public interface IBankDao
     {
         /// <summary>
         /// Create a new bank for user.

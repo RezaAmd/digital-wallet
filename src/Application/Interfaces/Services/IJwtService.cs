@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Application.Interfaces
+namespace Application.Interfaces.Services
 {
     public interface IJwtService
     {

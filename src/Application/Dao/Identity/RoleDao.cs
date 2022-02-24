@@ -1,6 +1,5 @@
 ﻿using Application.Extentions;
 using Application.Interfaces.Context;
-using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,9 +9,9 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services.Identity
+namespace Application.Dao
 {
-    public class RoleService : BaseService<Role>, IRoleService
+    public class RoleDao : BaseDao<Role, string>, IRoleService
     {
         #region Constructor
         //private readonly IRoleStore<Role> roleStore;
@@ -21,7 +20,7 @@ namespace Application.Services.Identity
         //private readonly ErrorDescriber error;
         //private readonly ILogger<RoleManager<Role>> logger;
         private readonly IDbContext context;
-        public RoleService(IDbContext _context) : base(_context)
+        public RoleDao(IDbContext _context) : base(_context)
         {
             context = _context;
         }
@@ -34,7 +33,7 @@ namespace Application.Services.Identity
             var roles = context.Roles.AsQueryable();
             #region Filter
             // Search with name, title, description
-            if(!string.IsNullOrEmpty(keyword))
+            if (!string.IsNullOrEmpty(keyword))
                 roles = roles.Where(x => x.Name.Contains(keyword)
                 || x.Title.Contains(keyword)
                 || x.Description.Contains(keyword));

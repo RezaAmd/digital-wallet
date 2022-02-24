@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IDepositService
+    public interface IDepositDao
     {
         /// <summary>
         /// Find deposit history by id.

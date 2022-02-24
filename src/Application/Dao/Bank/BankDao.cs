@@ -1,5 +1,4 @@
 ﻿using Application.Extentions;
-using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -9,13 +8,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Dao
 {
-    public class BankService : IBankService
+    public class BankDao : IBankDao
     {
         #region Initialize
         private readonly IDbContext context;
-        public BankService(IDbContext _context)
+        public BankDao(IDbContext _context)
         {
             context = _context;
         }
@@ -54,7 +53,6 @@ namespace Application.Services
         /// <summary>
         /// Find a specific bank of a user.
         /// </summary>
-        /// <param name="userId"></param>
         /// <param name="id"></param>
         /// <returns></returns>
         public async Task<Bank> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken())
