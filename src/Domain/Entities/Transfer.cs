@@ -14,13 +14,13 @@ namespace Domain.Entities
             string description = null, TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Success)
         {
             Id = Guid.NewGuid().ToString();
+            Identify = DateTime.Now.ToString("ddMMyyfffffff");
             Amount = amount;
             Balance = balance;
             OriginId = originId;
             DestinationId = destinationId;
             Description = description;
             OriginType = originType;
-            Identify = DateTime.Now.ToString("ddMMyyfffffff");
             State = state;
         }
         #endregion
