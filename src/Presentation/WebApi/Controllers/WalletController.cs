@@ -19,11 +19,11 @@ namespace WebApi.Controllers
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
-        private readonly IWalletService walletService;
+        private readonly IWalletDao walletService;
         private readonly ITransferService transferService;
         private readonly IDepositService depositService;
         private readonly IUserService userService;
-        public WalletController(IWalletService _walletService,
+        public WalletController(IWalletDao _walletService,
             ITransferService _transferService,
             IDepositService _depositService,
             IUserService _userService)
@@ -104,7 +104,7 @@ namespace WebApi.Controllers
                             result.State = TransferState.Success;
                             return Ok(result);
                         }
-                        return BadRequest(result);
+                        return Ok(result);
                     }
                 }
                 return BadRequest("موجودی ناکافی میباشد.");
@@ -116,7 +116,8 @@ namespace WebApi.Controllers
         [ModelStateValidate]
         public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model, CancellationToken cancellationToken = default)
         {
-            string destinationId = User.GetCurrentWalletId(); // Current user wallet id.
+            // Current user wallet id.
+            string destinationId = User.GetCurrentWalletId();
             if (destinationId != null)
             {
                 // Find origin wallet.
@@ -124,38 +125,38 @@ namespace WebApi.Controllers
                 if (originWallet != null)
                 {
                     // Find destination wallet.
-                    if (destinationId != null)
+                    var destinationWallet = await walletService.FindByIdAsync(destinationId);
+                    if (destinationWallet != null)
                     {
-                        var destinationWallet = await walletService.FindByIdAsync(destinationId);
-                        if (destinationWallet != null)
+                        var destinationLatestTransfer = await transferService.GetLatestByWalletIdAsync(destinationId);
+                        var newTransfer = new Transfer(model.Amount, destinationLatestTransfer.Balance, model.WalletId, destinationId);
+                        var result = new DecreaseResult(newTransfer.Identify, model.Amount,
+                            new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
+                            newTransfer.State, newTransfer.Balance);
+                        if (destinationLatestTransfer != null)
                         {
-                            var destinationLatestTransfer = await transferService.GetLatestByWalletIdAsync(destinationId);
-                            var newTransfer = new Transfer(model.Amount, 0, model.WalletId, destinationId);
-                            var result = new DecreaseResult(newTransfer.Identify, model.Amount,
-                                new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
-                                newTransfer.State, newTransfer.Balance);
-                            if (destinationLatestTransfer != null)
+                            if (destinationLatestTransfer.Balance >= model.Amount)
                             {
-                                if (destinationLatestTransfer.Balance >= model.Amount)
+                                // Get destination wallet balance.
+                                var originLatestTransfer = await transferService.GetLatestByWalletIdAsync(model.WalletId);
+                                // Create deposit history.
+                                newTransfer.Balance = originLatestTransfer.Balance + model.Amount;
+                                var transfermResult = await transferService.CreateAsync(newTransfer, cancellationToken);
+                                if (transfermResult.Succeeded)
                                 {
-                                    // Get destination wallet balance.
-                                    var originLatestTransfer = await transferService.GetLatestByWalletIdAsync(model.WalletId);
-                                    // Create deposit history.
-                                    newTransfer.Balance = originLatestTransfer.Balance + model.Amount;
-
-                                    var transfermResult = await transferService.CreateAsync(newTransfer, cancellationToken);
-
-
-                                    if (transfermResult.Succeeded)
-                                    {
-                                        result.State = TransferState.Success;
-                                        return Ok(result);
-                                    }
-                                    return BadRequest(result);
+                                    result.State = TransferState.Success;
+                                    result.Description = "پرداخت شما با موفقیت انجام شد.";
                                 }
                             }
-                            return BadRequest();
+                            else
+                            {
+                                // Create new transfer.
+                                await transferService.CreateAsync(newTransfer, cancellationToken);
+                                result.State = TransferState.Failed;
+                                result.Description = "موجودی حساب کافی نمی باشد.";
+                            }
                         }
+                        return Ok(result);
                     }
                 }
                 return NotFound("شناسه کیف پول مبدا اشتباه وارد شده.");

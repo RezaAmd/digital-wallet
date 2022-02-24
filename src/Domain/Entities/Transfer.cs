@@ -22,6 +22,7 @@ namespace Domain.Entities
             Description = description;
             OriginType = originType;
             State = state;
+            CreatedDateTime = DateTime.Now;
         }
         #endregion
 

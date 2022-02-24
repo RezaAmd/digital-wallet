@@ -19,7 +19,7 @@ namespace Application
                 .AddTransient<ISignInService, SignInService>()
                 .AddScoped<IRoleService, RoleService>()
                 .AddScoped<IPermissionService, PermissionService>()
-                .AddScoped<IWalletService, WalletService>()
+                .AddScoped<IWalletDao, WalletDao>()
                 .AddScoped<ITransferService, TransferService>()
                 .AddScoped<IDepositService, DepositService>()
                 .AddTransient<IMapper, Mapper>();

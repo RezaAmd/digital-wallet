@@ -53,7 +53,7 @@ namespace WebApi.Models
     {
         #region Constructors
         public DecreaseResult(string identify, double amount = 0, string dateTime = null,
-            TransferState state = TransferState.Success, double balance = 0)
+            TransferState state = TransferState.Success, double balance = 0, string description = null)
         {
             Identify = identify;
             Amount = amount;
@@ -61,6 +61,7 @@ namespace WebApi.Models
                 PersianDateTime.Now.ToString("dddd, dd MMMM yyyy") : dateTime;
             State = state;
             Balance = balance;
+            Description = description;
         }
         #endregion
 
@@ -69,5 +70,6 @@ namespace WebApi.Models
         public string DateTime { get; set; }
         public TransferState State { get; set; }
         public double Balance { get; set; }
+        public string Description { get; set; }
     }
 }

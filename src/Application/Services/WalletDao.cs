@@ -11,11 +11,11 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class WalletService : IWalletService
+    public class WalletDao : IWalletDao
     {
         #region Dependency Injection
         private readonly IDbContext context;
-        public WalletService(IDbContext _context)
+        public WalletDao(IDbContext _context)
         {
             context = _context;
         }

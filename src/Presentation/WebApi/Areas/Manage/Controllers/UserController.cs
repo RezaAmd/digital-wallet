@@ -23,12 +23,12 @@ namespace WebApi.Areas.Manage.Controllers
     {
         #region DI
         private readonly IUserService userService;
-        private readonly IWalletService walletService;
+        private readonly IWalletDao walletService;
         private readonly IPermissionService permissionService;
         private readonly ILogger<UserController> logger;
 
         public UserController(IUserService _userService,
-            IWalletService _walletService,
+            IWalletDao _walletService,
             IPermissionService _permissionService,
             ILogger<UserController> _logger)
         {

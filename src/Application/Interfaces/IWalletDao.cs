@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IWalletService
+    public interface IWalletDao
     {
         /// <summary>
         /// Get all wallets.
