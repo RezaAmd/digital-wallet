@@ -1,6 +1,6 @@
 ﻿namespace Domain.Enums
 {
-    public enum TransferOriginType
+    public enum f
     {
         Wallet,
         Getway

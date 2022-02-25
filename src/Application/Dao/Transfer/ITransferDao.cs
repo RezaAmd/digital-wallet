@@ -41,6 +41,13 @@ namespace Application.Dao
         Task<Transfer> GetLatestByWalletIdAsync(string walletId, CancellationToken cancellationToken = new());
 
         /// <summary>
+        /// Find two id of latest transfer.
+        /// </summary>
+        /// <param name="firstId">First wallet id.</param>
+        /// <param name="secondId">Second wallet id.</param>
+        Task<(Transfer first, Transfer second)> GetTwoLatestByWalletIdAsync(string firstId, string secondId, CancellationToken cancellationToken = new());
+
+        /// <summary>
         /// Create a new transfer history.
         /// </summary>
         /// <param name="transfer">New transfer history model object.</param>

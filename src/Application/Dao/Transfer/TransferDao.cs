@@ -43,6 +43,17 @@ namespace Application.Dao
                 .LastOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<(Transfer first, Transfer second)> GetTwoLatestByWalletIdAsync(string firstId, string secondId, CancellationToken cancellationToken = new())
+        {
+            var transfers = await context.Transfers
+                .OrderBy(t => t.CreatedDateTime)
+                .Where(t => t.OriginId == firstId || t.DestinationId == firstId ||
+                t.OriginId == secondId || t.DestinationId == secondId)
+                .ToListAsync(cancellationToken);
+            return (transfers.Where(t => t.OriginId == firstId || t.DestinationId == firstId).FirstOrDefault(),
+                transfers.Where(t => t.OriginId == secondId || t.DestinationId == secondId).FirstOrDefault());
+        }
+
         /// <summary>
         /// Get transfer history by wallet id
         /// </summary>
@@ -81,7 +92,7 @@ namespace Application.Dao
                 .OrderBy(t => t.CreatedDateTime)
                 .LastOrDefaultAsync(cancellationToken);
             if (transfer != null)
-                return transfer.Balance;
+                return transfer.DestinationBalance;
             return 0;
         }
 

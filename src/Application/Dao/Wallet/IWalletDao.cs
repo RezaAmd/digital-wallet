@@ -53,5 +53,12 @@ namespace Application.Dao
         /// <param name="wallet">Wallet model object.</param>
         /// <returns>Wallet balance.</returns>
         Task<double> GetBalanceAsync(Wallet wallet, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get two wallet by id.
+        /// </summary>
+        /// <param name="first">First wallet id.</param>
+        /// <param name="second">Second wallet id.</param>
+        Task<(Wallet first, Wallet second)> GetTwoWalletByIdAsync(string first, string second, CancellationToken cancellationToken = new());
     }
 }

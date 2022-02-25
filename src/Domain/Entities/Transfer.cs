@@ -16,7 +16,7 @@ namespace Domain.Entities
             Id = Guid.NewGuid().ToString();
             Identify = DateTime.Now.ToString("ddMMyyfffffff");
             Amount = amount;
-            Balance = balance;
+            DestinationBalance = balance;
             OriginId = originId;
             DestinationId = destinationId;
             Description = description;
@@ -29,12 +29,13 @@ namespace Domain.Entities
         public string Id { get; set; }
         public string Identify { get; set; } // Its a tracking code for user.
         public double Amount { get; set; }
-        public double Balance { get; set; }
+        public double DestinationBalance { get; set; }
         public DateTime CreatedDateTime { get; set; }
         public string OriginId { get; set; } // 0: wallet, 1: getway
         public TransferOriginType OriginType { get; set; }
         public TransferState State { get; set; }
 #nullable enable
+        public double? OriginBalance { get; set; }
         public string? Description { get; set; }
 #nullable disable
 
