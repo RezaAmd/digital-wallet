@@ -23,7 +23,7 @@ namespace Infrastructure
         {
             #region Introduction
             services.AddDbContext<IdentityDbContext>(options =>
-                options.UseSqlServer(ConnectionStrings.Identity,
+                options.UseSqlServer(ConnectionStrings.Default,
                 b => b.MigrationsAssembly(typeof(IdentityDbContext).Assembly.FullName)));
             #endregion
 

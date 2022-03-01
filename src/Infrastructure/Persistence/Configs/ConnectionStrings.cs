@@ -2,13 +2,8 @@
 {
     class ConnectionStrings
     {
-        private static string ipAddress = @"103.215.223.93"; // Local
-
-        #region Identity Connection String
-        private static string defaultCatalog = "techonit_wallet";
-        private static string defaultUser = "techonit_walletusr";
-        private static string defaultPassword = "xY21vj!5%fd5gwbo*R648";
-        public static string Identity = $"Data Source={ipAddress};Initial Catalog={defaultCatalog};User ID={defaultUser};Password={defaultPassword};Persist Security Info=True;";
+        #region Default Connection String
+        public static string Default = $"Data Source=62.204.61.143;Initial Catalog=techonit_wallet;User ID=techonit_walletusr;Password=xY21vj!5%fd5gwbo*R648;Persist Security Info=True;";
         #endregion        
     }
 }

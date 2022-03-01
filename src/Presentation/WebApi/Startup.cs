@@ -17,6 +17,7 @@ namespace WebApi
         }
 
         public IConfiguration Configuration { get; }
+        string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -24,6 +25,16 @@ namespace WebApi
             services.AddInfrastructure();
             services.AddLogicServices();
             services.AddJwtAuthentication();
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.WithOrigins("http://wallet.techonit.org/",
+                            "http://localhost:3000/*",
+                            "http://localhost:3000");
+                    });
+            });
             services.AddControllers().AddNewtonsoftJson(options =>
             {
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
@@ -48,6 +59,8 @@ namespace WebApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 
