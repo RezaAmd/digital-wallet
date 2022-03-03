@@ -34,7 +34,7 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpPost]
-        [ModelStateValidate]
+        [ModelStateValidator]
         //[Authorize(Roles = "CreatePermission")]
         public async Task<ApiResult<object>> Create([FromBody] CreatePermissionMDto model)
         {

@@ -37,7 +37,7 @@ namespace WebApi.Controllers
         #endregion
 
         [HttpPost]
-        [ModelStateValidate]
+        [ModelStateValidator]
         public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = new())
         {
             Request.Headers.TryGetValue("x-bank-id", out var bankId); // Get bank id from header.
@@ -75,8 +75,13 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ApiResult<object>> GetBalance([FromRoute] string id, CancellationToken cancellationToken = new())
         {
-            var balance = await transferService.GetBalanceAsync(id, cancellationToken);
-            return Ok(new GetBalanceVM(balance));
+            var wallet = await walletService.FindByIdAsync(id);
+            if (wallet != null)
+            {
+                var balance = await transferService.GetBalanceByIdAsync(wallet, cancellationToken);
+                return Ok(new GetBalanceVM(balance));
+            }
+            return NotFound($"The wallet { id } not found.");
         }
 
         [HttpGet]
@@ -85,10 +90,10 @@ namespace WebApi.Controllers
             var currentWalletId = User.GetCurrentWalletId();
             if (currentWalletId != null)
             {
-                var wallet = await walletService.FindByIdAsync(currentWalletId);
-                if (wallet != null)
+                var currentwallet = await walletService.FindByIdAsync(currentWalletId);
+                if (currentwallet != null)
                 {
-                    var balance = await transferService.GetBalanceAsync(currentWalletId, cancellationToken);
+                    var balance = await transferService.GetBalanceByIdAsync(currentwallet, cancellationToken);
                     return Ok(new GetBalanceVM(balance));
                 }
                 return NotFound("کیف پول شما یافت نشد!");
@@ -97,40 +102,78 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
+        [ModelStateValidator]
         public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model, CancellationToken cancellationToken = default)
         {
             string originId = User.GetCurrentWalletId(); // Current user wallet id.
             if (originId != null)
             {
-                // Fetch origin wallet balance.
-                var originLatestTransfer = await transferService.GetLatestByWalletIdAsync(originId);
-                double originBalance = originLatestTransfer != null ?
-                    originLatestTransfer.DestinationBalance : 0;
-                var newTransfer = new Transfer(model.Amount, 0, originId, model.WalletId, model.Description);
-                var result = new IncreaseResult(newTransfer.Identify, model.Amount,
-                    new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
-                    newTransfer.State, newTransfer.DestinationBalance);
-                if (originBalance >= model.Amount)
+                // origin wallet is first - destination wallet is second.
+                var wallets = await walletService.GetTwoWalletByIdAsync(originId, model.WalletId, cancellationToken);
+                // Validate origin wallet.
+                if (wallets.first != null)
                 {
-                    // Get destination wallet balance.
-                    var destinationLatestTransfer = await transferService.GetLatestByWalletIdAsync(model.WalletId);
-                    // Create deposit history.
-                    newTransfer.DestinationBalance = destinationLatestTransfer.DestinationBalance + model.Amount;
-                    var transfermResult = await transferService.CreateAsync(newTransfer, cancellationToken);
-                    if (transfermResult.Succeeded)
+                    // Validate destination wallet.
+                    if (wallets.second != null)
                     {
-                        result.State = TransferState.Success;
+                        // Create a new transfer.
+                        var newTransfer = new Transfer(model.Amount, originId, model.WalletId, model.Description, state: TransferState.Failed);
+
+                        // Create a result.
+                        var result = new IncreaseResult(newTransfer.Identify, model.Amount,
+                            new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
+                            newTransfer.State);
+
+                        // Fetch origin wallet balance.
+                        var originLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.first);
+                        double? originBalance = originLatestTransfer.transfer != null ?
+                            originLatestTransfer.Balance: null;
+                        // Map origin balance to result.
+                        result.OriginBalance = originBalance;
+                        // Check origin balance with amount.
+                        if (originBalance >= model.Amount)
+                        {
+                            newTransfer.State = TransferState.Success;
+                            #region destination transfer
+                            // Find destination latest transfer (Destination balance).
+                            var destinationLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.second);
+
+                            // Increase destination balance.
+                            newTransfer.DestinationBalance = destinationLatestTransfer.Balance + model.Amount;
+                            #endregion
+
+                            #region origin transfer
+                            // Decrease origin balance.
+                            newTransfer.OriginBalance = originLatestTransfer.Balance - model.Amount;
+                            #endregion
+                        }
+                        else
+                        {
+                            // Insufficient origin balance.
+                            newTransfer.State = TransferState.InsufficientOriginBalance;
+                        }
+                        // Save new transfer and map the result.
+                        var saveTransferResult = await transferService.CreateAsync(newTransfer, cancellationToken);
+                        if (saveTransferResult.Succeeded)
+                        {
+                            newTransfer.State = TransferState.Success;
+                        }
+                        else
+                        {
+                            return BadRequest("تراکنش با خطا مواجه شد.");
+                        }
+                        result.State = newTransfer.State;
                         return Ok(result);
                     }
-                    return Ok(result);
+                    return NotFound($"کیف پول مقصد '{ model.WalletId }' یافت نشد.");
                 }
-                return BadRequest("موجودی ناکافی میباشد.");
+                return NotFound($"کیف پول مبدا یافت نشد.");
             }
             return NotFound("هیچ کیف پولی به شما اختصاص نشده است.");
         }
 
         [HttpPost]
-        [ModelStateValidate]
+        [ModelStateValidator]
         public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model, CancellationToken cancellationToken = default)
         {
             // Current user wallet id.

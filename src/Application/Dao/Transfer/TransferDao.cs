@@ -2,6 +2,7 @@
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Application.Dao
     {
         #region Constructor
         private readonly IDbContext context;
+
         public TransferDao(IDbContext _context)
         {
             context = _context;
@@ -33,14 +35,19 @@ namespace Application.Dao
         /// <summary>
         /// Get latest transform history by wallet id.
         /// </summary>
-        /// <param name="walletId">Wallet id.</param>
+        /// <param name="wallet">Wallet model object.</param>
         /// <returns>Transfer model object.</returns>
-        public async Task<Transfer> GetLatestByWalletIdAsync(string walletId, CancellationToken cancellationToken = new())
+        public async Task<(Transfer transfer, double? Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new())
         {
-            return await context.Transfers
+            var transfer = await context.Transfers
                 .OrderBy(t => t.CreatedDateTime)
-                .Where(t => t.OriginId == walletId || t.DestinationId == walletId)
+                .Where(t => (t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
+                && t.State == TransferState.Success)
                 .LastOrDefaultAsync(cancellationToken);
+            double? balance = transfer.OriginId == wallet.Id ?
+                transfer.OriginBalance :
+                transfer.DestinationBalance;
+            return (transfer, balance);
         }
 
         public async Task<(Transfer first, Transfer second)> GetTwoLatestByWalletIdAsync(string firstId, string secondId, CancellationToken cancellationToken = new())
@@ -85,14 +92,33 @@ namespace Application.Dao
         /// </summary>
         /// <param name="walletId">Wallet id.</param>
         /// <returns>Wallet balance as double.</returns>
-        public async Task<double> GetBalanceAsync(string walletId, CancellationToken cancellationToken = default)
+        public async Task<double> GetBalanceByIdAsync(Wallet wallet, CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers
-                .Where(t => t.OriginId == walletId || t.DestinationId == walletId)
+                .Where(t => t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
                 .OrderBy(t => t.CreatedDateTime)
                 .LastOrDefaultAsync(cancellationToken);
+            // Were any transaction found?
             if (transfer != null)
-                return transfer.DestinationBalance;
+            {
+                // Is it deposit?
+                if (transfer.OriginType == TransferOriginType.Getway)
+                {
+                    if (wallet.Id == transfer.DestinationId)
+                        return transfer.DestinationBalance;
+                }
+                // Is it transfer? (Increase/Decrease)
+                else if (transfer.OriginType == TransferOriginType.Wallet)
+                {
+                    // Is it decrease?
+                    if (wallet.Id == transfer.OriginId)
+                        return transfer.OriginBalance.Value;
+                    // Is it increase?
+                    else if (wallet.Id == transfer.DestinationId)
+                        return transfer.DestinationBalance;
+                }
+            }
+            // Not found any transfer.
             return 0;
         }
 

@@ -9,9 +9,23 @@ namespace Domain.Entities
         #region Constructors
         Transfer() { }
 
+        public Transfer(double amount, string originId, string destinationId,
+            string description = null, TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
+        {
+            Id = Guid.NewGuid().ToString();
+            Identify = DateTime.Now.ToString("ddMMyyfffffff");
+            Amount = amount;
+            OriginId = originId;
+            DestinationId = destinationId;
+            Description = description;
+            OriginType = originType;
+            State = state;
+            CreatedDateTime = DateTime.Now;
+        }
+
         public Transfer(double amount, double balance,
             string originId, string destinationId,
-            string description = null, TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Success)
+            string description = null, TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
         {
             Id = Guid.NewGuid().ToString();
             Identify = DateTime.Now.ToString("ddMMyyfffffff");

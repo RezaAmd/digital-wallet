@@ -36,7 +36,7 @@ namespace WebApi.Areas.Manage.Controllers
         #endregion
 
         [HttpPost]
-        [ModelStateValidate]
+        [ModelStateValidator]
         //[Authorize(Roles = "CreateUser")]
         public async Task<ApiResult<object>> Create([FromBody] CreateUserMDto model, CancellationToken cancellationToken = new CancellationToken())
         {

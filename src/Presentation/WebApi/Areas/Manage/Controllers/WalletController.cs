@@ -29,7 +29,7 @@ namespace WebApi.Areas.Manage.Controllers
         #endregion
 
         [HttpPost]
-        [ModelStateValidate]
+        [ModelStateValidator]
         public async Task<ApiResult<object>> Create([FromBody] CreateWalletMDto model, CancellationToken cancellationToken = new CancellationToken())
         {
             var newWallet = new Wallet(model.seed, model.bankId);

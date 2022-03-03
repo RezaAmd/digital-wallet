@@ -22,7 +22,12 @@ namespace WebApi.Models
     {
         public GetBalanceVM(double balance)
         {
-            this.balance = balance;
+            if (balance <= 0)
+            {
+                this.balance = 0;
+            }
+            else
+                this.balance = balance;
         }
         public double balance { get; set; }
     }
@@ -31,14 +36,15 @@ namespace WebApi.Models
     {
         #region Constructors
         public IncreaseResult(string identify, double amount = 0, string dateTime = null,
-            TransferState state = TransferState.Pending, double balance = 0)
+            TransferState state = TransferState.Failed, double? originBalance = null, double? destinationBalance = null)
         {
             Identify = identify;
             Amount = amount;
             DateTime = dateTime == null ?
                 PersianDateTime.Now.ToString("dddd, dd MMMM yyyy") : dateTime;
             State = state;
-            Balance = balance;
+            OriginBalance = originBalance;
+            DestinationBalance = destinationBalance;
         }
         #endregion
 
@@ -46,7 +52,8 @@ namespace WebApi.Models
         public double Amount { get; set; }
         public string DateTime { get; set; }
         public TransferState State { get; set; }
-        public double Balance { get; set; }
+        public double? OriginBalance { get; set; }
+        public double? DestinationBalance { get; set; }
     }
 
     public class DecreaseResult

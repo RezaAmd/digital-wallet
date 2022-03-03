@@ -31,14 +31,14 @@ namespace Application.Dao
         /// Get wallet balance from last transaction.
         /// </summary>
         /// <param name="walletId">Wallet id for get balance.</param>
-        Task<double> GetBalanceAsync(string walletId, CancellationToken cancellationToken = default);
+        Task<double> GetBalanceByIdAsync(Wallet wallet, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get latest transform history by wallet id.
         /// </summary>
-        /// <param name="walletId">Wallet id.</param>
+        /// <param name="wallet">Wallet object model.</param>
         /// <returns>Transfer model object.</returns>
-        Task<Transfer> GetLatestByWalletIdAsync(string walletId, CancellationToken cancellationToken = new());
+        Task<(Transfer transfer, double Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new());
 
         /// <summary>
         /// Find two id of latest transfer.

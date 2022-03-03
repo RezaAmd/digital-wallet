@@ -35,7 +35,7 @@ namespace WebApi.Areas.Manage.Controllers
         }
 
         [HttpPost]
-        [ModelStateValidate]
+        [ModelStateValidator]
         //[Authorize(Roles = "CreateRole")]
         public async Task<ApiResult<object>> Create([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = new())
         {

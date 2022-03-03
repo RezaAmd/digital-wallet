@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace Application.Extentions
 {
-    public class ModelStateValidate : ActionFilterAttribute
+    public class ModelStateValidator : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
