@@ -37,16 +37,24 @@ namespace Application.Dao
         /// </summary>
         /// <param name="wallet">Wallet model object.</param>
         /// <returns>Transfer model object.</returns>
-        public async Task<(Transfer transfer, double? Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new())
+        public async Task<(Transfer Transfer, double Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new())
         {
             var transfer = await context.Transfers
                 .OrderBy(t => t.CreatedDateTime)
                 .Where(t => (t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
                 && t.State == TransferState.Success)
                 .LastOrDefaultAsync(cancellationToken);
-            double? balance = transfer.OriginId == wallet.Id ?
-                transfer.OriginBalance :
-                transfer.DestinationBalance;
+            double balance = 0;
+            if (transfer != null)
+            {
+                if (!transfer.OriginBalance.HasValue)
+                    balance = 0;
+                else
+                    balance = transfer.OriginId == wallet.Id ?
+                    transfer.OriginBalance.Value :
+                    transfer.DestinationBalance;
+
+            }
             return (transfer, balance);
         }
 

@@ -38,7 +38,7 @@ namespace Application.Dao
         /// </summary>
         /// <param name="wallet">Wallet object model.</param>
         /// <returns>Transfer model object.</returns>
-        Task<(Transfer transfer, double Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new());
+        Task<(Transfer Transfer, double Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new());
 
         /// <summary>
         /// Find two id of latest transfer.
