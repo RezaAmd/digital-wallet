@@ -81,7 +81,9 @@ namespace Application.Dao
             DateTime startDate = default, DateTime endDate = default, int page = 1, int pageSize = 20,
             CancellationToken cancellationToken = default)
         {
-            var transfers = context.Transfers.AsNoTracking();
+            var transfers = context.Transfers
+                .OrderByDescending(x => x.CreatedDateTime)
+                .AsNoTracking();
 
             #region fillters
             if (!string.IsNullOrEmpty(walletId))
