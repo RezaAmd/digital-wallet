@@ -43,18 +43,21 @@ namespace Domain.Entities
         public string Id { get; set; }
         public string Identify { get; set; } // Its a tracking code for user.
         public double Amount { get; set; }
-        public double DestinationBalance { get; set; }
-        public DateTime CreatedDateTime { get; set; }
         public string OriginId { get; set; } // 0: wallet, 1: getway
-        public TransferOriginType OriginType { get; set; }
-        public TransferState State { get; set; }
 #nullable enable
         public double? OriginBalance { get; set; }
+#nullable disable
+        public TransferOriginType OriginType { get; set; }
+        
+        [ForeignKey("Destination")]
+        public string DestinationId { get; set; }
+        public double DestinationBalance { get; set; }
+        public DateTime CreatedDateTime { get; set; }
+        public TransferState State { get; set; }
+#nullable enable
         public string? Description { get; set; }
 #nullable disable
 
-        [ForeignKey("Destination")]
-        public string DestinationId { get; set; }
 
         public virtual Wallet Destination { get; set; }
     }
