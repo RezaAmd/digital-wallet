@@ -1,7 +1,5 @@
 ﻿using Application.Dao;
 using Application.Extentions;
-using Application.Interfaces;
-using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities;
 using Domain.Enums;
