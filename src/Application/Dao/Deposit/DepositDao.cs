@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services
+namespace Application.Dao
 {
     public class DepositDao : IDepositDao
     {
