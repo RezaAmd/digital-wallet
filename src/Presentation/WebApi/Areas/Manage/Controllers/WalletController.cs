@@ -19,12 +19,9 @@ namespace WebApi.Areas.Manage.Controllers
     {
         #region Dependency Injection
         private readonly IWalletDao walletService;
-        private readonly IUserService userService;
-        public WalletController(IWalletDao _walletService,
-            IUserService _userService)
+        public WalletController(IWalletDao _walletService)
         {
             walletService = _walletService;
-            userService = _userService;
         }
         #endregion
 
@@ -49,7 +46,7 @@ namespace WebApi.Areas.Manage.Controllers
             return NotFound(wallets);
         }
 
-        [HttpGet]
+        [HttpDelete]
         public async Task<ApiResult<object>> Delete(string id, CancellationToken cancellationToken = new CancellationToken())
         {
             var wallet = await walletService.FindByIdAsync(id);
