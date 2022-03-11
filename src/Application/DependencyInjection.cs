@@ -1,8 +1,6 @@
 ﻿using Application.Dao;
-using Application.Interfaces;
 using Application.Interfaces.Identity;
 using Application.Models;
-using Application.Services;
 using Application.Services.Identity;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +14,7 @@ namespace Application
             // Service Life Time
             services.AddScoped<ErrorDescriber>()
                 .AddHttpContextAccessor()
-                .AddTransient<ISignInService, SignInService>()
+                .AddScoped<ISignInService, SignInService>()
                 .AddTransient<IMapper, Mapper>();
 
             #region DAO Services
@@ -26,7 +24,6 @@ namespace Application
                 .AddScoped<IWalletDao, WalletDao>()
                 .AddScoped<ITransferDao, TransferDao>()
                 .AddScoped<IDepositDao, DepositDao>();
-
             #endregion
 
             return services;
