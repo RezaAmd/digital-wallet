@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - داشبورد مدیریت کیف پول</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.css" />
+    <link rel="stylesheet" href="~/css/dark-theme.min.css" />
+    <link href="~/css/vertical-layout.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="dark-layout menu-collapsed">
+    <!-- BEGIN: Header-->
+    <nav class="header-navbar fixed-top navbar-dark">
+        <div class="w-100 d-flex justify-content-between container-fluid">
+            <div class="d-grid">
+                <button class="nav-link" onclick="$('body').toggleClass('menu-collapsed')">
+                    <i class="fa fa-list"></i>
+                </button>
+            </div>
+            <div class="d-flex">
+                <ul class="nav">
+                    <li class="nav-item">
+                        <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#addStructureModal">سازه جدید</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link">
+                            <i class="fa fa-bell"></i>
+                            <div class="badge bg-danger sticky rounded-pill">3</div>
+                        </button>
+                    </li>
+                </ul>
+
+                @* Profile *@
+                <div>
+                    <a class="nav-link" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img class="profile rounded-circle" src="~/assets/images/profile_avatar_placeholder.png" width="40" />
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="#">ویرایش</a>
+                        <a class="dropdown-item" href="/identity/manage/signout">خروج</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- END: Header-->
+    <!-- BEGIN: Main Menu-->
+    <div class="menu-fixed main-menu vh-100" style="touch-action: none; user-select: none;">
+        <div class="mobile-header mb-3">
+            <div class="container-fluid">
+                <a class="close p-3" onclick="$('body').toggleClass('menu-collapsed')">
+                    <span class="h4 m-0" aria-hidden="true">&times;</span>
+                </a>
+            </div>
+            <h4 className="w-50 text-center mr-auto ml-auto mt-2">
+                Asp.Net 5 MVC
+            </h4>
+        </div>
+        <div class="d-none d-sm-block mb-3">
+            <div class="central" style="height: 56px; background: radial-gradient(ellipse at top,#3f6be1ad,#385ab642,#1a233a00);">
+                <h5 class="text-center m-0">داشبورد <label class="extra">مدیریت</label></h5>
+            </div>
+        </div>
+        <div class="pr-4 pr-sm-0 pl-4 pl-sm-0">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/manage">
+                        <i class="fa fa-tachometer-alt"></i>
+                        <div class="extra">داشبورد</div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/bank">
+                        <i class="fa fa-piggy-bank"></i>
+                        <div class="extra">بانک ها</div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/wallet">
+                        <i class="fa fa-wallet"></i>
+                        <div class="extra">کیف پول ها</div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/user">
+                        <i class="fa fa-users"></i>
+                        <div class="extra">کاربران</div>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/manage/permission">
+                        <i class="fa fa-certificate"></i>
+                        <div class="extra">مجوز و نقش ها</div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- END: Main Menu-->
+    <!-- BEGIN: Content-->
+    <main role="main" class="content">
+        <div id="app" class="content-wrapper container-fluid">
+            @RenderBody()
+        </div>
+    </main>
+    <!-- END: Content-->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/rest.js" asp-append-version="true"></script>
+    <script src="~/js/control.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
