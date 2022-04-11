@@ -28,6 +28,5 @@ namespace Application
 
             return services;
         }
-
     }
 }
