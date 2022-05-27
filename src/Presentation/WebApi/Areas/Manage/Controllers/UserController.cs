@@ -35,6 +35,25 @@ namespace WebApi.Areas.Manage.Controllers
         }
         #endregion
 
+        [HttpGet]
+        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new())
+        {
+            int pageSize = 20;
+            var users = await userService.GetAllAsync<UserThumbailMVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
+            if (users.totalCount > 0)
+                return Ok(users);
+            return NotFound(users);
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ApiResult<object>> Get([FromRoute] string id)
+        {
+            var user = await userService.FindByIdAsync(id);
+            if (user != null)
+                return Ok(new UserThumbailMVM(user.Id, user.Username, user.PhoneNumber, user.Email, user.Name, user.Surname));
+            return NotFound("کاربر مورد نظر یافت نشد.");
+        }
+
         [HttpPost]
         [ModelStateValidator]
         //[Authorize(Roles = "CreateUser")]
@@ -74,26 +93,7 @@ namespace WebApi.Areas.Manage.Controllers
             return BadRequest(createUserResult.Errors);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ApiResult<object>> Get([FromRoute] string id)
-        {
-            var user = await userService.FindByIdAsync(id);
-            if (user != null)
-                return Ok(new UserThumbailMVM(user.Id, user.Username, user.PhoneNumber, user.Email, user.Name, user.Surname));
-            return NotFound("کاربر مورد نظر یافت نشد.");
-        }
-
-        [HttpGet]
-        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new())
-        {
-            int pageSize = 20;
-            var users = await userService.GetAllAsync<UserThumbailMVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
-            if (users.totalCount > 0)
-                return Ok(users);
-            return NotFound(users);
-        }
-
-        [HttpPost]
+        [HttpPost("{id}")]
         //[Authorize(Roles = "UpdateUser")]
         public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserMDto model, CancellationToken cancellationToken)
         {
@@ -146,14 +146,15 @@ namespace WebApi.Areas.Manage.Controllers
             return NotFound("کاربر مورد نظر پیدا نشد.");
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         //[Authorize(Roles = "DeleteUser")]
         public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken)
         {
             var user = await userService.FindByIdAsync(id);
             if (user != null)
             {
-                user.Wallet = null;
+                var wallet = await walletService.FindByIdAsync(user.WalletId);
+                var deleteWalletResult = await walletService.DeleteAsync(wallet, cancellationToken);
                 var deleteResult = await userService.DeleteAsync(user, cancellationToken);
                 if (deleteResult.Succeeded)
                     return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
