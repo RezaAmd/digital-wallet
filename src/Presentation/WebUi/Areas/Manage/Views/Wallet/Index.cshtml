@@ -1,5 +1,79 @@
 ﻿@{
-    ViewData["Title"] = "مدیریت کیف پول ها";
+    ViewData["Title"] = "Wallets manage";
     Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
 }
-<h1>مدیریت کیف پول</h1>
+<h1><i class="fa fa-wallet"></i> Wallet manager</h1>
+
+<table class="table table-borderless">
+    <thead>
+        <tr>
+            <th>Seed</th>
+            <th>Creation Date</th>
+            <th>Owner</th>
+        </tr>
+    </thead>
+    <tbody class="small">
+        <tr v-for="wallet in wallets.list">
+            <td>{{wallet.seed}}</td>
+            <td>{{wallet.createDateTime}}</td>
+            <td>{{wallet.owner}}</td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+{{message}}
+
+@section Scripts {
+<script>
+        var app = new Vue({
+               el: '#app',
+               mounted: function() {
+                   this.getWallets();
+               },
+               data: {
+                   wallets: {
+                       state: 0,
+                       list: []
+                   }
+               },
+               methods: {
+                   getWallets: async function() {
+                       var myHeaders = new Headers();
+                       myHeaders.append("Authorization", "Bearer eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwidHlwIjoiSldUIn0.1HmJr-yJO-bcyuWeIiSTTz7-GLNkfN1aEOGMQsmluBEY31m_rkTdmg.tuxJnztlJzd9e4jOdSPSZw.vV_ukUTcrXel_p7uzlnkYvzS_OlUquLm19UKjY6jUON4sg2xqd9Q5EwjT60VuNk7T2Y4dp0vY8-4dIdDMyTHwq5kfnKTK1lCQ1LQbJyd0Swn89EuDK1DkWXD_lYbImwm4YLCMSnZLhO13KUIrBjvCMUePABGCMk2Ny4n45jFrEIBSMbOPnTSzujHNRn5UG3pOQQTwQSYgZPO5hHrDmBUWqC85AEeOqwnNS0h3q15F_q1PecYgtucWKWd5VP0lDVeWRZlAvjlH3gQk8Vq8M7YD4hnCGgQy6z6fg477jBwcSUGVEBelVLf8-mm6l_kM6QbUvb20MFBBQcLMje0pUfF-FjKj1-khPHdZ2HSfdGiGIyBlGWnr-zjrTdfZGCsTtiA.NUl_XYKml13XjkgVIHHQvQ");
+                       await fetch("https://localhost:5001/manage/wallet/getAll", {
+                           method: 'GET',
+                           headers: myHeaders,
+                           redirect: 'follow'
+                       });
+                       this.wallets.list = [
+                           {
+                               seed: "6863546531685811",
+                               createDateTime: "2022/05/22 22:15:38",
+                               owner: "Reza Ahmadi"
+                           },
+                           {
+                               seed: "4653116556886813",
+                               createDateTime: "2022/05/21 17:03:26",
+                               owner: "Mohsen Noori"
+                           },
+                           {
+                               seed: "8465316356851681",
+                               createDateTime: "2022/04/11 15:48:08",
+                               owner: "Mohammad Namei"
+                           },
+                           {
+                               seed: "6863546531685811",
+                               createDateTime: "2022/02/03 00:47:11",
+                               owner: "Mehrdad Azarhoosh"
+                           },
+                           {
+                               seed: "145725653162588",
+                               createDateTime: "2022/01/08 18:22:05",
+                               owner: "Mahbod Maleki"
+                           }
+                       ]
+                   }
+               }
+           });
+</script>
+}
