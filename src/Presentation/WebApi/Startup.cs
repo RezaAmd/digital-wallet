@@ -30,9 +30,10 @@ namespace WebApi
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                     builder =>
                     {
-                        builder.WithOrigins("http://wallet.techonit.org/",
-                            "http://localhost:3000/*",
-                            "http://localhost:3000");
+                        builder.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        ;
                     });
             });
             services.AddControllers().AddNewtonsoftJson(options =>
