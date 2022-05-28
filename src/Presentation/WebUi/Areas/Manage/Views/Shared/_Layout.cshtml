@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - داشبورد مدیریت کیف پول</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.css" />
+    <title>@ViewData["Title"] - Wallet Manager Dashboard</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/dark-theme.min.css" />
     <link href="~/css/vertical-layout.css" rel="stylesheet" />
     <link href="~/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
@@ -22,7 +22,7 @@
             <div class="d-flex">
                 <ul class="nav">
                     <li class="nav-item">
-                        <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#addStructureModal">سازه جدید</button>
+                        <button class="nav-link" type="button" data-bs-toggle="modal" data-bs-target="#addNewWallet">+ New Wallet</button>
                     </li>
                     <li class="nav-item">
                         <button class="nav-link">
@@ -39,7 +39,7 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="#">ویرایش</a>
-                        <a class="dropdown-item" href="/identity/manage/signout">خروج</a>
+                        <a class="dropdown-item" href="/identity/manage/signout">Signout</a>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
         </div>
         <div class="d-none d-sm-block mb-3">
             <div class="central" style="height: 56px; background: radial-gradient(ellipse at top,#3f6be1ad,#385ab642,#1a233a00);">
-                <h5 class="text-center m-0">داشبورد <label class="extra">مدیریت</label></h5>
+                <h5 class="text-center m-0">Wallet <label class="extra">Dashboard</label></h5>
             </div>
         </div>
         <div class="pr-4 pr-sm-0 pl-4 pl-sm-0">
@@ -68,31 +68,31 @@
                 <li class="nav-item">
                     <a class="nav-link active" href="/manage">
                         <i class="fa fa-tachometer-alt"></i>
-                        <div class="extra">داشبورد</div>
+                        <div class="extra">Dashboard</div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/manage/bank">
                         <i class="fa fa-piggy-bank"></i>
-                        <div class="extra">بانک ها</div>
+                        <div class="extra">Banks</div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/manage/wallet">
                         <i class="fa fa-wallet"></i>
-                        <div class="extra">کیف پول ها</div>
+                        <div class="extra">Wallets</div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/manage/user">
                         <i class="fa fa-users"></i>
-                        <div class="extra">کاربران</div>
+                        <div class="extra">Users</div>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/manage/permission">
                         <i class="fa fa-certificate"></i>
-                        <div class="extra">مجوز و نقش ها</div>
+                        <div class="extra">Roles and Permissions</div>
                     </a>
                 </li>
             </ul>
@@ -101,7 +101,7 @@
     <!-- END: Main Menu-->
     <!-- BEGIN: Content-->
     <main role="main" class="content">
-        <div id="app" class="content-wrapper container-fluid">
+        <div id="app" class="content-wrapper container-fluid px-4">
             @RenderBody()
         </div>
     </main>
@@ -110,7 +110,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/rest.js" asp-append-version="true"></script>
     <script src="~/js/control.js" asp-append-version="true"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/vue-js/vue.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
