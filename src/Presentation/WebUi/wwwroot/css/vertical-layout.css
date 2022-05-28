@@ -3,11 +3,13 @@
     transition: .3s ease all,background 0s;
     -webkit-transition: .3s ease all,background 0s;
     -moz-transition: .3s ease all,background 0s;
+    z-index: 10000;
 }
 
 .main-menu {
     background-color: #1a233a;
-    border-left: 1px solid #464D5C;
+    border-right: 1px solid #464D5C;
+    box-shadow: 8px 0 18px 0 rgba(13, 22, 46, 0.7);
     transition: .3s ease all,background 0s;
     -webkit-transition: .3s ease all,background 0s;
     -moz-transition: .3s ease all,background 0s;
@@ -50,11 +52,11 @@ body.menu-collapsed .main-menu .nav-item {
 }
 
     .main-menu ul li a i {
-        margin-left: 1rem;
+        margin-right: 1rem;
     }
 
 body.menu-collapsed .main-menu ul li a i {
-    margin-left: 0;
+    margin-right: 0;
 }
 
 body.menu-collapsed .main-menu ul li a {
@@ -112,7 +114,7 @@ body.menu-collapsed .main-menu ul li a {
     }
 
     .menu-collapsed .header-navbar {
-        right: 0;
+        left: 0;
     }
 
     .pc-display {
@@ -131,15 +133,15 @@ body.menu-collapsed .main-menu ul li a {
     }
 
     .menu-collapsed .header-navbar {
-        right: 78px;
+        left: 78px;
     }
 
     body.menu-collapsed .content {
-        margin-right: 78px;
+        margin-left: 78px;
     }
 
     body .content {
-        margin-right: 260px;
+        margin-left: 260px;
     }
 
     .mobile-header {
@@ -147,7 +149,7 @@ body.menu-collapsed .main-menu ul li a {
     }
 
     .header-navbar {
-        right: 260px;
+        left: 260px;
         box-shadow: 8px 8px 18px 0 rgb(13 22 46 / 0.70);
         transition: .3s ease all,background 0s;
         -webkit-transition: .3s ease all,background 0s;

@@ -26,8 +26,8 @@ a {
 -------------------------------------------------- */
 
 html {
-    direction: rtl !important;
-    text-align: right !important;
+    direction: ltr !important;
+    text-align: left !important;
     font-family: "IRANSans" !important;
 }
 
