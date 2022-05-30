@@ -39,7 +39,7 @@
                methods: {
                    getWallets: async function() {
                        var myHeaders = new Headers();
-                       myHeaders.append("Authorization", "Bearer eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwidHlwIjoiSldUIn0.1HmJr-yJO-bcyuWeIiSTTz7-GLNkfN1aEOGMQsmluBEY31m_rkTdmg.tuxJnztlJzd9e4jOdSPSZw.vV_ukUTcrXel_p7uzlnkYvzS_OlUquLm19UKjY6jUON4sg2xqd9Q5EwjT60VuNk7T2Y4dp0vY8-4dIdDMyTHwq5kfnKTK1lCQ1LQbJyd0Swn89EuDK1DkWXD_lYbImwm4YLCMSnZLhO13KUIrBjvCMUePABGCMk2Ny4n45jFrEIBSMbOPnTSzujHNRn5UG3pOQQTwQSYgZPO5hHrDmBUWqC85AEeOqwnNS0h3q15F_q1PecYgtucWKWd5VP0lDVeWRZlAvjlH3gQk8Vq8M7YD4hnCGgQy6z6fg477jBwcSUGVEBelVLf8-mm6l_kM6QbUvb20MFBBQcLMje0pUfF-FjKj1-khPHdZ2HSfdGiGIyBlGWnr-zjrTdfZGCsTtiA.NUl_XYKml13XjkgVIHHQvQ");
+                       myHeaders.append("Authorization", "Bearer 1HmJr-yJO-bcyuWeIiSTTz7-GLNkfN1aEOGMQsmluBEY31m_rkTdmg.tuxJnztlJzd9e4jOdSPSZw.vV_ukUTcrXel_p7uzlnkYvzS_OlUquLm19UKjY6jUON4sg2xqd9Q5EwjT60VuNk7T2Y4dp0vY8-4dIdDMyTHwq5kfnKTK1lCQ1LQbJyd0Swn89EuDK1DkWXD_lYbImwm4YLCMSnZLhO13KUIrBjvCMUePABGCMk2Ny4n45jFrEIBSMbOPnTSzujHNRn5UG3pOQQTwQSYgZPO5hHrDmBUWqC85AEeOqwnNS0h3q15F_q1PecYgtucWKWd5VP0lDVeWRZlAvjlH3gQk8Vq8M7YD4hnCGgQy6z6fg477jBwcSUGVEBelVLf8-mm6l_kM6QbUvb20MFBBQcLMje0pUfF-FjKj1-khPHdZ2HSfdGiGIyBlGWnr-zjrTdfZGCsTtiA.NUl_XYKml13XjkgVIHHQvQ");
                        await fetch("https://localhost:5001/manage/wallet/getAll", {
                            method: 'GET',
                            headers: myHeaders,
