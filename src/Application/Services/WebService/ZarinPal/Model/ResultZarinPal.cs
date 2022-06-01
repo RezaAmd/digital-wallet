@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Infrastructure.Common.Services.WebService.ZarinPal.Model
+namespace Application.Services.WebService.ZarinPal.Model
 {
     public class ResultZarinPal<T>
     {
