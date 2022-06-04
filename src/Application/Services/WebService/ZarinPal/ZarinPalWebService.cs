@@ -11,7 +11,8 @@ namespace Application.Services.WebService.ZarinPal
     {
         #region Dependency Injection
         private readonly string merchantId = "c581ad20-7ef9-4553-ae6f-6f175c39af9e";
-        private readonly string callbackUrl = "https://wallet.techonit.org/payment/zarinpalcallback";
+        //private readonly string callbackUrl = "https://wallet.techonit.org/payment/zarinpalcallback";
+        private readonly string callbackUrl = "https://localhost:5001/payment/zarinpalcallback";
         private readonly string baseUrl = "https://api.zarinpal.com/pg/";
         private readonly IRestService restService;
 
