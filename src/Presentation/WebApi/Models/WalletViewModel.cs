@@ -24,12 +24,13 @@ namespace WebApi.Models
         {
             if (balance <= 0)
             {
-                this.balance = 0;
+                Balance = 0;
             }
             else
-                this.balance = balance;
+                Balance = balance;
         }
-        public double balance { get; set; }
+
+        public double Balance { get; set; }
     }
 
     public class IncreaseResult
