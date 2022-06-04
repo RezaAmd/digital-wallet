@@ -14,7 +14,8 @@ namespace WebApi.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    [Authorize(AuthenticationSchemes = "Bearer")]
+    //[Authorize(AuthenticationSchemes = "Bearer")]
+    [AllowAnonymous]
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
@@ -233,6 +234,13 @@ namespace WebApi.Controllers
                     return NotFound($"کیف پول مبدا یافت نشد.");
             }
             return NotFound("هیچ کیف پولی به شما اختصاص نشده است.");
+        }
+
+        [HttpPost]
+        [ModelStateValidator]
+        public async Task<ApiResult<object>> Deposit()
+        {
+            return Ok();
         }
     }
 }
