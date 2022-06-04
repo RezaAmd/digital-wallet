@@ -2,6 +2,7 @@
 using Application.Interfaces.Identity;
 using Application.Models;
 using Application.Services.Identity;
+using Application.Services.WebService.ZarinPal;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -23,7 +24,14 @@ namespace Application
                 .AddScoped<IPermissionService, PermissionDao>()
                 .AddScoped<IWalletDao, WalletDao>()
                 .AddScoped<ITransferDao, TransferDao>()
-                .AddScoped<IDepositDao, DepositDao>();
+                .AddScoped<IDepositDao, DepositDao>()
+                ;
+            #endregion
+
+            #region Web Service
+            services
+                .AddTransient<IZarinPalWebService, ZarinPalWebService>()
+                ;
             #endregion
 
             return services;

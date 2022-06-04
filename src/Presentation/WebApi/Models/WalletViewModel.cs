@@ -82,4 +82,16 @@ namespace WebApi.Models
         public double? DestinationBalance { get; set; }
         public string Description { get; set; }
     }
+
+    public class DepositVM
+    {
+        #region Constructors
+        public DepositVM(string getwayLink)
+        {
+            GetwayLink = getwayLink;
+        }
+        #endregion
+
+        public string GetwayLink { get; set; }
+    }
 }

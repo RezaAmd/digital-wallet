@@ -1,6 +1,7 @@
 ﻿using Application.Dao;
 using Application.Extentions;
 using Application.Models;
+using Application.Services.WebService.ZarinPal;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
@@ -23,15 +24,19 @@ namespace WebApi.Controllers
         private readonly ITransferDao transferService;
         private readonly IDepositDao depositService;
         private readonly IUserService userService;
+        private readonly IZarinPalWebService _zarinpalWebservice;
+
         public WalletController(IWalletDao _walletService,
             ITransferDao _transferService,
             IDepositDao _depositService,
-            IUserService _userService)
+            IUserService _userService,
+            IZarinPalWebService zarinpalWebservice)
         {
             walletService = _walletService;
             transferService = _transferService;
             depositService = _depositService;
             userService = _userService;
+            _zarinpalWebservice = zarinpalWebservice;
         }
         #endregion
 
@@ -238,9 +243,18 @@ namespace WebApi.Controllers
 
         [HttpPost]
         [ModelStateValidator]
-        public async Task<ApiResult<object>> Deposit()
+        public async Task<ApiResult<object>> Deposit([FromBody] DepositDto depositDto, CancellationToken cancellationToken = default)
         {
-            return Ok();
+            // TODO: Insert transaction to database.
+
+            // Payment request to bank.
+            var paymentRequestResult = await _zarinpalWebservice
+                .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile);
+            if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
+            }
+            return BadRequest(paymentRequestResult.Response.Content);
         }
     }
 }
