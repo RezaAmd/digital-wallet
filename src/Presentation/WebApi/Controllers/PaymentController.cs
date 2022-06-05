@@ -47,6 +47,7 @@ namespace WebApi.Controllers
                 {
                     if (verifyResult.Result.data.code == 100)
                     {
+                        deposit.RefId = verifyResult.Result.data.ref_id.ToString();
                         var latestTransfer = await _transferService.GetLatestByWalletAsync(deposit.Wallet, cancellationToken);
                         var newTransfer = new Transfer(deposit.Amount, latestTransfer.Balance + deposit.Amount,
                             deposit.DestinationId, description: deposit.Id);
