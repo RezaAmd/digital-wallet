@@ -245,12 +245,13 @@ namespace WebApi.Controllers
         [ModelStateValidator]
         public async Task<ApiResult<object>> Deposit([FromBody] DepositDto depositDto, CancellationToken cancellationToken = default)
         {
-            var newDeposit = new Deposit(depositDto.Amount, depositDto.WalletId, depositDto.TraceId);
             // Payment request to bank.
             var paymentRequestResult = await _zarinpalWebservice
-            .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile);
+                .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile, depositDto.Email);
             if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
             {
+                var newDeposit = new Deposit(depositDto.Amount, depositDto.WalletId, paymentRequestResult.Result.data.authority);
+                // Create new deposit history.
                 var createDepositResult = await depositService.CreateAsync(newDeposit);
                 if (createDepositResult.Succeeded)
                 {
@@ -258,13 +259,11 @@ namespace WebApi.Controllers
                 }
                 else
                 {
-
+                    return BadRequest(createDepositResult.Errors);
                 }
             }
             else
             {
-                newDeposit.State = DepositState.Failed;
-                var updateDepositResult = await depositService.UpdateAsync(newDeposit);
                 return BadRequest(paymentRequestResult.Response.Content);
             }
         }
