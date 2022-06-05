@@ -47,13 +47,12 @@ namespace Application.Dao
             double balance = 0;
             if (transfer != null)
             {
-                if (!transfer.OriginBalance.HasValue)
+                if (!transfer.OriginBalance.HasValue && wallet.Id != transfer.DestinationId)
                     balance = 0;
                 else
                     balance = transfer.OriginId == wallet.Id ?
                     transfer.OriginBalance.Value :
                     transfer.DestinationBalance;
-
             }
             return (transfer, balance);
         }

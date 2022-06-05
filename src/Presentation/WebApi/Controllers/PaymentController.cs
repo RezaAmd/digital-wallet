@@ -38,7 +38,7 @@ namespace WebApi.Controllers
             var deposit = await _depositService.FindByTraceIdAsync(Authority, includeWallet: true, cancellationToken);
             if (deposit != null)
             {
-                string redirectAddress = $"{deposit.Callback}?traceId={deposit.Id}";
+                string redirectAddress = $"{deposit.Callback}?traceId={deposit.TraceId}";
                 // Verify request to bank.
                 var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount, deposit.TraceId, cancellationToken);
                 // Update deposit state.
