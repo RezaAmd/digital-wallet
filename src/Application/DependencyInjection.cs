@@ -30,7 +30,7 @@ namespace Application
 
             #region Web Service
             services
-                .AddTransient<IZarinPalWebService, ZarinPalWebService>()
+                .AddTransient<IZarinpalWebService, ZarinpalWebService>()
                 ;
             #endregion
 
