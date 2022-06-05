@@ -4,6 +4,7 @@ using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
 using System;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +29,11 @@ namespace Application.Dao
         public async Task<Deposit> FindByIdAsync(string id, CancellationToken cancellationToken = default)
         {
             return await context.Deposits.FindAsync(id, cancellationToken);
+        }
+
+        public async Task<Deposit> FindByTraceIdAsync(string traceId, CancellationToken cancellationToken = default)
+        {
+            return await context.Deposits.Where(d => d.TraceId == traceId).FirstOrDefaultAsync(cancellationToken);
         }
 
         /// <summary>
