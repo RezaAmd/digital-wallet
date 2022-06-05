@@ -25,9 +25,9 @@ namespace Application.Dao
         /// </summary>
         /// <param name="id">Deposit history id (GUID).</param>
         /// <returns>Deposit model object.</returns>
-        public async Task<Deposit> FindByIdAsync(string id)
+        public async Task<Deposit> FindByIdAsync(string id, CancellationToken cancellationToken = default)
         {
-            return await context.Deposits.FindAsync(id);
+            return await context.Deposits.FindAsync(id, cancellationToken);
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Application.Dao
         /// <param name="deposit">New deposit model object.</param>
         public async Task<Result> CreateAsync(Deposit deposit, CancellationToken cancellationToken = default)
         {
-            await context.Deposits.AddAsync(deposit);
+            await context.Deposits.AddAsync(deposit, cancellationToken);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
                 return Result.Success;
             return Result.Failed();

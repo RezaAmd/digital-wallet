@@ -12,7 +12,7 @@ namespace Application.Dao
         /// </summary>
         /// <param name="id">Deposit history id (GUID).</param>
         /// <returns>Deposit model object.</returns>
-        Task<Deposit> FindByIdAsync(string id);
+        Task<Deposit> FindByIdAsync(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get deposit history by wallet id.
