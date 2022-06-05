@@ -3,7 +3,7 @@
     public class PatmentRequestZarinPal
     {
         #region Constructors
-        public PatmentRequestZarinPal(double amount = 1000, string description = "پرداخت تستی",
+        public PatmentRequestZarinPal(double amount = 1000, string description = null,
             string callback = null, string mobile = null, string email = null)
         {
             merchant_id = "c581ad20-7ef9-4553-ae6f-6f175c39af9e";
