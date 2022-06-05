@@ -7,6 +7,6 @@ namespace Application.Services.WebService.ZarinPal
     public interface IZarinPalWebService
     {
         Task<(IRestResponse Response, ResultZarinPal<PaymentRequestResultZarinPal> Result)> PaymentRequestAsync(double amount,
-            string description, string mobile, string email);
+            string description, string mobile = null, string email = null);
     }
 }

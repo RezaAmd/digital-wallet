@@ -23,7 +23,7 @@ namespace Application.Services.WebService.ZarinPal
         #endregion
 
         public async Task<(IRestResponse Response, ResultZarinPal<PaymentRequestResultZarinPal> Result)> PaymentRequestAsync(double amount,
-            string description, string mobile, string email)
+            string description, string mobile = null, string email = null)
         {
             var paymentRequestDto = new PatmentRequestZarinPal(amount, description, callbackUrl, mobile, email);
             var response = await restService
