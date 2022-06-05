@@ -24,13 +24,13 @@ namespace WebApi.Controllers
         private readonly ITransferDao transferService;
         private readonly IDepositDao depositService;
         private readonly IUserService userService;
-        private readonly IZarinPalWebService _zarinpalWebservice;
+        private readonly IZarinpalWebService _zarinpalWebservice;
 
         public WalletController(IWalletDao _walletService,
             ITransferDao _transferService,
             IDepositDao _depositService,
             IUserService _userService,
-            IZarinPalWebService zarinpalWebservice)
+            IZarinpalWebService zarinpalWebservice)
         {
             walletService = _walletService;
             transferService = _transferService;
@@ -253,7 +253,8 @@ namespace WebApi.Controllers
                     .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile, depositDto.Email);
                 if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    var newDeposit = new Deposit(depositDto.Amount, wallet.Id, paymentRequestResult.Result.data.authority);
+                    var newDeposit = new Deposit(depositDto.Amount, wallet.Id,
+                        depositDto.Callback, paymentRequestResult.Result.data.authority);
                     // Create new deposit history.
                     var createDepositResult = await depositService.CreateAsync(newDeposit, cancellationToken);
                     if (createDepositResult.Succeeded)
