@@ -2,9 +2,10 @@
 {
     public enum DepositState
     {
-        Pending,
-        Success,
-        Failed,
-        Cancelled
+        Pending = 0,
+        Success = 200,
+        Successed = 201,
+        Failed = 400,
+        Cancelled = 401
     }
 }
