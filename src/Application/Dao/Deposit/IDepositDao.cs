@@ -18,7 +18,7 @@ namespace Application.Dao
         /// Find specific deposit by traceId.
         /// </summary>
         /// <param name="traceId">Unique ref if from bank when payment request was sent.</param>
-        Task<Deposit> FindByTraceIdAsync(string traceId, CancellationToken cancellationToken = default);
+        Task<Deposit> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get deposit history by wallet id.

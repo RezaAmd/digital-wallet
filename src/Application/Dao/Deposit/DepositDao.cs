@@ -3,8 +3,8 @@ using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -31,9 +31,14 @@ namespace Application.Dao
             return await context.Deposits.FindAsync(id, cancellationToken);
         }
 
-        public async Task<Deposit> FindByTraceIdAsync(string traceId, CancellationToken cancellationToken = default)
+        public async Task<Deposit> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default)
         {
-            return await context.Deposits.Where(d => d.TraceId == traceId).FirstOrDefaultAsync(cancellationToken);
+            var query = context.Deposits.Where(d => d.TraceId == traceId);
+            if (includeWallet)
+            {
+                query = query.Include(d => d.Wallet);
+            }
+            return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
         /// <summary>
