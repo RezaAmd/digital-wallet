@@ -245,27 +245,32 @@ namespace WebApi.Controllers
         [ModelStateValidator]
         public async Task<ApiResult<object>> Deposit([FromBody] DepositDto depositDto, CancellationToken cancellationToken = default)
         {
-            // Payment request to bank.
-            var paymentRequestResult = await _zarinpalWebservice
-                .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile, depositDto.Email);
-            if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
+            var wallet = await walletService.FindByIdAsync(depositDto.WalletId);
+            if (wallet != null)
             {
-                var newDeposit = new Deposit(depositDto.Amount, depositDto.WalletId, paymentRequestResult.Result.data.authority);
-                // Create new deposit history.
-                var createDepositResult = await depositService.CreateAsync(newDeposit, cancellationToken);
-                if (createDepositResult.Succeeded)
+                // Payment request to bank.
+                var paymentRequestResult = await _zarinpalWebservice
+                    .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile, depositDto.Email);
+                if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
+                    var newDeposit = new Deposit(depositDto.Amount, wallet.Id, paymentRequestResult.Result.data.authority);
+                    // Create new deposit history.
+                    var createDepositResult = await depositService.CreateAsync(newDeposit, cancellationToken);
+                    if (createDepositResult.Succeeded)
+                    {
+                        return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
+                    }
+                    else
+                    {
+                        return BadRequest(createDepositResult.Errors);
+                    }
                 }
                 else
                 {
-                    return BadRequest(createDepositResult.Errors);
+                    return BadRequest(paymentRequestResult.Response.Content);
                 }
             }
-            else
-            {
-                return BadRequest(paymentRequestResult.Response.Content);
-            }
+            return NotFound("Wallet not found!");
         }
     }
 }
