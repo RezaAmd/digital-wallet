@@ -7,7 +7,7 @@ namespace Domain.Entities
     public class Deposit : BaseEntity
     {
         #region Constructors
-        public Deposit(double amount, string destinationId, DepositState state = DepositState.Pending, string traceId = null)
+        public Deposit(double amount, string destinationId, string traceId = null, DepositState state = DepositState.Pending)
         {
             Id = Guid.NewGuid().ToString();
             Amount = amount;

@@ -85,7 +85,7 @@ namespace WebApi.Controllers
                 var balance = await transferService.GetBalanceByIdAsync(wallet, cancellationToken);
                 return Ok(new GetBalanceVM(balance));
             }
-            return NotFound($"The wallet { id } not found.");
+            return NotFound($"The wallet {id} not found.");
         }
 
         [HttpGet]
@@ -165,7 +165,7 @@ namespace WebApi.Controllers
                         return Ok(result);
                     }
                     else
-                        return NotFound($"کیف پول مقصد '{ model.WalletId }' یافت نشد.");
+                        return NotFound($"کیف پول مقصد '{model.WalletId}' یافت نشد.");
                 }
                 else
                     return NotFound($"کیف پول مبدا یافت نشد.");
@@ -233,7 +233,7 @@ namespace WebApi.Controllers
                         return Ok(result);
                     }
                     else
-                        return NotFound($"کیف پول مقصد '{ model.WalletId }' یافت نشد.");
+                        return NotFound($"کیف پول مقصد '{model.WalletId}' یافت نشد.");
                 }
                 else
                     return NotFound($"کیف پول مبدا یافت نشد.");
@@ -245,16 +245,28 @@ namespace WebApi.Controllers
         [ModelStateValidator]
         public async Task<ApiResult<object>> Deposit([FromBody] DepositDto depositDto, CancellationToken cancellationToken = default)
         {
-            // TODO: Insert transaction to database.
-
+            var newDeposit = new Deposit(depositDto.Amount, depositDto.WalletId, depositDto.TraceId);
             // Payment request to bank.
             var paymentRequestResult = await _zarinpalWebservice
-                .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile);
+            .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile);
             if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
+                var createDepositResult = await depositService.CreateAsync(newDeposit);
+                if (createDepositResult.Succeeded)
+                {
+                    return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
+                }
+                else
+                {
+
+                }
             }
-            return BadRequest(paymentRequestResult.Response.Content);
+            else
+            {
+                newDeposit.State = DepositState.Failed;
+                var updateDepositResult = await depositService.UpdateAsync(newDeposit);
+                return BadRequest(paymentRequestResult.Response.Content);
+            }
         }
     }
 }
