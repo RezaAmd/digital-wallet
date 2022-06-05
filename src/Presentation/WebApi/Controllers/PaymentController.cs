@@ -1,5 +1,4 @@
 ﻿using Application.Dao;
-using Application.Models;
 using Application.Services.WebService.ZarinPal;
 using Domain.Entities;
 using Domain.Enums;
