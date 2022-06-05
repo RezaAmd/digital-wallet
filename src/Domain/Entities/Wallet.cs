@@ -1,5 +1,6 @@
 ﻿using Domain.Entities.Identity;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities
@@ -32,5 +33,6 @@ namespace Domain.Entities
 #nullable disable
         public virtual Bank Bank { get; set; }
         public virtual User Owner { get; set; }
+        public virtual ICollection<Deposit> Deposits { get; set; }
     }
 }
