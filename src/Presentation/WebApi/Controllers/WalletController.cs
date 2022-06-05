@@ -252,7 +252,7 @@ namespace WebApi.Controllers
             {
                 var newDeposit = new Deposit(depositDto.Amount, depositDto.WalletId, paymentRequestResult.Result.data.authority);
                 // Create new deposit history.
-                var createDepositResult = await depositService.CreateAsync(newDeposit);
+                var createDepositResult = await depositService.CreateAsync(newDeposit, cancellationToken);
                 if (createDepositResult.Succeeded)
                 {
                     return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
