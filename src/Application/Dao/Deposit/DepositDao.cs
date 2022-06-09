@@ -41,6 +41,16 @@ namespace Application.Dao
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
+        public async Task<Deposit?> FindByAuthorityAsync(string authority, bool includeWallet = false, CancellationToken cancellationToken = default)
+        {
+            var query = context.Deposits.Where(d => d.Authority == authority);
+            if (includeWallet)
+            {
+                query = query.Include(d => d.Wallet);
+            }
+            return await query.FirstOrDefaultAsync(cancellationToken);
+        }
+
         /// <summary>
         /// Get deposit history by wallet id.
         /// </summary>
