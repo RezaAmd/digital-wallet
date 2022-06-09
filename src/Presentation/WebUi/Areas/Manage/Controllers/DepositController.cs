@@ -2,8 +2,7 @@
 
 namespace WebUi.Areas.Manage.Controllers
 {
-    [Area("Manage")]
-    public class WalletController : Controller
+    public class DepositController : Controller
     {
         [HttpGet]
         public IActionResult Index()
