@@ -35,21 +35,24 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> ZarinpalCallback(string Authority, string Status, CancellationToken cancellationToken = default)
         {
-            var deposit = await _depositService.FindByTraceIdAsync(Authority, includeWallet: true, cancellationToken);
+            // Find deposit history with authority.
+            var deposit = await _depositService.FindByAuthorityAsync(Authority, includeWallet: true, cancellationToken);
             if (deposit != null)
             {
                 string redirectAddress = $"{deposit.Callback}?traceId={deposit.TraceId}";
-                // Verify request to bank.
-                var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount, deposit.TraceId, cancellationToken);
+                // Send verify request to bank.
+                var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount, deposit.Authority, cancellationToken);
                 // Update deposit state.
                 if (verifyResult.Response.StatusCode == HttpStatusCode.OK)
                 {
                     if (verifyResult.Result.data.code == 100)
                     {
+                        // Updade deposit history.
                         deposit.RefId = verifyResult.Result.data.ref_id.ToString();
                         var latestTransfer = await _transferService.GetLatestByWalletAsync(deposit.Wallet, cancellationToken);
                         var newTransfer = new Transfer(deposit.Amount, latestTransfer.Balance + deposit.Amount,
                             deposit.DestinationId, description: deposit.Id);
+                        // Increase wallet balance.
                         var increaseResult = await _transferService.CreateAsync(newTransfer, cancellationToken);
                         if (increaseResult.Succeeded)
                         {
