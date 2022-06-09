@@ -1,8 +1,10 @@
 ﻿using Application.Services.WebService.ZarinPal.Model;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using RestSharp.Service;
 using RestSharp.Service.Models;
+using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -12,15 +14,17 @@ namespace Application.Services.WebService.ZarinPal
     public class ZarinpalWebService : IZarinpalWebService
     {
         #region Dependency Injection
-        private readonly string merchantId = "c581ad20-7ef9-4553-ae6f-6f175c39af9e";
         //private readonly string callbackUrl = "https://wallet.techonit.org/payment/zarinpalcallback";
         private readonly string callbackUrl = "https://localhost:5001/payment/zarinpalcallback";
         private readonly string baseUrl = "https://api.zarinpal.com/pg/";
         private readonly IRestService restService;
+        private readonly ILogger<ZarinpalWebService> _logger;
 
-        public ZarinpalWebService(IRestService _restService)
+        public ZarinpalWebService(IRestService _restService,
+            ILogger<ZarinpalWebService> logger)
         {
             restService = _restService;
+            _logger = logger;
         }
         #endregion
 
@@ -42,15 +46,23 @@ namespace Application.Services.WebService.ZarinPal
         public async Task<(IRestResponse Response, ResultZarinPal<ZarinpalVerifyPaymentResponse> Result)> VerifyPaymentAsync(double amount,
             string authority, CancellationToken cancellationToken = default)
         {
-            var verifyPaymentDto = new ZarinpalPaymentVerifyParams(authority, amount * 10);
-            var response = await restService.RequestAsync(baseUrl + "v4/payment/verify.json",
-                Method.POST, new RestConfig(body: verifyPaymentDto));
             var result = new ResultZarinPal<ZarinpalVerifyPaymentResponse>();
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
-                 result = JsonConvert.DeserializeObject<ResultZarinPal<ZarinpalVerifyPaymentResponse>>(response.Content);
+                var verifyPaymentDto = new ZarinpalPaymentVerifyParams(authority, amount * 10);
+                var response = await restService.RequestAsync(baseUrl + "v4/payment/verify.json",
+                    Method.POST, new RestConfig(body: verifyPaymentDto));
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    result = JsonConvert.DeserializeObject<ResultZarinPal<ZarinpalVerifyPaymentResponse>>(response.Content);
+                }
+                return (response, result);
             }
-            return (response, result);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return (null, result);
         }
     }
 }
