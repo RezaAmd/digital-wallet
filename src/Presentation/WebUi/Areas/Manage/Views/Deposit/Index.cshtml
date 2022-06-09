@@ -29,3 +29,59 @@
     </tbody>
 </table>
 
+@section Scripts {
+<script>
+        var app = new Vue({
+               el: '#app',
+               mounted: function() {
+                   this.getWallets();
+               },
+               data: {
+                   deposits: {
+                       state: 0,
+                       list: []
+                   }
+               },
+               methods: {
+                   getDeposits: async function() {
+                       var myHeaders = new Headers();
+                       myHeaders.append("Authorization", "Bearer 2UzPh9afwUr9lOiX6tO_0w");
+                       await fetch(consts.urls.baseUrl + "/manage/wallet/getAll", {
+                           method: 'GET',
+                           headers: myHeaders,
+                           redirect: 'follow'
+                       });
+                       this.deposits.list = [
+                           {
+                               seed: "256481256651",
+                               Amount: "2,000",
+                               Destination: {
+                                   Id: "1354785214"
+                               },
+                               createDateTime: "Now",
+                               owner: "Reza Ahmadi"
+                           },
+                           {
+                               seed: "84521463280",
+                               Amount: "35,800",
+                               Destination: {
+                                   Id: "365482355"
+                               },
+                               createDateTime: "Now",
+                               owner: "Reza Ahmadi"
+                           },
+                           {
+                               seed: "17520147786",
+                               Amount: "853,000",
+                               Destination: {
+                                   Id: "9846451655"
+                               },
+                               createDateTime: "Now",
+                               owner: "Reza Ahmadi"
+                           },
+                       ]
+                   }
+               }
+           });
+</script>
+}
