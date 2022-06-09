@@ -21,7 +21,6 @@
         </tr>
     </tbody>
 </table>
-{{message}}
 
 @section Scripts {
 <script>
@@ -40,7 +39,7 @@
                    getWallets: async function() {
                        var myHeaders = new Headers();
                        myHeaders.append("Authorization", "Bearer 2UzPh9afwUr9lOiX6tO_0w");
-                       await fetch("https://localhost:5001/manage/wallet/getAll", {
+                       await fetch(consts.urls.baseUrl + "/manage/wallet/getAll", {
                            method: 'GET',
                            headers: myHeaders,
                            redirect: 'follow'
