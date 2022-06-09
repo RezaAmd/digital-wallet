@@ -2,6 +2,7 @@
 
 namespace WebUi.Areas.Manage.Controllers
 {
+    [Area("Manage")]
     public class DepositController : Controller
     {
         [HttpGet]
