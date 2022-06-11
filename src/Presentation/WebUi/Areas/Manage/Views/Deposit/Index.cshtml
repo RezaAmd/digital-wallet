@@ -1,87 +1,105 @@
-﻿
-@{
+﻿@{
     ViewData["Title"] = "Deposit history";
     Layout = "~/Areas/Manage/Views/Shared/_Layout.cshtml";
 }
 
 <h1><i class="fa fa-money-check-alt"></i> Diposit general history</h1>
-<input class="form-control col-4" type="search" placeholder="Search by: Trace Id, Authority, Wallet Id..." />
-<table class="table table-borderless mt-3">
+<input class="form-control col-4" type="search" placeholder="Trace Id, Authority, Wallet Id..." />
+<table class="table table-striped table-borderless mt-3">
     <thead>
         <tr>
             <th>Trace Id</th>
-            <th title="Toman">Amount</th>
-            <th title="Wallet Id">Destination Id</th>
-            <th>State</th>
+            <th><span title="Toman">Amount</span></th>
+            <th><span title="Wallet Id">Destination Id</span></th>
+            <th class="text-center">State</th>
             <th>Created Date & Time</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>256481256651</td>
-            <td>2,000</td>
-            <td>1354785214</td>
-            <td><i class="fa fa-check text-success"></i></td>
-            <td>Now</td>
+        <tr v-for="deposit in deposits.list">
+            <td>{{deposit.seed}}</td>
+            <td>{{deposit.amount}}</td>
+            <td><i class="far fa-wallet"></i> {{deposit.destination.id}}</td>
+            <td class="text-center">
+                <i v-bind:class="[deposit.state == 0 ? 'far fa-hourglass text-warning'
+                : deposit.state == 400 ? 'fa fa-times text-danger'
+                : 'fa fa-check text-success']"
+                   v-bind:title="[deposit.state == 0 ? 'Pending'
+                : deposit.state == 400 ? 'Failed'
+                : 'Success']"></i>
+            </td>
+            <td>{{deposit.createDateTime}}</td>
             <td></td>
         </tr>
     </tbody>
 </table>
 
 @section Scripts {
-<script>
+    <script>
         var app = new Vue({
-               el: '#app',
-               mounted: function() {
-                   this.getWallets();
-               },
-               data: {
-                   deposits: {
-                       state: 0,
-                       list: []
-                   }
-               },
-               methods: {
-                   getDeposits: async function() {
-                       var myHeaders = new Headers();
-                       myHeaders.append("Authorization", "Bearer 2UzPh9afwUr9lOiX6tO_0w");
-                       await fetch(consts.urls.baseUrl + "/manage/wallet/getAll", {
-                           method: 'GET',
-                           headers: myHeaders,
-                           redirect: 'follow'
-                       });
-                       this.deposits.list = [
-                           {
-                               seed: "256481256651",
-                               Amount: "2,000",
-                               Destination: {
-                                   Id: "1354785214"
-                               },
-                               createDateTime: "Now",
-                               owner: "Reza Ahmadi"
-                           },
-                           {
-                               seed: "84521463280",
-                               Amount: "35,800",
-                               Destination: {
-                                   Id: "365482355"
-                               },
-                               createDateTime: "Now",
-                               owner: "Reza Ahmadi"
-                           },
-                           {
-                               seed: "17520147786",
-                               Amount: "853,000",
-                               Destination: {
-                                   Id: "9846451655"
-                               },
-                               createDateTime: "Now",
-                               owner: "Reza Ahmadi"
-                           },
-                       ]
-                   }
-               }
-           });
-</script>
+            el: '#app',
+            mounted: function() {
+                this.getDeposits();
+            },
+            data: {
+                deposits: {
+                    state: 0,
+                    list: []
+                }
+            },
+            methods: {
+                getDeposits: async function() {
+                    var myHeaders = new Headers();
+                    myHeaders.append("Authorization", "Bearer 2UzPh9afwUr9lOiX6tO_0w");
+                    await fetch("https://localhost:5001" + "/manage/deposit/getAll", {
+                        method: 'GET',
+                        headers: myHeaders,
+                        redirect: 'follow'
+                    });
+                    this.deposits.list = [
+                        {
+                            seed: "256481256651",
+                            amount: "2,000",
+                            destination: {
+                                id: "1354785214"
+                            },
+                            state: 0,
+                            createDateTime: "Now",
+                            owner: "Reza Ahmadi"
+                        },
+                        {
+                            seed: "84521463280",
+                            amount: "35,800",
+                            destination: {
+                                id: "3654872355"
+                            },
+                            state: 400,
+                            createDateTime: "25 minutes ago",
+                            owner: "Reza Ahmadi"
+                        },
+                        {
+                            seed: "17520147786",
+                            amount: "853,000",
+                            destination: {
+                                id: "9846451655"
+                            },
+                            state: 200,
+                            createDateTime: "5 hours ago",
+                            owner: "Reza Ahmadi"
+                        },
+                    ]
+                    this.setupTooltip();
+                },
+                setupTooltip: function() {
+                    setTimeout(function() {
+                        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'))
+                        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                            return new bootstrap.Tooltip(tooltipTriggerEl)
+                        })
+                    }, 1)
+                }
+            }
+        });
+    </script>
 }
