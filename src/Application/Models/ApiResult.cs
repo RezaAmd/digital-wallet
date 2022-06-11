@@ -166,6 +166,11 @@ namespace Application.Models
         {
             return new ApiResult<TData>(ApiResultStatusCode.Forbiden, null);
         }
+
+        public static implicit operator ApiResult<TData>(ConflictResult result)
+        {
+            return new ApiResult<TData>(ApiResultStatusCode.ServerError, null);
+        }
         #endregion
     }
 
