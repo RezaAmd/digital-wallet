@@ -21,6 +21,47 @@ namespace Application.Dao
         }
         #endregion
 
+        public async Task<PaginatedList<Deposit>> GetAllAsync(int page = 1, int pageSize = 20, string keyword = null,
+            bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
+            CancellationToken cancellationToken = default)
+        {
+            var query = context.Deposits.AsQueryable();
+
+            // Search
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                query = query
+                    .Where(d => d.TraceId.Contains(keyword) ||
+                    d.RefId.Contains(keyword) ||
+                    d.DestinationId.Contains(keyword));
+            }
+
+            // Join to wallet.
+            if (includeWallet)
+            {
+                query = query.Include(d => d.Wallet);
+            }
+
+            // As no tracking.
+            if (asNoTracking)
+            {
+                query = query.AsNoTracking();
+            }
+
+            // Orderby
+            if (isOrderByDesending)
+            {
+                query = query.OrderByDescending(d => d.DateTime);
+            }
+            else
+            {
+                query = query.OrderBy(d => d.DateTime);
+            }
+
+            return await query
+                .PaginatedListAsync(page, pageSize, cancellationToken);
+        }
+
         /// <summary>
         /// Find deposit history by id.
         /// </summary>

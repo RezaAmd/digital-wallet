@@ -8,6 +8,19 @@ namespace Application.Dao
     public interface IDepositDao
     {
         /// <summary>
+        /// Get all deposits history.
+        /// </summary>
+        /// <param name="page">Page number. (minimum: 1)</param>
+        /// <param name="pageSize">Size of page items.</param>
+        /// <param name="keyword">Keyword for search. (with traceId, refId or Authority)</param>
+        /// <param name="includeWallet">Join to wallet table?</param>
+        /// <param name="asNoTracking">As no tracking items?</param>
+        /// <returns>Paginated list of deposit entity.</returns>
+        Task<PaginatedList<Deposit>> GetAllAsync(int page = 1, int pageSize = 20, string keyword = null,
+            bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
+            CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Find deposit history by id.
         /// </summary>
         /// <param name="id">Deposit history id (GUID).</param>

@@ -17,10 +17,15 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="deposit in deposits.list">
-            <td>{{deposit.seed}}</td>
+        @* Loading *@
+        <tr v-if="deposits.state === 0">
+            <td class="text-center" colspan="6">Loading ...</td>
+        </tr>
+        @* Loaded succedd *@
+        <tr v-if="deposits.state === 200" v-for="deposit in deposits.list">
+            <td>{{deposit.traceId}}</td>
             <td>{{deposit.amount}}</td>
-            <td><i class="far fa-wallet"></i> {{deposit.destination.id}}</td>
+            <td><i class="far fa-wallet"></i> {{deposit.destinationId}}</td>
             <td class="text-center">
                 <i v-bind:class="[deposit.state == 0 ? 'far fa-hourglass text-warning'
                 : deposit.state == 400 ? 'fa fa-times text-danger'
@@ -29,18 +34,21 @@
                 : deposit.state == 400 ? 'Failed'
                 : 'Success']"></i>
             </td>
-            <td>{{deposit.createDateTime}}</td>
+            <td>{{deposit.dateTime}}</td>
             <td></td>
+        </tr>
+        @* Not Found *@
+        <tr v-else>
+            <td class="text-center" colspan="6">No items found!</td>
         </tr>
     </tbody>
 </table>
-
 @section Scripts {
     <script>
         var app = new Vue({
             el: '#app',
-            mounted: function() {
-                this.getDeposits();
+            mounted: async function() {
+                await this.getDeposits();
             },
             data: {
                 deposits: {
@@ -52,44 +60,22 @@
                 getDeposits: async function() {
                     var myHeaders = new Headers();
                     myHeaders.append("Authorization", "Bearer 2UzPh9afwUr9lOiX6tO_0w");
-                    await fetch("https://localhost:5001" + "/manage/deposit/getAll", {
+                    var response = await fetch("https://localhost:5001" + "/manage/deposit/getAll", {
                         method: 'GET',
                         headers: myHeaders,
                         redirect: 'follow'
                     });
-                    this.deposits.list = [
-                        {
-                            seed: "256481256651",
-                            amount: "2,000",
-                            destination: {
-                                id: "1354785214"
-                            },
-                            state: 0,
-                            createDateTime: "Now",
-                            owner: "Reza Ahmadi"
-                        },
-                        {
-                            seed: "84521463280",
-                            amount: "35,800",
-                            destination: {
-                                id: "3654872355"
-                            },
-                            state: 400,
-                            createDateTime: "25 minutes ago",
-                            owner: "Reza Ahmadi"
-                        },
-                        {
-                            seed: "17520147786",
-                            amount: "853,000",
-                            destination: {
-                                id: "9846451655"
-                            },
-                            state: 200,
-                            createDateTime: "5 hours ago",
-                            owner: "Reza Ahmadi"
-                        },
-                    ]
+                    let result = await response.json();
+                    if (result) {
+                        if (result.statusCode == 200) {
+                            this.replaceDeposits(result.data.items);
+                        }
+                        this.deposits.state = result.statusCode;
+                    }
                     this.setupTooltip();
+                },
+                replaceDeposits: function(depositsResponse) {
+                    this.deposits.list = depositsResponse;
                 },
                 setupTooltip: function() {
                     setTimeout(function() {
