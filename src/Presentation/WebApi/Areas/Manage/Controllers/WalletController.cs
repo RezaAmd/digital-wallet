@@ -14,7 +14,7 @@ namespace WebApi.Areas.Manage.Controllers
     [ApiController]
     [Area("Manage")]
     [Route("[area]/[controller]/[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
@@ -40,7 +40,7 @@ namespace WebApi.Areas.Manage.Controllers
         public async Task<ApiResult<object>> GetAll(string bankId = null, int page = 1, CancellationToken cancellationToken = new CancellationToken())
         {
             int pageSize = 10;
-            var wallets = await walletService.GetAllAsync(bankId, page, pageSize, cancellationToken);
+            var wallets = await walletService.GetAllAsync<WalletViewModelManage>(bankId, page, pageSize, cancellationToken);
             if (wallets.totalCount > 0)
                 return Ok(wallets);
             return NotFound(wallets);

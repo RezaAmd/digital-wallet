@@ -2,6 +2,7 @@
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -24,15 +25,15 @@ namespace Application.Dao
         /// Get all wallets.
         /// </summary>
         /// <param name="bankId">Bank id for get wallets of specific bank.</param>
-        public async Task<PaginatedList<Wallet>> GetAllAsync(string bankId = null, int page = 1, int pageSize = 10,
-            CancellationToken cancellationToken = new CancellationToken())
+        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(string bankId = null, int page = 1, int pageSize = 10,
+            CancellationToken cancellationToken = new CancellationToken(), TypeAdapterConfig config = default)
         {
-            var wallets = context.Wallets.AsQueryable();
+            var walletsQuery = context.Wallets.AsQueryable();
             if (!string.IsNullOrEmpty(bankId))
-                wallets = wallets.Where(b => b.BankId == bankId);
+                walletsQuery = walletsQuery.Where(b => b.BankId == bankId);
             else
-                wallets = wallets.Where(w => w.BankId == null);
-            return await wallets.PaginatedListAsync(page, pageSize, cancellationToken);
+                walletsQuery = walletsQuery.Where(w => w.BankId == null);
+            return await walletsQuery.PaginatedListAsync<Wallet, TDestination>(page, pageSize, cancellationToken);
         }
 
         /// <summary>

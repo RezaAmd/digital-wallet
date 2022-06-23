@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Domain.Entities;
+using Mapster;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -11,8 +12,8 @@ namespace Application.Dao
         /// Get all wallets.
         /// </summary>
         /// <param name="bankId">Bank id for get wallets of specific bank.</param>
-        Task<PaginatedList<Wallet>> GetAllAsync(string bankId = null, int page = 1, int pageSize = 10,
-            CancellationToken cancellationToken = new CancellationToken());
+        Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(string bankId = null, int page = 1, int pageSize = 10,
+            CancellationToken cancellationToken = new CancellationToken(), TypeAdapterConfig config = default);
 
         /// <summary>
         /// Find a specific wallet with seed.
