@@ -3,6 +3,7 @@ using Application.Interfaces.Identity;
 using Application.Models;
 using Application.Services.Identity;
 using Application.Services.WebService.ZarinPal;
+using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -33,6 +34,8 @@ namespace Application
                 .AddTransient<IZarinpalWebService, ZarinpalWebService>()
                 ;
             #endregion
+
+            TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 
             return services;
         }
