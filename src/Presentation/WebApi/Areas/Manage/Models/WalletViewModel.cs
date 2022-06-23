@@ -2,7 +2,7 @@
 {
     public class WalletViewModelManage
     {
-        public string Seed { get; set; }
+        public string seed { get; set; }
         public string createdDateTime { get; set; }
         public OwnerViewModelManage owner { get; set; }
     }
