@@ -18,7 +18,7 @@
             <td class="text-center" colspan="6">Loading ...</td>
         </tr>
         @* Loaded succedd *@
-        <tr v-for="wallet in wallets.list">
+        <tr v-if="wallets.state === 200" v-for="wallet in wallets.list">
             <td>{{wallet.seed}}</td>
             <td>{{wallet.createdDateTime}}</td>
             <td>{{wallet.owner}}</td>
