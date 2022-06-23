@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,20 @@ namespace Application.Models
                 .ToListAsync(cancellationToken);
 
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
+        }
+
+        public static async Task<PaginatedList<TDestination>> CreateAsync<TOrigin, TDestination>(IQueryable<TOrigin> source,
+            int pageIndex, int pageSize, CancellationToken cancellationToken, TypeAdapterConfig config = default)
+        {
+            pageIndex = pageIndex <= 0 ? 1 : pageIndex;
+            pageSize = pageSize <= 0 ? 5 : pageSize;
+
+            var count = await source.CountAsync();
+            var items = await source
+                .Skip((pageIndex - 1) * pageSize).Take(pageSize)
+                .ProjectToType<TDestination>(config)
+                .ToListAsync(cancellationToken);
+            return new PaginatedList<TDestination>(items, count, pageIndex, pageSize);
         }
     }
 }
