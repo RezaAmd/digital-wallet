@@ -28,7 +28,8 @@ namespace Application.Dao
         public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(string bankId = null, int page = 1, int pageSize = 10,
             CancellationToken cancellationToken = new CancellationToken(), TypeAdapterConfig config = default)
         {
-            var walletsQuery = context.Wallets.AsQueryable();
+            var walletsQuery = context.Wallets.OrderBy(w => w.CreatedDateTime)
+                .AsQueryable();
             if (!string.IsNullOrEmpty(bankId))
                 walletsQuery = walletsQuery.Where(b => b.BankId == bankId);
             else
