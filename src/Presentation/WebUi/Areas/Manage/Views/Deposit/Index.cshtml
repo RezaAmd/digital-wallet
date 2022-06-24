@@ -34,7 +34,7 @@
                 : deposit.state == 400 ? 'Failed'
                 : 'Success']"></i>
             </td>
-            <td>{{deposit.dateTime}}</td>
+            <td>{{deposit.createdDateTime.dateTime}}</td>
             <td></td>
         </tr>
         @* Not Found *@
@@ -75,7 +75,18 @@
                     this.setupTooltip();
                 },
                 replaceDeposits: function(depositsResponse) {
-                    this.deposits.list = depositsResponse;
+                    this.deposits.list = depositsResponse.map(function(deposit) {
+                        return {
+                            traceId: deposit.traceId,
+                            amount: deposit.amount,
+                            destinationId: deposit.destinationId,
+                            state: deposit.state,
+                            createdDateTime: {
+                                dateTime: deposit.createdDateTime,
+                                persianDateTime: new persianDate(deposit.createdDateTime).format('dddd, DD MMMM YYYY - HH:mm')
+                            }
+                        };
+                    });
                 },
                 setupTooltip: function() {
                     setTimeout(function() {

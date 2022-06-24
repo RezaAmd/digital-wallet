@@ -4,7 +4,7 @@
 }
 <h1><i class="fa fa-wallet"></i> Wallet manager</h1>
 
-<table class="table table-borderless">
+<table class="table table-borderless table-striped mt-3">
     <thead>
         <tr>
             <th>Seed</th>
@@ -20,8 +20,8 @@
         @* Loaded succedd *@
         <tr v-if="wallets.state === 200" v-for="wallet in wallets.list">
             <td>{{wallet.seed}}</td>
-            <td>{{wallet.createdDateTime}}</td>
-            <td>{{wallet.owner}}</td>
+            <td><span v-bind:title="wallet.createdDateTime.persianDateTime">{{wallet.createdDateTime.dateTime}}</span></td>
+            <td>{{wallet.owner ? wallet.owner.name : ''}} {{wallet.owner ? wallet.owner.surname : ''}}</td>
             <td></td>
         </tr>
         @* Not Found *@
@@ -62,7 +62,26 @@
                     }
                 },
                 mapWallets: function(walletsResult) {
-                    this.wallets.list = walletsResult;
+                    this.wallets.list = walletsResult.map(function(wallet) {
+                        return {
+                            id: wallet.id,
+                            seed: wallet.seed,
+                            createdDateTime: {
+                                dateTime: wallet.createdDateTime,
+                                persianDateTime: new persianDate(wallet.createdDateTime).format('dddd, DD MMMM YYYY - HH:mm')
+                            },
+                            owner: wallet.owner
+                        };
+                    });
+                    this.setupTooltip()
+                },
+                setupTooltip: function() {
+                    setTimeout(function() {
+                        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[title]'))
+                        var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                            return new bootstrap.Tooltip(tooltipTriggerEl)
+                        })
+                    }, 1)
                 }
             }
         });
