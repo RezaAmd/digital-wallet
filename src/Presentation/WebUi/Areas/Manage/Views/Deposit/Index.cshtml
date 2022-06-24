@@ -34,7 +34,7 @@
                 : deposit.state == 400 ? 'Failed'
                 : 'Success']"></i>
             </td>
-            <td>{{deposit.createdDateTime.dateTime}}</td>
+            <td><span v-bind:title="deposit.createdDateTime.persianDateTime">{{deposit.createdDateTime.dateTime}}</span></td>
             <td></td>
         </tr>
         @* Not Found *@
@@ -68,25 +68,32 @@
                     let result = await response.json();
                     if (result) {
                         if (result.statusCode == 200) {
-                            this.replaceDeposits(result.data.items);
+                            this.mapDeposits(result.data.items);
                         }
                         this.deposits.state = result.statusCode;
                     }
-                    this.setupTooltip();
                 },
-                replaceDeposits: function(depositsResponse) {
+                mapDeposits: function(depositsResponse) {
                     this.deposits.list = depositsResponse.map(function(deposit) {
+                        let createdDateTime = new Date(deposit.dateTime);
+                        let yyyy = createdDateTime.getFullYear();
+                        let MM = createdDateTime.getMonth();
+                        let dd = createdDateTime.getDay();
+                        let HH = createdDateTime.getHours();
+                        let mm = createdDateTime.getMinutes();
+                        let ss = createdDateTime.getSeconds();
                         return {
                             traceId: deposit.traceId,
                             amount: deposit.amount,
                             destinationId: deposit.destinationId,
                             state: deposit.state,
                             createdDateTime: {
-                                dateTime: deposit.createdDateTime,
-                                persianDateTime: new persianDate(deposit.createdDateTime).format('dddd, DD MMMM YYYY - HH:mm')
+                                dateTime: `${yyyy}/${MM}/${dd} - ${HH}:${mm}:${ss}`,
+                                persianDateTime: new persianDate(createdDateTime).format('dddd, DD MMMM YYYY - HH:mm')
                             }
                         };
                     });
+                    this.setupTooltip();
                 },
                 setupTooltip: function() {
                     setTimeout(function() {
@@ -94,7 +101,7 @@
                         var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
                             return new bootstrap.Tooltip(tooltipTriggerEl)
                         })
-                    }, 1)
+                    }, 10)
                 }
             }
         });
