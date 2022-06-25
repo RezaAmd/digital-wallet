@@ -23,7 +23,8 @@ namespace WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddInfrastructure();
-            services.AddLogicServices();
+            services.AddApplicationServices();
+            services.AddRepositoryServices();
             services.AddJwtAuthentication();
             services.AddCors(options =>
             {

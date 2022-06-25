@@ -11,23 +11,13 @@ namespace Application
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddLogicServices(this IServiceCollection services)
+        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             // Service Life Time
             services.AddScoped<ErrorDescriber>()
                 .AddHttpContextAccessor()
                 .AddScoped<ISignInService, SignInService>()
                 .AddTransient<IMapper, Mapper>();
-
-            #region DAO Services
-            services.AddScoped<IUserService, UserService>()
-                .AddScoped<IRoleService, RoleDao>()
-                .AddScoped<IPermissionService, PermissionDao>()
-                .AddScoped<IWalletDao, WalletDao>()
-                .AddScoped<ITransferDao, TransferDao>()
-                .AddScoped<IDepositDao, DepositDao>()
-                ;
-            #endregion
 
             #region Web Service
             services
@@ -37,6 +27,18 @@ namespace Application
 
             TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 
+            return services;
+        }
+
+        public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
+        {
+            services.AddScoped<IUserService, UserService>()
+                .AddScoped<IRoleService, RoleDao>()
+                .AddScoped<IPermissionService, PermissionDao>()
+                .AddScoped<IWalletDao, WalletDao>()
+                .AddScoped<ITransferDao, TransferDao>()
+                .AddScoped<IDepositDao, DepositDao>()
+                ;
             return services;
         }
     }
