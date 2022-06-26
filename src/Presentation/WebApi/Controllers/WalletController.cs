@@ -4,6 +4,7 @@ using Application.Models;
 using Application.Services.WebService.ZarinPal;
 using Domain.Entities;
 using Domain.Enums;
+using Domain.ValueObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -253,7 +254,7 @@ namespace WebApi.Controllers
                     .PaymentRequestAsync(depositDto.Amount, depositDto.Description, depositDto.Mobile, depositDto.Email);
                 if (paymentRequestResult.Response.StatusCode == System.Net.HttpStatusCode.OK)
                 {
-                    var newDeposit = new Deposit(depositDto.Amount, wallet.Id, depositDto.Callback,
+                    var newDeposit = new Deposit(new Money(depositDto.Amount), wallet.Id, depositDto.Callback,
                         paymentRequestResult.Result.data.authority, depositDto.TraceId);
                     // Create new deposit history.
                     var createDepositResult = await depositService.CreateAsync(newDeposit, cancellationToken);

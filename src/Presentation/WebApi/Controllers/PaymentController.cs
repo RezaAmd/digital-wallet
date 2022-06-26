@@ -41,7 +41,7 @@ namespace WebApi.Controllers
             {
                 string redirectAddress = $"{deposit.Callback}?traceId={deposit.TraceId}";
                 // Send verify request to bank.
-                var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount, deposit.Authority, cancellationToken);
+                var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount.Value, deposit.Authority, cancellationToken);
                 // Update deposit state.
                 if (verifyResult.Response.StatusCode == HttpStatusCode.OK)
                 {
@@ -50,7 +50,7 @@ namespace WebApi.Controllers
                         // Updade deposit history.
                         deposit.RefId = verifyResult.Result.data.ref_id.ToString();
                         var latestTransfer = await _transferService.GetLatestByWalletAsync(deposit.Wallet, cancellationToken);
-                        var newTransfer = new Transfer(deposit.Amount, latestTransfer.Balance + deposit.Amount,
+                        var newTransfer = new Transfer(deposit.Amount.Value, latestTransfer.Balance + deposit.Amount.Value,
                             deposit.DestinationId, description: deposit.Id);
                         // Increase wallet balance.
                         var increaseResult = await _transferService.CreateAsync(newTransfer, cancellationToken);
