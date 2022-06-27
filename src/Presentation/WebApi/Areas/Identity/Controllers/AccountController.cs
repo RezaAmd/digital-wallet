@@ -2,46 +2,42 @@
 using Application.Models;
 using Application.Services.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using WebApi.Areas.Identity.Models;
 
-namespace WebApi.Areas.Identity.Controllers
-{
-    [ApiController]
-    [Area("Identity")]
-    [Route("[area]/[controller]/[action]")]
-    public class AccountController : ControllerBase
-    {
-        #region DI
-        private readonly IUserService userService;
-        private readonly IAuthenticationService signInService;
-        public AccountController(IAuthenticationService _signinService,
-            IUserService _userService)
-        {
-            signInService = _signinService;
-            userService = _userService;
-        }
-        #endregion
+namespace WebApi.Areas.Identity.Controllers;
 
-        [HttpPost]
-        public async Task<ApiResult<object>> SignIn([FromBody] SignInDto model)
+[ApiController]
+[Area("Identity")]
+[Route("[area]/[controller]/[action]")]
+public class AccountController : ControllerBase
+{
+    #region DI
+    private readonly IUserService userService;
+    private readonly IAuthenticationService signInService;
+    public AccountController(IAuthenticationService _signinService,
+        IUserService _userService)
+    {
+        signInService = _signinService;
+        userService = _userService;
+    }
+    #endregion
+
+    [HttpPost]
+    public async Task<ApiResult<object>> SignIn([FromBody] SignInDto model)
+    {
+        var user = await userService.FindByIdentityAsync(model.username, withPermissions: true);
+        if (user != null)
         {
-            var user = await userService.FindByIdentityAsync(model.username, withPermissions: true);
-            if (user != null)
+            var passwordValidation = userService.CheckPassword(user, model.password);
+            if (passwordValidation)
             {
-                var passwordValidation = userService.CheckPassword(user, model.password);
-                if (passwordValidation)
-                {
-                    var extraClaims = new List<Claim> { new Claim("wallet-id", user.WalletId) };
-                    var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
-                    if (JwtBearer.Status.Succeeded)
-                        return Ok(new SignInVM(JwtBearer.Token));
-                }
+                var extraClaims = new List<Claim> { new Claim("wallet-id", user.WalletId) };
+                var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
+                if (JwtBearer.Status.Succeeded)
+                    return Ok(new SignInVM(JwtBearer.Token));
             }
-            return BadRequest("نام کاربری یا رمز ورود اشتباه است.");
         }
+        return BadRequest("نام کاربری یا رمز ورود اشتباه است.");
     }
 }

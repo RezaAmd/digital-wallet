@@ -1,10 +1,9 @@
-﻿namespace WebApi.Areas.Manage.Models
+﻿namespace WebApi.Areas.Manage.Models;
+
+public class PermissionMVM
 {
-    public class PermissionMVM
-    {
-        public string id { get; set; }
-        public string slug { get; set; }
-        public string name { get; set; }
-        public string description { get; set; }
-    }
+    public string id { get; set; }
+    public string slug { get; set; }
+    public string name { get; set; }
+    public string description { get; set; }
 }

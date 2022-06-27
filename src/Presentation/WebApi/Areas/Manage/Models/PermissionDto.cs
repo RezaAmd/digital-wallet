@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Areas.Manage.Models
+namespace WebApi.Areas.Manage.Models;
+
+public class CreatePermissionMDto
 {
-    public class CreatePermissionMDto
-    {
-        [Required(ErrorMessage = "وارد کردن نام ضروری است.")]
-        public string name { get; set; }
+    [Required(ErrorMessage = "وارد کردن نام ضروری است.")]
+    public string name { get; set; }
 #nullable enable
-        public string? title { get; set; }
-        public string? description { get; set; }
+    public string? title { get; set; }
+    public string? description { get; set; }
 #nullable disable
-        public List<string> rolesId { get; set; } // List of role id.
-    }
+    public List<string> rolesId { get; set; } // List of role id.
 }

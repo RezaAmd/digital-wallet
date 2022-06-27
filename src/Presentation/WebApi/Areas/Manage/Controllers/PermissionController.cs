@@ -3,13 +3,10 @@ using Application.Extentions;
 using Application.Models;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using WebApi.Areas.Manage.Models;
 
-namespace WebApi.Areas.Manage.Controllers
-{
+namespace WebApi.Areas.Manage.Controllers;
+
     [ApiController]
     [Area("Manage")]
     [Route("[Area]/[controller]/[action]")]
@@ -26,7 +23,7 @@ namespace WebApi.Areas.Manage.Controllers
 
         [HttpGet]
         //[Authorize(Roles = "ReadPermission")]
-        public async Task<ApiResult<object>> GetAll(string keyword = null, int page = 1, CancellationToken cancellationToken = new())
+        public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = new())
         {
             int pageSize = 30;
             var permissions = await permissionService.GetAllAsync(keyword, page, pageSize, true, cancellationToken);
@@ -68,4 +65,3 @@ namespace WebApi.Areas.Manage.Controllers
             return NotFound("نقش مورد نظر پیدا نشد.");
         }
     }
-}

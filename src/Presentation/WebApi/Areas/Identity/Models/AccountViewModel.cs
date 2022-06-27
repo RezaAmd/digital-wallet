@@ -1,11 +1,10 @@
-﻿namespace WebApi.Areas.Identity.Models
+﻿namespace WebApi.Areas.Identity.Models;
+
+public class SignInVM
 {
-    public class SignInVM
+    public SignInVM(string token)
     {
-        public SignInVM(string token)
-        {
-            this.token = token;
-        }
-        public string token { get; set; }
+        this.token = token;
     }
+    public string token { get; set; }
 }
