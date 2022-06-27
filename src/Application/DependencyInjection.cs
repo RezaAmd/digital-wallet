@@ -1,5 +1,4 @@
 ﻿using Application.Dao;
-using Application.Interfaces.Identity;
 using Application.Models;
 using Application.Services.Identity;
 using Application.Services.WebService.ZarinPal;
@@ -16,7 +15,7 @@ namespace Application
             // Service Life Time
             services.AddScoped<ErrorDescriber>()
                 .AddHttpContextAccessor()
-                .AddScoped<ISignInService, SignInService>()
+                .AddScoped<IAuthenticationService, AuthenticationService>()
                 .AddTransient<IMapper, Mapper>();
 
             #region Web Service
@@ -35,9 +34,9 @@ namespace Application
             services.AddScoped<IUserService, UserService>()
                 .AddScoped<IRoleService, RoleDao>()
                 .AddScoped<IPermissionService, PermissionDao>()
-                .AddScoped<IWalletDao, WalletDao>()
-                .AddScoped<ITransferDao, TransferDao>()
-                .AddScoped<IDepositDao, DepositDao>()
+                .AddScoped<IWalletRepository, WalletRepository>()
+                .AddScoped<ITransferRepository, TransferRepository>()
+                .AddScoped<IDepositRepository, DepositRepository>()
                 ;
             return services;
         }
