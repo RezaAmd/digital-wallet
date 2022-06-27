@@ -1,12 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="C:\Users\Reza\.nuget\packages\rest.service\1.0.4\contentFiles\any\net5.0\favicon.ico" />
-    <Content Remove="C:\Users\Vatandar Developer\.nuget\packages\rest.service\1.0.4\contentFiles\any\net5.0\favicon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,10 +15,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.12" />
-    <PackageReference Include="PersianDateTime.Core" Version="1.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.6" />
+    <PackageReference Include="PersianDateTime.Core" Version="2.0.0" />
     <PackageReference Include="Rest.Service" Version="1.0.4" />
-    <PackageReference Include="Microsoft.NETCore.Targets" Version="3.0.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.NETCore.Targets" Version="5.0.0" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>

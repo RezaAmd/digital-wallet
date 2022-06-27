@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Presentation\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUi", "src\Presentation\WebUi\WebUi.csproj", "{7738328C-0905-45D2-9CDF-AB7FD2CDBF70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScheduleWorker", "src\Presentation\ScheduleWorker\ScheduleWorker.csproj", "{FF87249B-E845-4513-8C80-8A345C0A281F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleWorker", "src\Presentation\ScheduleWorker\ScheduleWorker.csproj", "{FF87249B-E845-4513-8C80-8A345C0A281F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
