@@ -4,6 +4,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+// Exception handling
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -17,10 +18,12 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
+
+#region Custom middleware
+
+#endregion
 
 app.UseEndpoints(endpoints =>
 {
