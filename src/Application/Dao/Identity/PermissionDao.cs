@@ -1,6 +1,5 @@
 ﻿using Application.Extentions;
 using Application.Interfaces.Context;
-using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,5 @@
 ﻿using Application.Extentions;
 using Application.Interfaces.Context;
-using Application.Interfaces.Identity;
 using Application.Models;
 using Domain.Entities.Identity;
 using Domain.Enums;
@@ -39,7 +38,7 @@ namespace Application.Dao
         public async Task<User> FindByIdAsync(string id, CancellationToken cancellationToken = new())
         {
             return await context.Users
-                .Include(x=>x.Permissions)
+                .Include(x => x.Permissions)
                 .Where(u => u.Id == id).FirstOrDefaultAsync(cancellationToken);
         }
 
@@ -79,7 +78,7 @@ namespace Application.Dao
         public async Task<Result> DeleteAsync(User user, CancellationToken cancellationToken = new CancellationToken())
         {
             context.Users.Remove(user);
-            if(Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+            if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
                 return Result.Success;
             return Result.Failed();
         }

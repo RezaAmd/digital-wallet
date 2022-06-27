@@ -1,6 +1,7 @@
 ﻿using Application.Dao;
 using Application.Extentions;
 using Application.Models;
+using Application.Repositories;
 using Domain.Entities;
 using Domain.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,7 +45,7 @@ namespace WebApi.Areas.Manage.Controllers
                 return Ok(users);
             return NotFound(users);
         }
-        
+
         [HttpGet("{id}")]
         public async Task<ApiResult<object>> Get([FromRoute] string id)
         {

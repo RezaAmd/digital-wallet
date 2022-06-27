@@ -1,6 +1,7 @@
 ﻿using Application.Dao;
 using Application.Extentions;
 using Application.Models;
+using Application.Repositories;
 using Application.Services.WebService.ZarinPal;
 using Domain.Entities;
 using Domain.Enums;

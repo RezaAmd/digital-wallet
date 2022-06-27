@@ -1,6 +1,7 @@
 ﻿using Application.Dao;
 using Application.Extentions;
 using Application.Models;
+using Application.Repositories;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
