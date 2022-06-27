@@ -15,9 +15,9 @@ namespace WebApi.Areas.Manage.Controllers
     {
         #region Dependency Injection
         private readonly ILogger<DepositController> _logger;
-        private readonly IDepositDao _depositService;
+        private readonly IDepositRepository _depositService;
 
-        public DepositController(IDepositDao depositService,
+        public DepositController(IDepositRepository depositService,
             ILogger<DepositController> logger)
         {
             _depositService = depositService;

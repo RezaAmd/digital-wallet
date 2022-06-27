@@ -15,14 +15,14 @@ namespace WebApi.Controllers
     public class PaymentController : ControllerBase
     {
         #region Dependency Injection
-        private readonly IDepositDao _depositService;
+        private readonly IDepositRepository _depositService;
         private readonly IZarinpalWebService _zarinpalService;
-        private readonly ITransferDao _transferService;
+        private readonly ITransferRepository _transferService;
         private readonly ILogger<PaymentController> _logger;
 
-        public PaymentController(IDepositDao depositService,
+        public PaymentController(IDepositRepository depositService,
             IZarinpalWebService zarinpalService,
-            ITransferDao transferService,
+            ITransferRepository transferService,
             ILogger<PaymentController> logger)
         {
             _depositService = depositService;

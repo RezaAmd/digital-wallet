@@ -13,13 +13,13 @@ namespace WebApi.Controllers
     public class TransferController : ControllerBase
     {
         #region Dependency Injection
-        private readonly IWalletDao walletService;
-        private readonly ITransferDao transferService;
-        private readonly IDepositDao depositService;
+        private readonly IWalletRepository walletService;
+        private readonly ITransferRepository transferService;
+        private readonly IDepositRepository depositService;
         private readonly IUserService userService;
-        public TransferController(IWalletDao _walletService,
-            ITransferDao _transferService,
-            IDepositDao _depositService,
+        public TransferController(IWalletRepository _walletService,
+            ITransferRepository _transferService,
+            IDepositRepository _depositService,
             IUserService _userService)
         {
             walletService = _walletService;

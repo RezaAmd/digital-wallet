@@ -21,15 +21,15 @@ namespace WebApi.Controllers
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
-        private readonly IWalletDao walletService;
-        private readonly ITransferDao transferService;
-        private readonly IDepositDao depositService;
+        private readonly IWalletRepository walletService;
+        private readonly ITransferRepository transferService;
+        private readonly IDepositRepository depositService;
         private readonly IUserService userService;
         private readonly IZarinpalWebService _zarinpalWebservice;
 
-        public WalletController(IWalletDao _walletService,
-            ITransferDao _transferService,
-            IDepositDao _depositService,
+        public WalletController(IWalletRepository _walletService,
+            ITransferRepository _transferService,
+            IDepositRepository _depositService,
             IUserService _userService,
             IZarinpalWebService zarinpalWebservice)
         {

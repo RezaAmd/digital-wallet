@@ -1,6 +1,6 @@
 ﻿using Application.Dao;
-using Application.Interfaces.Identity;
 using Application.Models;
+using Application.Services.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,8 +17,8 @@ namespace WebApi.Areas.Identity.Controllers
     {
         #region DI
         private readonly IUserService userService;
-        private readonly ISignInService signInService;
-        public AccountController(ISignInService _signinService,
+        private readonly IAuthenticationService signInService;
+        public AccountController(IAuthenticationService _signinService,
             IUserService _userService)
         {
             signInService = _signinService;

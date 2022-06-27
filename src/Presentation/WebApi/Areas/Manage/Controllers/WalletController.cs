@@ -18,8 +18,8 @@ namespace WebApi.Areas.Manage.Controllers
     public class WalletController : ControllerBase
     {
         #region Dependency Injection
-        private readonly IWalletDao walletService;
-        public WalletController(IWalletDao _walletService)
+        private readonly IWalletRepository walletService;
+        public WalletController(IWalletRepository _walletService)
         {
             walletService = _walletService;
         }
