@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.Identity
+namespace Application.Services.Identity
 {
-    public interface ISignInService
+    public interface IAuthenticationService
     {
         /// <summary>
         /// Signs in the specified user.
@@ -22,7 +22,7 @@ namespace Application.Interfaces.Identity
         /// </summary>
         /// <param name="user">The user to sign-in.</param>
         /// <param name="authProperties">Properties applied to the login and authentication cookie.</param>
-        Task SignInAsync(User user, AuthenticationProperties? authProperties = null);
+        Task SignInAsync(User user, AuthenticationProperties authProperties = null);
 
         /// <summary>
         /// Signs the current user out of the application

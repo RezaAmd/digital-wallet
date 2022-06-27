@@ -1,6 +1,5 @@
 ﻿using Application.Interfaces;
 using Application.Interfaces.Context;
-using Application.Interfaces.Identity;
 using Application.Interfaces.Services;
 using Application.Models;
 using Domain.Entities.Identity;
@@ -14,13 +13,13 @@ using System.Threading.Tasks;
 
 namespace Application.Services.Identity
 {
-    public class SignInService : ISignInService
+    public class AuthenticationService : IAuthenticationService
     {
         #region Constructor
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IJwtService jwtService;
 
-        public SignInService(IJwtService _jwtService,
+        public AuthenticationService(IJwtService _jwtService,
              IHttpContextAccessor _httpContext)
         {
             jwtService = _jwtService;
