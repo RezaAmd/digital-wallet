@@ -15,6 +15,7 @@ namespace Application.Repositories
     {
         #region Dependency Injection
         private readonly IDbContext context;
+
         public WalletRepository(IDbContext _context)
         {
             context = _context;
@@ -115,13 +116,18 @@ namespace Application.Repositories
             return 0;
         }
 
-        public async Task<(Wallet first, Wallet second)> GetTwoWalletByIdAsync(string firstId, string secondId, CancellationToken cancellationToken = new())
+        /// <summary>
+        /// Find two wallet by id.
+        /// </summary>
+        /// <param name="firstId">First wallet id.</param>
+        /// <param name="secondId">Second wallet id.</param>
+        /// <returns>Return first and second wallet info.</returns>
+        public async Task<(Wallet? first, Wallet? second)> GetTwoWalletByIdAsync(string firstId, string secondId, CancellationToken cancellationToken = new())
         {
             var wallets = await context.Wallets
                 .Where(w => w.Id == firstId || w.Id == secondId).ToListAsync(cancellationToken);
-            var origin = wallets.Where(w => w.Id == firstId).FirstOrDefault();
-            var destination = wallets.Where(w => w.Id == secondId).FirstOrDefault();
-            return (origin, destination);
+            return (wallets.Where(w => w.Id == firstId).FirstOrDefault(),
+                wallets.Where(w => w.Id == secondId).FirstOrDefault());
         }
     }
 }
