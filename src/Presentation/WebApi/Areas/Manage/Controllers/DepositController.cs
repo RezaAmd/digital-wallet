@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Application.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using WebApi.Areas.Manage.Models;
 
 namespace WebApi.Areas.Manage.Controllers;
 
@@ -27,7 +28,7 @@ public class DepositController : ControllerBase
         try
         {
             int pageSize = 20;
-            var deposits = await _depositService.GetAllAsync(page, pageSize, keyword,
+            var deposits = await _depositService.GetAllAsync<DepositMVM>(page, pageSize, keyword,
                 includeWallet: false, asNoTracking: true, isOrderByDesending: true, cancellationToken);
             if (deposits.totalCount > 0)
             {

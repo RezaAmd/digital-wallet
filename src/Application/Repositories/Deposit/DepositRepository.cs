@@ -1,5 +1,4 @@
 ﻿using Application.Extentions;
-using Application.Interfaces;
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
@@ -15,13 +14,23 @@ namespace Application.Repositories
     {
         #region Initialize
         private readonly IDbContext context;
+
         public DepositRepository(IDbContext _context)
         {
             context = _context;
         }
         #endregion
 
-        public async Task<PaginatedList<Deposit>> GetAllAsync(int page = 1, int pageSize = 20, string keyword = null,
+        /// <summary>
+        /// Get all deposits history.
+        /// </summary>
+        /// <param name="page">Page number. (minimum: 1)</param>
+        /// <param name="pageSize">Size of page items.</param>
+        /// <param name="keyword">Keyword for search. (with traceId, refId or Authority)</param>
+        /// <param name="includeWallet">Join to wallet table?</param>
+        /// <param name="asNoTracking">As no tracking items?</param>
+        /// <returns>Paginated list of deposit entity.</returns>
+        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(int page = 1, int pageSize = 20, string keyword = null,
             bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
             CancellationToken cancellationToken = default)
         {
@@ -59,7 +68,7 @@ namespace Application.Repositories
             }
 
             return await query
-                .PaginatedListAsync(page, pageSize, cancellationToken);
+                .PaginatedListAsync<Deposit, TDestination>(page, pageSize, cancellationToken);
         }
 
         /// <summary>
@@ -67,12 +76,13 @@ namespace Application.Repositories
         /// </summary>
         /// <param name="id">Deposit history id (GUID).</param>
         /// <returns>Deposit model object.</returns>
-        public async Task<Deposit> FindByIdAsync(string id, CancellationToken cancellationToken = default)
-        {
-            return await context.Deposits.FindAsync(id, cancellationToken);
-        }
+        public async Task<Deposit?> FindByIdAsync(string id, CancellationToken cancellationToken = default) => await context.Deposits.FindAsync(id, cancellationToken);
 
-        public async Task<Deposit> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default)
+        /// <summary>
+        /// Find specific deposit by traceId.
+        /// </summary>
+        /// <param name="traceId">Unique ref if from bank when payment request was sent.</param>
+        public async Task<Deposit?> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default)
         {
             var query = context.Deposits.Where(d => d.TraceId == traceId);
             if (includeWallet)
@@ -82,6 +92,10 @@ namespace Application.Repositories
             return await query.FirstOrDefaultAsync(cancellationToken);
         }
 
+        /// <summary>
+        /// Find specific deposit by traceId.
+        /// </summary>
+        /// <param name="traceId">Unique ref if from bank when payment request was sent.</param>
         public async Task<Deposit?> FindByAuthorityAsync(string authority, bool includeWallet = false, CancellationToken cancellationToken = default)
         {
             var query = context.Deposits.Where(d => d.Authority == authority);
