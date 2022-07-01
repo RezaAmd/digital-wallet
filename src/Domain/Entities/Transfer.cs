@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.ValueObjects;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,7 +10,7 @@ namespace Domain.Entities
         #region Constructors
         Transfer() { }
 
-        public Transfer(double amount, string originId, string destinationId, string description = null,
+        public Transfer(Money amount, string originId, string destinationId, string description = null,
             TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
         {
             Id = Guid.NewGuid().ToString();
@@ -23,7 +24,7 @@ namespace Domain.Entities
             CreatedDateTime = DateTime.Now;
         }
 
-        public Transfer(double amount, double balance,
+        public Transfer(Money amount, double balance,
             string originId, string destinationId, string description = null,
             TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
         {
@@ -42,7 +43,7 @@ namespace Domain.Entities
         /// <summary>
         /// For deposit transfers.
         /// </summary>
-        public Transfer(double amount, double balance, string destinationId, string description = null)
+        public Transfer(Money amount, double balance, string destinationId, string description = null)
         {
             Id = Guid.NewGuid().ToString();
             Identify = DateTime.Now.ToString("ddMMyyfffffff");
@@ -58,7 +59,7 @@ namespace Domain.Entities
 
         public string Id { get; set; }
         public string Identify { get; set; } // Its a tracking code for user.
-        public double Amount { get; set; }
+        public Money Amount { get; set; }
         public string? OriginId { get; set; }
 #nullable enable
         public double? OriginBalance { get; set; }

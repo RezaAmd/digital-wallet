@@ -7,7 +7,10 @@ namespace Domain.ValueObjects
     public class Money : ValueObject
     {
         #region Constructors
-        Money() { }
+        public Money()
+        {
+            Value = 0;
+        }
 
         public Money(double amount)
         {
@@ -33,9 +36,22 @@ namespace Domain.ValueObjects
 
         public double Value { get; private set; }
 
+        public Money Increase(double amount)
+        {
+            return Value + new Money(amount);
+        }
+
         public Money Increase(Money amount)
         {
             return Value + amount;
+        }
+
+        public Money Decrease(double amount)
+        {
+            // Amount cannot grater than value.
+            if (amount > Value)
+                throw new ArgumentOutOfRangeException("Insuffience balance");
+            return Value - new Money(amount);
         }
 
         public Money Decrease(Money amount)
@@ -43,7 +59,7 @@ namespace Domain.ValueObjects
             // Amount cannot grater than value.
             if (amount.Value > Value)
                 throw new ArgumentOutOfRangeException("Insuffience balance");
-            return Value + amount;
+            return Value - amount;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

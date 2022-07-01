@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Domain.Entities;
+using Mapster;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,22 +17,22 @@ namespace Application.Repositories
         /// <param name="includeWallet">Join to wallet table?</param>
         /// <param name="asNoTracking">As no tracking items?</param>
         /// <returns>Paginated list of deposit entity.</returns>
-        Task<PaginatedList<Deposit>> GetAllAsync(int page = 1, int pageSize = 20, string keyword = null,
+        Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(int page = 1, int pageSize = 20, string keyword = null,
             bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
-            CancellationToken cancellationToken = default);
+            CancellationToken cancellationToken = default, TypeAdapterConfig config = default);
 
         /// <summary>
         /// Find deposit history by id.
         /// </summary>
         /// <param name="id">Deposit history id (GUID).</param>
         /// <returns>Deposit model object.</returns>
-        Task<Deposit> FindByIdAsync(string id, CancellationToken cancellationToken = default);
+        Task<Deposit?> FindByIdAsync(string id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Find specific deposit by traceId.
         /// </summary>
         /// <param name="traceId">Unique ref if from bank when payment request was sent.</param>
-        Task<Deposit> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default);
+        Task<Deposit?> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Find specific deposit by traceId.
