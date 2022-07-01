@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <RootNamespace>$(SolutionName).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <AssemblyName>$(SolutionName).$(MSBuildProjectName)</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

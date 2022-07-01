@@ -6,6 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>dotnet-ScheduleWorker-41781C0F-696A-474F-ABBB-26CB133CB023</UserSecretsId>
 		<SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+		<AssemblyName>$(SolutionName).$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>$(SolutionName).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
 	<ItemGroup>
