@@ -4,10 +4,6 @@ using Application.Models;
 using Domain.Entities;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace Application.Repositories
 {
@@ -35,7 +31,7 @@ namespace Application.Repositories
                 walletsQuery = walletsQuery.Where(b => b.BankId == bankId);
             else
                 walletsQuery = walletsQuery.Where(w => w.BankId == null);
-            return await walletsQuery.PaginatedListAsync<Wallet, TDestination>(page, pageSize, cancellationToken);
+            return await walletsQuery.PaginatedListAsync<Wallet, TDestination>(page, pageSize, cancellationToken, config);
         }
 
         /// <summary>
