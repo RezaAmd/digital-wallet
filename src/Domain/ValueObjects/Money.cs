@@ -36,9 +36,22 @@ namespace Domain.ValueObjects
 
         public double Value { get; private set; }
 
+        public Money Increase(double amount)
+        {
+            return Value + new Money(amount);
+        }
+
         public Money Increase(Money amount)
         {
             return Value + amount;
+        }
+
+        public Money Decrease(double amount)
+        {
+            // Amount cannot grater than value.
+            if (amount > Value)
+                throw new ArgumentOutOfRangeException("Insuffience balance");
+            return Value - new Money(amount);
         }
 
         public Money Decrease(Money amount)
