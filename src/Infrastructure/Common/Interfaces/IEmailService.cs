@@ -1,8 +1,8 @@
-﻿using Application.Models;
-using Domain.Enums;
+﻿using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Enums;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.Interfaces
+namespace DigitalWallet.Infrastructure.Common.Interfaces
 {
     public interface IEmailService
     {

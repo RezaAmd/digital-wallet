@@ -1,10 +1,10 @@
 ﻿
 
-using Domain.Entities.Identity;
+using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations.FluentApi.Identity
+namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Identity
 {
     public class UserPermissionConfiguration : IEntityTypeConfiguration<UserPermission>
     {

@@ -7,9 +7,9 @@
 
     <IsPackable>false</IsPackable>
 
-    <AssemblyName>Wallet.$(MSBuildProjectName)</AssemblyName>
+    <AssemblyName>$(SolutionName).$(MSBuildProjectName)</AssemblyName>
 
-    <RootNamespace>Wallet.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <RootNamespace>$(SolutionName).$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

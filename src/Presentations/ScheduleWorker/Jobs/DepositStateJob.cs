@@ -1,5 +1,5 @@
-﻿using Application.Dao;
-using Application.Interfaces.Context;
+﻿using  DigitalWallet.Application.Dao;
+using  DigitalWallet.Application.Interfaces.Context;
 using Quartz;
 
 namespace ScheduleWorker.Jobs

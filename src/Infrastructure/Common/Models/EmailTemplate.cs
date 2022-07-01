@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Infrastructure.Common.Models
+namespace DigitalWallet.Infrastructure.Common.Models
 {
     public class EmailTemplate
     {

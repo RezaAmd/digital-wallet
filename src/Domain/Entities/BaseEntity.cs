@@ -1,4 +1,4 @@
-﻿namespace Domain.Entities
+﻿namespace DigitalWallet.Domain.Entities
 {
     public class BaseEntity
     {

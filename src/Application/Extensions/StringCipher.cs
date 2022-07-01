@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Application.Extentions
+namespace  DigitalWallet.Application.Extentions
 {
     public static class StringCipher
     {

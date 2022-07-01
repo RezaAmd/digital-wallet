@@ -1,4 +1,4 @@
-﻿namespace Domain.Enums
+﻿namespace DigitalWallet.Domain.Enums
 {
     public enum FromEmail
     {

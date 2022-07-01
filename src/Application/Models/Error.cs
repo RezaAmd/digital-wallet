@@ -1,4 +1,4 @@
-﻿namespace Application.Models
+﻿namespace DigitalWallet.Application.Models
 {
     public class Error
     {

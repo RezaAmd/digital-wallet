@@ -1,10 +1,10 @@
-﻿using Application.Models;
-using Domain.Entities;
+﻿using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Repositories
+namespace  DigitalWallet.Application.Repositories
 {
     public interface ITransferRepository
     {

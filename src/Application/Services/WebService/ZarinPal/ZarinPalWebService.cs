@@ -1,4 +1,4 @@
-﻿using Application.Services.WebService.ZarinPal.Model;
+﻿using  DigitalWallet.Application.Services.WebService.ZarinPal.Model;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -9,7 +9,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services.WebService.ZarinPal
+namespace  DigitalWallet.Application.Services.WebService.ZarinPal
 {
     public class ZarinpalWebService : IZarinpalWebService
     {

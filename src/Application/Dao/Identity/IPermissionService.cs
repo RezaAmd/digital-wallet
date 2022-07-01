@@ -1,9 +1,9 @@
-﻿using Application.Models;
-using Domain.Entities.Identity;
+﻿using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities.Identity;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Dao
+namespace  DigitalWallet.Application.Dao
 {
     public interface IPermissionService
     {

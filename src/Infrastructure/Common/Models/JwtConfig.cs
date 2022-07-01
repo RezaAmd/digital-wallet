@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Common.Models
+﻿namespace DigitalWallet.Infrastructure.Common.Models
 {
     public static class JwtConfig
     {

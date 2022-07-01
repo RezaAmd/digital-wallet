@@ -1,7 +1,7 @@
-﻿using Application.Repositories;
-using Application.Services.WebService.ZarinPal;
-using Domain.Entities;
-using Domain.Enums;
+﻿using  DigitalWallet.Application.Repositories;
+using  DigitalWallet.Application.Services.WebService.ZarinPal;
+using DigitalWallet.Domain.Entities;
+using DigitalWallet.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

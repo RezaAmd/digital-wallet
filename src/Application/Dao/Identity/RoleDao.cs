@@ -1,7 +1,7 @@
-﻿using Application.Extentions;
-using Application.Interfaces.Context;
-using Application.Models;
-using Domain.Entities.Identity;
+﻿using  DigitalWallet.Application.Extentions;
+using  DigitalWallet.Application.Interfaces.Context;
+using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Dao
+namespace  DigitalWallet.Application.Dao
 {
     public class RoleDao : BaseDao<Role, string>, IRoleService
     {

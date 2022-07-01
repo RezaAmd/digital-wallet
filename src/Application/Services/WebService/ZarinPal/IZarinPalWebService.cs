@@ -1,9 +1,9 @@
-﻿using Application.Services.WebService.ZarinPal.Model;
+﻿using DigitalWallet.Application.Services.WebService.ZarinPal.Model;
 using RestSharp;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Services.WebService.ZarinPal
+namespace DigitalWallet.Application.Services.WebService.ZarinPal
 {
     public interface IZarinpalWebService
     {

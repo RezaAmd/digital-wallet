@@ -1,5 +1,5 @@
-﻿using Application.Models;
-using Infrastructure.Common.Interfaces;
+﻿using  DigitalWallet.Application.Models;
+using DigitalWallet.Infrastructure.Common.Interfaces;
 using RestSharp;
 using RestSharp.Service;
 using RestSharp.Service.Models;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.Services
+namespace DigitalWallet.Infrastructure.Common.Services
 {
     public class SmsService : ISmsService
     {

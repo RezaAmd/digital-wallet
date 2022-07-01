@@ -1,9 +1,9 @@
-﻿using Domain.Entities.Identity;
+﻿using DigitalWallet.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities
+namespace DigitalWallet.Domain.Entities
 {
     public class Wallet : BaseEntity
     {

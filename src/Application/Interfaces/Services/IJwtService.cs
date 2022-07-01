@@ -1,9 +1,9 @@
-﻿using Application.Models;
+﻿using DigitalWallet.Application.Models;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 
-namespace Application.Interfaces.Services
+namespace DigitalWallet.Application.Interfaces.Services
 {
     public interface IJwtService
     {

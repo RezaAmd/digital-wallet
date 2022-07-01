@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace Infrastructure.Persistence.Migrations
+namespace DigitalWallet.Infrastructure.Persistence.Migrations
 {
     public partial class initialize : Migration
     {

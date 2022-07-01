@@ -1,8 +1,8 @@
-﻿using Domain.Common;
+﻿using DigitalWallet.Domain.Common;
 using System;
 using System.Collections.Generic;
 
-namespace Domain.ValueObjects
+namespace DigitalWallet.Domain.ValueObjects
 {
     public class Money : ValueObject
     {

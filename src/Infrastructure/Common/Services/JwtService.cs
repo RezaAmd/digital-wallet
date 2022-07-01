@@ -1,6 +1,6 @@
-﻿using Application.Interfaces.Services;
-using Application.Models;
-using Infrastructure.Common.Models;
+﻿using  DigitalWallet.Application.Interfaces.Services;
+using  DigitalWallet.Application.Models;
+using DigitalWallet.Infrastructure.Common.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Infrastructure.Common.Services
+namespace DigitalWallet.Infrastructure.Common.Services
 {
     public class JwtService : IJwtService
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Domain.Entities.Identity
+namespace DigitalWallet.Domain.Entities.Identity
 {
     public class Role : BaseEntity
     {

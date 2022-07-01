@@ -1,7 +1,7 @@
-﻿using Application.Models;
+﻿using  DigitalWallet.Application.Models;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.Interfaces
+namespace DigitalWallet.Infrastructure.Common.Interfaces
 {
     public interface ISmsService
     {

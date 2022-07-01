@@ -1,8 +1,8 @@
-﻿using Application.Extentions;
-using Application.Interfaces.Context;
-using Application.Models;
-using Domain.Entities.Identity;
-using Domain.Enums;
+﻿using  DigitalWallet.Application.Extentions;
+using  DigitalWallet.Application.Interfaces.Context;
+using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities.Identity;
+using DigitalWallet.Domain.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Dao
+namespace  DigitalWallet.Application.Dao
 {
     public class UserService : IUserService
     {

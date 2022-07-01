@@ -1,7 +1,7 @@
-﻿using Domain.ValueObjects;
+﻿using DigitalWallet.Domain.ValueObjects;
 using FluentAssertions;
 
-namespace Wallet.Domain.UnitTests.ValueObjects;
+namespace DigitalWallet.Domain.UnitTests.ValueObjects;
 public class MoneyTests
 {
     #region Initialize
