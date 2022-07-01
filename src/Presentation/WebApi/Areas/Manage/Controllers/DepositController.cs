@@ -29,7 +29,7 @@ public class DepositController : ControllerBase
         {
             int pageSize = 20;
             var deposits = await _depositService.GetAllAsync<DepositMVM>(page, pageSize, keyword,
-                includeWallet: false, asNoTracking: true, isOrderByDesending: true, cancellationToken);
+                includeWallet: false, asNoTracking: true, isOrderByDesending: true, cancellationToken, DepositMVM.MapConfig());
             if (deposits.totalCount > 0)
             {
                 return Ok(deposits);

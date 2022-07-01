@@ -2,6 +2,7 @@
 using Application.Interfaces.Context;
 using Application.Models;
 using Domain.Entities;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace Application.Repositories
         /// <returns>Paginated list of deposit entity.</returns>
         public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(int page = 1, int pageSize = 20, string keyword = null,
             bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
-            CancellationToken cancellationToken = default)
+            CancellationToken cancellationToken = default, TypeAdapterConfig config = default)
         {
             var query = context.Deposits.AsQueryable();
 
@@ -68,7 +69,7 @@ namespace Application.Repositories
             }
 
             return await query
-                .PaginatedListAsync<Deposit, TDestination>(page, pageSize, cancellationToken);
+                .PaginatedListAsync<Deposit, TDestination>(page, pageSize, cancellationToken, config);
         }
 
         /// <summary>

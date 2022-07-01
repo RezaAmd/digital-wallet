@@ -1,5 +1,6 @@
 ﻿using Application.Models;
 using Domain.Entities;
+using Mapster;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace Application.Repositories
         /// <returns>Paginated list of deposit entity.</returns>
         Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(int page = 1, int pageSize = 20, string keyword = null,
             bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
-            CancellationToken cancellationToken = default);
+            CancellationToken cancellationToken = default, TypeAdapterConfig config = default);
 
         /// <summary>
         /// Find deposit history by id.
