@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Identity
+namespace DigitalWallet.Domain.Entities.Identity
 {
     public class PermissionRole : BaseEntity
     {

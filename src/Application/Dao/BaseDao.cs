@@ -1,12 +1,12 @@
-﻿using Application.Interfaces.Context;
-using Application.Models;
-using Domain.Entities;
+﻿using  DigitalWallet.Application.Interfaces.Context;
+using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Dao
+namespace  DigitalWallet.Application.Dao
 {
     public class BaseDao<TEntity, TKey> where TEntity : BaseEntity
     {

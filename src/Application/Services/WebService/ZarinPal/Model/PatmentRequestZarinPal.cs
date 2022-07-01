@@ -1,4 +1,4 @@
-﻿namespace Application.Services.WebService.ZarinPal.Model
+﻿namespace  DigitalWallet.Application.Services.WebService.ZarinPal.Model
 {
     public class PatmentRequestZarinPal : ZarinpalBaseAuthorize
     {

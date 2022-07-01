@@ -1,7 +1,7 @@
-﻿using Application.Models;
-using Domain.Enums;
-using Infrastructure.Common.Interfaces;
-using Infrastructure.Common.Models;
+﻿using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Enums;
+using DigitalWallet.Infrastructure.Common.Interfaces;
+using DigitalWallet.Infrastructure.Common.Models;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -10,7 +10,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.Services
+namespace DigitalWallet.Infrastructure.Common.Services
 {
     public class EmailService : IEmailService
     {

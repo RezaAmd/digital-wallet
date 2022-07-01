@@ -1,10 +1,10 @@
-﻿using Domain.Entities;
-using Domain.Entities.Identity;
+﻿using DigitalWallet.Domain.Entities;
+using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Interfaces.Context
+namespace  DigitalWallet.Application.Interfaces.Context
 {
     public interface IDbContext
     {

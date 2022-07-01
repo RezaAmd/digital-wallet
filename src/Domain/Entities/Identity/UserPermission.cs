@@ -1,8 +1,8 @@
-﻿using Domain.Enums;
+﻿using DigitalWallet.Domain.Enums;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities.Identity
+namespace DigitalWallet.Domain.Entities.Identity
 {
     public class UserPermission : BaseEntity
     {

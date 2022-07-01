@@ -1,7 +1,7 @@
-﻿using Domain.Enums;
+﻿using DigitalWallet.Domain.Enums;
 using System.Collections.Generic;
 
-namespace Infrastructure.Common.Models
+namespace DigitalWallet.Infrastructure.Common.Models
 {
     public class EmailSettings
     {

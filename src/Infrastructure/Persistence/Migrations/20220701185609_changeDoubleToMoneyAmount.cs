@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Infrastructure.Persistence.Migrations
+namespace DigitalWallet.Infrastructure.Persistence.Migrations
 {
     public partial class changeDoubleToMoneyAmount : Migration
     {

@@ -1,7 +1,7 @@
-﻿using Application.Dao;
-using Application.Extentions;
-using Application.Models;
-using Domain.Entities.Identity;
+﻿using  DigitalWallet.Application.Dao;
+using  DigitalWallet.Application.Extentions;
+using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Areas.Manage.Models;
 

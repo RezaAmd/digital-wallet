@@ -1,9 +1,9 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
+﻿using DigitalWallet.Domain.Entities;
+using DigitalWallet.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Infrastructure.Persistence.Configurations.FluentApi
+namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
 {
     public class DepositConfiguration : IEntityTypeConfiguration<Deposit>
     {

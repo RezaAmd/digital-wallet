@@ -1,45 +1,44 @@
-﻿using Application.Dao;
-using Application.Models;
-using Application.Repositories;
-using Application.Services.Identity;
-using Application.Services.WebService.ZarinPal;
+﻿using DigitalWallet.Application.Dao;
+using DigitalWallet.Application.Models;
+using DigitalWallet.Application.Repositories;
+using DigitalWallet.Application.Services.Identity;
+using DigitalWallet.Application.Services.WebService.ZarinPal;
 using Mapster;
 using MapsterMapper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Application
+namespace DigitalWallet.Application;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
-        public static IServiceCollection AddApplicationServices(this IServiceCollection services)
-        {
-            // Service Life Time
-            services.AddScoped<ErrorDescriber>()
-                .AddHttpContextAccessor()
-                .AddScoped<IAuthenticationService, AuthenticationService>()
-                .AddTransient<IMapper, Mapper>();
+        // Service Life Time
+        services.AddScoped<ErrorDescriber>()
+            .AddHttpContextAccessor()
+            .AddScoped<IAuthenticationService, AuthenticationService>()
+            .AddTransient<IMapper, Mapper>();
 
-            #region Web Service
-            services
-                .AddTransient<IZarinpalWebService, ZarinpalWebService>()
-                ;
-            #endregion
+        #region Web Service
+        services
+            .AddTransient<IZarinpalWebService, ZarinpalWebService>()
+            ;
+        #endregion
 
-            TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
+        TypeAdapterConfig.GlobalSettings.Default.NameMatchingStrategy(NameMatchingStrategy.Flexible);
 
-            return services;
-        }
+        return services;
+    }
 
-        public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
-        {
-            services.AddScoped<IUserService, UserService>()
-                .AddScoped<IRoleService, RoleDao>()
-                .AddScoped<IPermissionService, PermissionDao>()
-                .AddScoped<IWalletRepository, WalletRepository>()
-                .AddScoped<ITransferRepository, TransferRepository>()
-                .AddScoped<IDepositRepository, DepositRepository>()
-                ;
-            return services;
-        }
+    public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
+    {
+        services.AddScoped<IUserService, UserService>()
+            .AddScoped<IRoleService, RoleDao>()
+            .AddScoped<IPermissionService, PermissionDao>()
+            .AddScoped<IWalletRepository, WalletRepository>()
+            .AddScoped<ITransferRepository, TransferRepository>()
+            .AddScoped<IDepositRepository, DepositRepository>()
+            ;
+        return services;
     }
 }

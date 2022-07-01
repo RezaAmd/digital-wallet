@@ -1,12 +1,12 @@
-﻿using Application.Models;
-using Domain.Entities.Identity;
+﻿using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Authentication;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Application.Services.Identity
+namespace  DigitalWallet.Application.Services.Identity
 {
     public interface IAuthenticationService
     {

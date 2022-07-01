@@ -1,8 +1,8 @@
-﻿using Application.Dao;
-using Application.Extentions;
-using Application.Models;
-using Application.Repositories;
-using Domain.Entities;
+﻿using  DigitalWallet.Application.Dao;
+using  DigitalWallet.Application.Extentions;
+using  DigitalWallet.Application.Models;
+using  DigitalWallet.Application.Repositories;
+using DigitalWallet.Domain.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

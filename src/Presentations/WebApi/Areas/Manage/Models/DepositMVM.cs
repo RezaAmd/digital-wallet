@@ -1,5 +1,5 @@
-﻿using Domain.Entities;
-using Domain.Enums;
+﻿using DigitalWallet.Domain.Entities;
+using DigitalWallet.Domain.Enums;
 using Mapster;
 
 namespace WebApi.Areas.Manage.Models;

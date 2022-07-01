@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Domain.Entities
+namespace DigitalWallet.Domain.Entities
 {
     public class Bank : BaseEntity
     {

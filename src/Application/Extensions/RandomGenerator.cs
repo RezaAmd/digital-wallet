@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Application.Extentions
+namespace  DigitalWallet.Application.Extentions
 {
     public static class RandomGenerator
     {

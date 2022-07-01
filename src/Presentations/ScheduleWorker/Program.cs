@@ -1,5 +1,5 @@
-using Application;
-using Infrastructure;
+using DigitalWallet.Application;
+using DigitalWallet.Infrastructure;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;

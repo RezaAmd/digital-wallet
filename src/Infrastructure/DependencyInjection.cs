@@ -1,10 +1,10 @@
-﻿using Application.Interfaces.Context;
-using Application.Interfaces.Services;
-using Infrastructure.Common.Interfaces;
-using Infrastructure.Common.Models;
-using Infrastructure.Common.Services;
-using Infrastructure.Persistence.Configs;
-using Infrastructure.Persistence.Context;
+﻿using  DigitalWallet.Application.Interfaces.Context;
+using  DigitalWallet.Application.Interfaces.Services;
+using DigitalWallet.Infrastructure.Common.Interfaces;
+using DigitalWallet.Infrastructure.Common.Models;
+using DigitalWallet.Infrastructure.Common.Services;
+using DigitalWallet.Infrastructure.Persistence.Configs;
+using DigitalWallet.Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +15,7 @@ using RestSharp;
 using System;
 using System.Text;
 
-namespace Infrastructure
+namespace DigitalWallet.Infrastructure
 {
     public static class DependencyInjection
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Domain.Common
+namespace DigitalWallet.Domain.Common
 {
     public abstract class ValueObject
     {

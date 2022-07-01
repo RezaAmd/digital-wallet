@@ -1,4 +1,4 @@
-﻿using Application.Extentions;
+﻿using  DigitalWallet.Application.Extentions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Application.Models
+namespace  DigitalWallet.Application.Models
 {
     public class ApiResult
     {

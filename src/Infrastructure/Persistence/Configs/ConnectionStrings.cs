@@ -1,4 +1,4 @@
-﻿namespace Infrastructure.Persistence.Configs
+﻿namespace DigitalWallet.Infrastructure.Persistence.Configs
 {
     class ConnectionStrings
     {

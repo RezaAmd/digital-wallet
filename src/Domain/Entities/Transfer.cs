@@ -1,9 +1,9 @@
-﻿using Domain.Enums;
-using Domain.ValueObjects;
+﻿using DigitalWallet.Domain.Enums;
+using DigitalWallet.Domain.ValueObjects;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Domain.Entities
+namespace DigitalWallet.Domain.Entities
 {
     public class Transfer : BaseEntity
     {

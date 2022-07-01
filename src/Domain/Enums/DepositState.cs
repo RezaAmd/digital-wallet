@@ -1,11 +1,10 @@
-﻿namespace Domain.Enums
+﻿namespace DigitalWallet.Domain.Enums;
+
+public enum DepositState
 {
-    public enum DepositState
-    {
-        Pending = 0,
-        Success = 200,
-        Successed = 201,
-        Failed = 400,
-        Cancelled = 401
-    }
+    Pending = 0,
+    Success = 200,
+    Successed = 201,
+    Failed = 400,
+    Cancelled = 401
 }

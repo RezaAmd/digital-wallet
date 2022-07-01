@@ -1,10 +1,10 @@
-﻿using Application.Models;
+﻿using DigitalWallet.Application.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 
-namespace Application.Extentions
+namespace DigitalWallet.Application.Extentions
 {
     public static class ExceptionMiddlewareExtensions
     {

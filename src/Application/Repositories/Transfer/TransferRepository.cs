@@ -1,15 +1,15 @@
-﻿using Application.Extentions;
-using Application.Interfaces.Context;
-using Application.Models;
-using Domain.Entities;
-using Domain.Enums;
+﻿using  DigitalWallet.Application.Extentions;
+using  DigitalWallet.Application.Interfaces.Context;
+using  DigitalWallet.Application.Models;
+using DigitalWallet.Domain.Entities;
+using DigitalWallet.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Application.Repositories
+namespace  DigitalWallet.Application.Repositories
 {
     public class TransferRepository : ITransferRepository
     {

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 
-namespace Application.Extentions
+namespace DigitalWallet.Application.Extentions
 {
     public static class EnumExtensions
     {

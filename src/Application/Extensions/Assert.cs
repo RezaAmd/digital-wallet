@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Linq;
 
-namespace Application.Extentions
+namespace  DigitalWallet.Application.Extentions
 {
     public class Assert
     {

@@ -1,5 +1,5 @@
-﻿using Application.Interfaces.Services;
-using Application.Models;
+﻿using  DigitalWallet.Application.Interfaces.Services;
+using  DigitalWallet.Application.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Common.Services
+namespace DigitalWallet.Infrastructure.Common.Services
 {
     public class RedisService : IRedisService
     {

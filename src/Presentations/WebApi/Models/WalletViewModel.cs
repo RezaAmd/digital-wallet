@@ -1,4 +1,4 @@
-﻿using Domain.Enums;
+﻿using DigitalWallet.Domain.Enums;
 
 namespace WebApi.Models;
 
