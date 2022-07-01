@@ -121,7 +121,7 @@ public class WalletController : ControllerBase
                 if (wallets.second != null)
                 {
                     // Create a new transfer.
-                    var newTransfer = new Transfer(model.Amount, originId, model.WalletId, model.Description, state: TransferState.Failed);
+                    var newTransfer = new Transfer(new Money(model.Amount), originId, model.WalletId, model.Description, state: TransferState.Failed);
                     // Create a result.
                     var result = new IncreaseResult(newTransfer.Identify, model.Amount,
                         new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
@@ -189,7 +189,7 @@ public class WalletController : ControllerBase
                 if (wallets.first != null)
                 {
                     // Create a new transfer.
-                    var newTransfer = new Transfer(model.Amount, model.WalletId, destinationId, model.Description, state: TransferState.Failed);
+                    var newTransfer = new Transfer(new Money(model.Amount), model.WalletId, destinationId, model.Description, state: TransferState.Failed);
                     // Create a result.
                     var result = new DecreaseResult(newTransfer.Identify, model.Amount,
                         new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),

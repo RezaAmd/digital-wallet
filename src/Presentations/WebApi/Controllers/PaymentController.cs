@@ -47,7 +47,7 @@ public class PaymentController : ControllerBase
                     // Updade deposit history.
                     deposit.RefId = verifyResult.Result.data.ref_id.ToString();
                     var latestTransfer = await _transferService.GetLatestByWalletAsync(deposit.Wallet, cancellationToken);
-                    var newTransfer = new Transfer(deposit.Amount.Value, latestTransfer.Balance + deposit.Amount.Value,
+                    var newTransfer = new Transfer(deposit.Amount, latestTransfer.Balance + deposit.Amount.Value,
                         deposit.DestinationId, description: deposit.Id);
                     // Increase wallet balance.
                     var increaseResult = await _transferService.CreateAsync(newTransfer, cancellationToken);

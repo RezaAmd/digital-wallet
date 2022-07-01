@@ -11,17 +11,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "src\Infra
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "src\Domain\Domain.csproj", "{1D36EFE8-1389-468A-B468-282EDA82D771}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{BE07DC40-024D-4A7C-B910-AC83F28C11FD}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentations", "Presentations", "{BE07DC40-024D-4A7C-B910-AC83F28C11FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Presentation\WebApi\WebApi.csproj", "{1DDF6A18-B143-4544-9574-77361F667008}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "src\Presentations\WebApi\WebApi.csproj", "{1DDF6A18-B143-4544-9574-77361F667008}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUi", "src\Presentation\WebUi\WebUi.csproj", "{7738328C-0905-45D2-9CDF-AB7FD2CDBF70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebUi", "src\Presentations\WebUi\WebUi.csproj", "{7738328C-0905-45D2-9CDF-AB7FD2CDBF70}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleWorker", "src\Presentation\ScheduleWorker\ScheduleWorker.csproj", "{FF87249B-E845-4513-8C80-8A345C0A281F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScheduleWorker", "src\Presentations\ScheduleWorker\ScheduleWorker.csproj", "{FF87249B-E845-4513-8C80-8A345C0A281F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{4572F64C-1111-4A15-84D2-2ED57DA4ACD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.UnitTests", "tests\Domain.UnitTests\Domain.UnitTests.csproj", "{81BE753D-D78E-41F7-A167-5BA56645E4A8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain.UnitTests", "tests\Domain.UnitTests\Domain.UnitTests.csproj", "{81BE753D-D78E-41F7-A167-5BA56645E4A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
