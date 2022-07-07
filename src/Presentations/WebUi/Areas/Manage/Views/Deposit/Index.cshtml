@@ -59,7 +59,7 @@
             methods: {
                 getDeposits: async function() {
                     var myHeaders = new Headers();
-                    myHeaders.append("Authorization", "Bearer 2UzPh9afwUr9lOiX6tO_0w");
+                    myHeaders.append("Authorization", "Bearer JWT_TOKEN");
                     var response = await fetch("https://localhost:5001" + "/manage/deposit/getAll", {
                         method: 'GET',
                         headers: myHeaders,
