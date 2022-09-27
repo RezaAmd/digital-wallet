@@ -1,5 +1,5 @@
-﻿using  DigitalWallet.Application.Models;
-using  DigitalWallet.Application.Repositories;
+﻿using DigitalWallet.Application.Models;
+using DigitalWallet.Application.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Areas.Manage.Models;
 
