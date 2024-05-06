@@ -15,7 +15,7 @@ namespace WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
-//[Authorize(AuthenticationSchemes = "Bearer")]
+[Authorize(AuthenticationSchemes = "Bearer")]
 [AllowAnonymous]
 public class WalletController : ControllerBase
 {

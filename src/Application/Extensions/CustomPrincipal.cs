@@ -4,7 +4,10 @@
     {
         public static string GetCurrentWalletId(this ClaimsPrincipal claims)
         {
-            return claims.FindFirst("wallet-id").Value;
+            var walletIdClaim = claims.FindFirst("wallet-id");
+            if(walletIdClaim == null)
+                return string.Empty;
+            return walletIdClaim.Value;
         }
     }
 }

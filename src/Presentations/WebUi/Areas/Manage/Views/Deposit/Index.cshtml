@@ -60,7 +60,7 @@
                 getDeposits: async function() {
                     var myHeaders = new Headers();
                     myHeaders.append("Authorization", "Bearer JWT_TOKEN");
-                    var response = await fetch("https://localhost:5001" + "/manage/deposit/getAll", {
+                    var response = await fetch(consts.urls.baseUrl + "/manage/deposit/getAll", {
                         method: 'GET',
                         headers: myHeaders,
                         redirect: 'follow'

@@ -2,7 +2,7 @@
 
 manage.user = {}
 manage.user.init = function () {
-    rest.get('https://localhost:5001/manage/user/getAll',
+    rest.get(consts.urls.baseUrl +'manage/user/getAll',
         function onSuccess() {
             alert('success');
         },

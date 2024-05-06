@@ -47,8 +47,10 @@
             methods: {
                 getWallets: async function() {
                     var myHeaders = new Headers();
-                    myHeaders.append("Authorization", "Bearer ");
-                    var response = await fetch("https://localhost:5001" + "/manage/wallet/getAll", {
+                    myHeaders.append("Authorization", "Bearer eyJhbGciOiJBMTI4S1ciLCJlbmMiOiJBMTI4Q0JDLUhTMjU2IiwidHlwIjoiSldUIn0.xzpLhfczu-_HrwjifFbmm_NtFV8XsNhdKELiTI0KCLaRr3hUfqDe9w._WIxY2oPr-cTXl9gQaILbA.GGFpZ-RmhA-YGCUhGaHa2XcSeXaKMcL7OKxR6LT_Mza1MFOL3_ZKc9k6_ey5KS51kYDaBl-UI-FmWxv7sjV6eNJ8GM8c_NdTVqU_QI69RXbdwyyGux3E-PdQu1daTLAwUnt2FqHoggQNHHMHEg-ul6fOkQ8M28gghbqdTPU2uTVhvbXjqYg13NZfCvoUllRUxttzH6ppmKsQr7SkxxdyVA_Qci32WC_h010tbg7DEk4VGyM91arWHJUV3SwyH0vBbXOg368pDniA_nksc2-YeWslKD6B0nDk-LfaS-mGOqXfeiXh7xYvggHjRSykasSnhBqq3ALeRQ2MxGLXmWDHqyPDfiz5jip_7TQIu-GeKSl3dDINIqISqsbVw543q_Gm.tIw4JwQQlUdCeQtYvVcv4g");
+                    debugger
+                    console.log('')
+                    var response = await fetch('https://localhost:44383' + "/manage/wallet/getAll", {
                         method: 'GET',
                         headers: myHeaders,
                         redirect: 'follow'

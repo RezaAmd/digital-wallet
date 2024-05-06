@@ -119,12 +119,12 @@ namespace  DigitalWallet.Application.Repositories
                 // Is it transfer? (Increase/Decrease)
                 else if (transfer.OriginType == TransferOriginType.Wallet)
                 {
-                    // Is it decrease?
-                    if (wallet.Id == transfer.OriginId)
-                        return transfer.OriginBalance.Value;
                     // Is it increase?
-                    else if (wallet.Id == transfer.DestinationId)
+                    if (wallet.Id == transfer.DestinationId)
                         return transfer.DestinationBalance;
+                    // Is it decrease?
+                    else if (wallet.Id == transfer.OriginId)
+                        return transfer.OriginBalance!.Value;
                 }
             }
             // Not found any transfer.

@@ -1,5 +1,5 @@
 ﻿var consts = {
     urls: {
-        baseUrl: "https://localhost:5001"
+        baseUrl: "https://localhost:44383/"
     }
 };

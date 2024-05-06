@@ -1,5 +1,5 @@
-﻿using  DigitalWallet.Application.Interfaces.Services;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Interfaces.Services;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Infrastructure.Common.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
