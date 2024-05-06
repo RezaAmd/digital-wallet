@@ -15,14 +15,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="EntityFramework" Version="6.4.4" />
-		<PackageReference Include="Mapster" Version="7.3.0" />
-		<PackageReference Include="MediatR" Version="10.0.1" />
+		<PackageReference Include="Mapster" Version="7.4.0" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Diagnostics" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.6" />
-		<PackageReference Include="PersianDateTime.Core" Version="2.0.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
+		<PackageReference Include="PersianDateTime.Core" Version="2.0.5" />
 		<PackageReference Include="Rest.Service" Version="1.0.4" />
 		<PackageReference Include="Microsoft.NETCore.Targets" Version="5.0.0" PrivateAssets="all" />
 	</ItemGroup>
