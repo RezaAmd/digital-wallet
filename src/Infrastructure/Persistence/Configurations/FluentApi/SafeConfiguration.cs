@@ -1,16 +1,40 @@
-﻿using DigitalWallet.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
 {
     public class SafeConfiguration : IEntityTypeConfiguration<SafeEntity>
     {
-        public void Configure(EntityTypeBuilder<SafeEntity> b)
+        public void Configure(EntityTypeBuilder<SafeEntity> builder)
         {
-            b.ToTable("Safe");
-            b.HasIndex(r => r.Name)
+            builder.ToTable("Safe", DatabaseSchemaDefaults.Dbo);
+
+            // Name
+            builder.Property(s => s.Name)
+                .IsRequired();
+
+            // ApiKey
+            builder.Property(s => s.ApiKey)
+                .IsRequired(false);
+            builder.HasIndex(s => s.ApiKey)
                 .IsUnique();
+
+            // CreatedDateTime
+            builder.Property(s => s.CreatedDateTime)
+                .IsRequired();
+
+            #region Relations
+
+            // Owner - (OneToMany)
+            builder.HasOne(s => s.Owner)
+                .WithMany(u => u.Safes)
+                .HasForeignKey(s => s.OwnerId);
+
+            // Wallets - (ManyToOne)
+            builder.HasMany(s => s.Wallets)
+                .WithOne(p => p.Safe)
+                .HasForeignKey(b => b.SafeId);
+
+            #endregion
         }
     }
 }

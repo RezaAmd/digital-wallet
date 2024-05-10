@@ -1,6 +1,4 @@
-﻿using DigitalWallet.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
 {
@@ -8,11 +6,60 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
     {
         public void Configure(EntityTypeBuilder<TransferEntity> b)
         {
-            b.ToTable("Transfers");
-            b.HasIndex(d => d.Id)
+            b.ToTable("Transfers", DatabaseSchemaDefaults.Dbo);
+
+            // Identify
+            b.Property(t => t.Identify)
+                .IsRequired();
+            b.HasIndex(t => t.Identify)
                 .IsUnique();
-            b.Property(d => d.DestinationId).IsRequired();
-            b.OwnsOne(d => d.Amount);
+
+            // Amount
+            b.OwnsOne(t => t.Amount, t => {
+                t.Property(a => a.Value)
+                .HasColumnName("Amount")
+                .IsRequired();
+            });
+
+            // OriginType
+            b.Property(a => a.OriginType);
+
+            // OriginId - (FK)
+            b.Property(t => t.OriginId)
+                .IsRequired(false);
+
+            // OriginBalance - Wallet
+            b.Property(t => t.OriginBalance)
+                .IsRequired(false);
+
+            // DestinationId
+            b.Property(t => t.DestinationId)
+                .IsRequired();
+
+            // DestinationBalance
+            b.Property(t => t.DestinationBalance)
+                .IsRequired();
+
+            // CreatedDateTime
+            b.Property(t => t.CreatedDateTime)
+                .IsRequired();
+
+            // State
+            b.Property(t => t.State)
+                .IsRequired();
+
+            // Description
+            b.Property(t => t.Description)
+                .IsRequired(false);
+
+            #region Relations
+
+            // Destination - (OneToMany)
+            b.HasOne(t => t.Destination)
+                .WithMany()
+                .HasForeignKey(t => t.DestinationId);
+
+            #endregion
         }
     }
 }
