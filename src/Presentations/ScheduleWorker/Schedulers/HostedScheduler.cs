@@ -1,8 +1,8 @@
-﻿using Quartz;
+﻿using DigitalWallet.ScheduleWorker.Models;
+using Quartz;
 using Quartz.Spi;
-using ScheduleWorker.Models;
 
-namespace ScheduleWorker.Schedulers
+namespace DigitalWallet.ScheduleWorker.Schedulers
 {
     public class HostedScheduler : IHostedService
     {

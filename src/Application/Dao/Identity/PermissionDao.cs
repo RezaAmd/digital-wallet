@@ -1,26 +1,29 @@
-﻿using  DigitalWallet.Application.Extentions;
-using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Extensions;
+using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Dao
+namespace DigitalWallet.Application.Dao.Identity
 {
-    public class PermissionDao : BaseDao<Permission, string>, IPermissionService
+    public class PermissionDao : BaseDao<PermissionEntity, string>, IPermissionService
     {
         #region DI
+
         private readonly IDbContext context;
 
         public PermissionDao(IDbContext _context) : base(_context)
         {
             context = _context;
         }
+
         #endregion
 
-        public Task<PaginatedList<Permission>> GetAllAsync(string keyword = null, int page = 1, int pageSize = 15,
+        public async Task<PermissionEntity?> FindByIdAsync(Guid id,
+            CancellationToken cancellationToken = default)
+            => await context.Permissions.FindAsync(id, cancellationToken);
+
+        public Task<PaginatedList<PermissionEntity>> GetAllAsync(string keyword = null, int page = 1, int pageSize = 15,
             bool withRoles = false,
             CancellationToken cancellationToken = default)
         {

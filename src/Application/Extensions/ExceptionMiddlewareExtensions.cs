@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using System.Net;
 
-namespace DigitalWallet.Application.Extentions
+namespace DigitalWallet.Application.Extensions
 {
     public static class ExceptionMiddlewareExtensions
     {

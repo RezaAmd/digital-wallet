@@ -1,4 +1,4 @@
-﻿using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
 using DigitalWallet.Domain.Enums;
 using Mapster;
@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Dao
+namespace DigitalWallet.Application.Dao.Identity
 {
     public interface IUserService
     {
@@ -14,25 +14,25 @@ namespace  DigitalWallet.Application.Dao
         /// Find a specific user by id.
         /// </summary>
         /// <param name="id">user id.</param>
-        Task<User> FindByIdAsync(string id, CancellationToken cancellationToken = new());
+        Task<UserEntity?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Create a new user.
         /// </summary>
         /// <param name="user">New user object model.</param>
-        Task<Result> CreateAsync(User user, string password, CancellationToken cancellationToken = new CancellationToken());
+        Task<Result> CreateAsync(UserEntity user, string password, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Update an specific user.
         /// </summary>
         /// <param name="user">Modified user you want to update.</param>
-        Task<Result> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken());
+        Task<Result> UpdateAsync(UserEntity user, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Delete a specific user.
         /// </summary>
         /// <param name="user">User model object.</param>
-        Task<Result> DeleteAsync(User user, CancellationToken cancellationToken = new CancellationToken());
+        Task<Result> DeleteAsync(UserEntity user, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Get All Users List as Paginated List.
@@ -41,14 +41,14 @@ namespace  DigitalWallet.Application.Dao
         /// <param name="gender">Fillter as gender.</param>
         /// <param name="tracking">For range changes.</param>
         /// <returns>List of all users</returns>
-        Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(TypeAdapterConfig config = null, int page = 1, int pageSize = 20,
-            bool withRoles = false, string keyword = default, bool tracking = false, CancellationToken cancellationToken = new CancellationToken());
+        Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(TypeAdapterConfig? config = null, int page = 1, int pageSize = 20,
+            bool withRoles = false, string? keyword = null, bool tracking = false, CancellationToken cancellationToken = new CancellationToken());
 
         /// <summary>
         /// Find user by identity (Username or Phone number or Email)
         /// </summary>
         /// <param name="identity">identity for find</param>
-        Task<User> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
+        Task<UserEntity?> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
             bool withPermissions = false,
             TypeAdapterConfig config = null);
 
@@ -73,10 +73,10 @@ namespace  DigitalWallet.Application.Dao
         /// <param name="user">User model object with password.</param>
         /// <param name="password">The password you want to check.</param>
         /// <returns>true/false</returns>
-        bool CheckPassword(User user, string password);
+        bool CheckPassword(UserEntity user, string password);
 
         #region Permission
-        Task<Result> AddToPermissionAsync(User user, Permission permission,
+        Task<Result> AddToPermissionAsync(UserEntity user, PermissionEntity permission,
             RelatedPermissionType type = RelatedPermissionType.General);
         #endregion
     }

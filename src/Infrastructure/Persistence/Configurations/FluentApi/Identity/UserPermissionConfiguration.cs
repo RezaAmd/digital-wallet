@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Identity
 {
-    public class UserPermissionConfiguration : IEntityTypeConfiguration<UserPermission>
+    public class UserPermissionConfiguration : IEntityTypeConfiguration<UserPermissionEntity>
     {
-        public void Configure(EntityTypeBuilder<UserPermission> b)
+        public void Configure(EntityTypeBuilder<UserPermissionEntity> b)
         {
             b.ToTable("UserPermissions");
 

@@ -1,6 +1,8 @@
-﻿using DigitalWallet.Application.Dao;
+﻿using DigitalWallet.Application.Dao.Identity;
 using DigitalWallet.Application.Models;
-using DigitalWallet.Application.Repositories;
+using DigitalWallet.Application.Repositories.Deposit;
+using DigitalWallet.Application.Repositories.Transfer;
+using DigitalWallet.Application.Repositories.Wallet;
 using DigitalWallet.Application.Services.Identity;
 using DigitalWallet.Application.Services.WebService.ZarinPal;
 using Mapster;

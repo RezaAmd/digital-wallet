@@ -1,17 +1,17 @@
-﻿namespace WebApi.Areas.Manage.Models;
+﻿namespace DigitalWallet.WebApi.Areas.Manage.Models;
 
 public class CreateUserMVM
 {
-    public CreateUserMVM(string id)
+    public CreateUserMVM(Guid id)
     {
         Id = id;
     }
-    public string Id { get; set; }
+    public Guid Id { get; set; }
 }
 
 public class UserThumbailMVM
 {
-    public UserThumbailMVM(string id, string username, string phoneNumber, string email, string name, string surname)
+    public UserThumbailMVM(Guid id, string username, string phoneNumber, string email, string name, string surname)
     {
         Id = id;
         Username = username;
@@ -21,7 +21,7 @@ public class UserThumbailMVM
         Surname = surname;
     }
 
-    public string Id { get; set; }
+    public Guid Id { get; set; }
     public string Username { get; set; }
     public string PhoneNumber { get; set; }
     public string Email { get; set; }

@@ -27,11 +27,11 @@ public class AuthenticationService : IAuthenticationService
     /// </summary>
     /// <param name="user">The user to sign-in.</param>
     /// <param name="isPersistent">Flag indicating whether the sign-in cookie should persist after the browser is closed.</param>
-    public async Task SignInAsync(User user, bool isPersistent = false)
+    public async Task SignInAsync(UserEntity user, bool isPersistent = false)
     {
         var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
             };
         #region Roles
@@ -57,10 +57,10 @@ public class AuthenticationService : IAuthenticationService
             authProperties);
     }
 
-    public (Result Status, string Token) GenerateJwtToken(User user, DateTime? expire = default, List<Claim> extraClaims = null)
+    public (Result Status, string Token) GenerateJwtToken(UserEntity user, DateTime? expire = default, List<Claim> extraClaims = null)
     {
         var claims = new List<Claim>();
-        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
+        claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
         claims.Add(new Claim(ClaimTypes.Name, user.Username));
         if (user.UserRoles != null)
             foreach (var role in user.UserRoles)
@@ -86,11 +86,11 @@ public class AuthenticationService : IAuthenticationService
     /// </summary>
     /// <param name="user">The user to sign-in.</param>
     /// <param name="authProperties">Properties applied to the login and authentication cookie.</param>
-    public async Task SignInAsync(User user, AuthenticationProperties? authProperties = null)
+    public async Task SignInAsync(UserEntity user, AuthenticationProperties? authProperties = null)
     {
         var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Username),
             };
         #region Roles

@@ -1,17 +1,12 @@
-﻿using  DigitalWallet.Application.Extentions;
-using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Extensions;
+using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Dao
+namespace DigitalWallet.Application.Dao.Identity
 {
-    public class RoleDao : BaseDao<Role, string>, IRoleService
+    public class RoleDao : BaseDao<RoleEntity, string>, IRoleService
     {
         #region Constructor
         //private readonly IRoleStore<Role> roleStore;
@@ -27,8 +22,8 @@ namespace  DigitalWallet.Application.Dao
 
         #endregion
 
-        public async Task<PaginatedList<Role>> GetAllAsync(string keyword, int page = 1, int pageSize = 30,
-            CancellationToken cancellationToken = new())
+        public async Task<PaginatedList<RoleEntity>> GetAllAsync(string keyword, int page = 1, int pageSize = 30,
+            CancellationToken cancellationToken = default)
         {
             var roles = context.Roles.AsQueryable();
             #region Filter
@@ -41,7 +36,7 @@ namespace  DigitalWallet.Application.Dao
             return await roles.PaginatedListAsync(page, pageSize, cancellationToken);
         }
 
-        public async Task<Result> CreateRangeAsync(List<Role> roles)
+        public async Task<Result> CreateRangeAsync(List<RoleEntity> roles)
         {
             try
             {
@@ -55,5 +50,8 @@ namespace  DigitalWallet.Application.Dao
             }
             return Result.Failed();
         }
+
+        public async Task<RoleEntity?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
+            => await context.Roles.FindAsync(id, cancellationToken);
     }
 }

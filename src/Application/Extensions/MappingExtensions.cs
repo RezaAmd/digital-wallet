@@ -1,10 +1,10 @@
-﻿using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Models;
 using Mapster;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Extentions
+namespace DigitalWallet.Application.Extensions
 {
     public static class MappingExtensions
     {

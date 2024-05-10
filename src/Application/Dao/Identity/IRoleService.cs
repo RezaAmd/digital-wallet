@@ -1,21 +1,21 @@
-﻿using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Dao
+namespace DigitalWallet.Application.Dao.Identity
 {
     public interface IRoleService
     {
-        Task<PaginatedList<Role>> GetAllAsync(string keyword, int page = 1, int pageSize = 30,
-            CancellationToken cancellationToken = new());
+        Task<PaginatedList<RoleEntity>> GetAllAsync(string keyword, int page = 1, int pageSize = 30,
+            CancellationToken cancellationToken = default);
 
-        Task<Role?> FindByIdAsync(string id, CancellationToken cancellationToken = new());
+        Task<RoleEntity?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
-        Task<Result> CreateAsync(Role role, CancellationToken cancellationToken = new());
+        Task<Result> CreateAsync(RoleEntity role, CancellationToken cancellationToken = default);
 
-        Task<Result> UpdateAsync(Role role, CancellationToken cancellationToken = new());
+        Task<Result> UpdateAsync(RoleEntity role, CancellationToken cancellationToken = default);
 
-        Task<Result> DeleteAsync(Role role, CancellationToken cancellationToken = new());
+        Task<Result> DeleteAsync(RoleEntity role, CancellationToken cancellationToken = default);
     }
 }

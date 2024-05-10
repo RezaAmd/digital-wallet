@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Areas.Manage.Models;
+namespace DigitalWallet.WebApi.Areas.Manage.Models;
 
 public class CreateWalletMDto
 {
     [Required(ErrorMessage = "انتخاب یک مقدار اولیه ضروری است.")]
-    public string seed { get; set; }
-#nullable enable
-    public string? bankId { get; set; }
-#nullable disable
+    public string seed { get; set; } = string.Empty;
+    public Guid? bankId { get; set; } = null;
 }

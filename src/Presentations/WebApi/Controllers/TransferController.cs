@@ -1,10 +1,12 @@
-﻿using  DigitalWallet.Application.Dao;
-using  DigitalWallet.Application.Models;
-using  DigitalWallet.Application.Repositories;
+﻿using DigitalWallet.Application.Dao.Identity;
+using DigitalWallet.Application.Models;
+using DigitalWallet.Application.Repositories.Deposit;
+using DigitalWallet.Application.Repositories.Transfer;
+using DigitalWallet.Application.Repositories.Wallet;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebApi.Controllers;
+namespace DigitalWallet.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
@@ -29,7 +31,7 @@ public class TransferController : ControllerBase
     #endregion
 
     [HttpGet("{id}")]
-    public async Task<ApiResult<object>> History([FromRoute] string id, CancellationToken cancellationToken = new())
+    public async Task<ApiResult<object>> History([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var wallet = await walletService.FindByIdAsync(id);
         if (wallet != null)

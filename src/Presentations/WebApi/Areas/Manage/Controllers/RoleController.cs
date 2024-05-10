@@ -1,11 +1,11 @@
-﻿using DigitalWallet.Application.Dao;
-using DigitalWallet.Application.Extentions;
+﻿using DigitalWallet.Application.Dao.Identity;
+using DigitalWallet.Application.Extensions;
 using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
+using DigitalWallet.WebApi.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Areas.Manage.Models;
 
-namespace WebApi.Areas.Manage.Controllers;
+namespace DigitalWallet.WebApi.Areas.Manage.Controllers;
 
 [ApiController]
 [Area("Manage")]
@@ -23,7 +23,7 @@ public class RoleController : ControllerBase
 
     [HttpGet]
     //[Authorize(Roles = "ReadRole")]
-    public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = new())
+    public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = default)
     {
         int pageSize = 30;
         var roles = await roleService.GetAllAsync(keyword, page, pageSize, cancellationToken);
@@ -35,9 +35,9 @@ public class RoleController : ControllerBase
     [HttpPost]
     [ModelStateValidator]
     //[Authorize(Roles = "CreateRole")]
-    public async Task<ApiResult<object>> Create([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = new())
+    public async Task<ApiResult<object>> Create([FromBody] CreateRoleMDto model, CancellationToken cancellationToken = default)
     {
-        var newRole = new Role(model.name, model.title, model.description);
+        var newRole = new RoleEntity(model.name, model.title, model.description);
         var result = await roleService.CreateAsync(newRole, cancellationToken);
         if (result.Succeeded)
             return Ok(newRole.Id);
@@ -46,7 +46,7 @@ public class RoleController : ControllerBase
 
     [HttpDelete("{id}")]
     //[Authorize(Roles = "DeleteRole")]
-    public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken = new())
+    public async Task<ApiResult<object>> Delete([FromRoute] Guid id, CancellationToken cancellationToken = default)
     {
         var role = await roleService.FindByIdAsync(id);
         if (role != null)

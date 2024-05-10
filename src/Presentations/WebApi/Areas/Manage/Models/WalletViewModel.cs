@@ -1,4 +1,4 @@
-﻿namespace WebApi.Areas.Manage.Models;
+﻿namespace DigitalWallet.WebApi.Areas.Manage.Models;
 
 public class WalletViewModelManage
 {
@@ -9,7 +9,7 @@ public class WalletViewModelManage
 
 public class OwnerViewModelManage
 {
-    public string id { get; set; }
+    public Guid id { get; set; }
     public string name { get; set; }
     public string surname { get; set; }
 }

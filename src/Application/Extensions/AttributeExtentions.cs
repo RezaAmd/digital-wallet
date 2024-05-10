@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace  DigitalWallet.Application.Extentions
+namespace DigitalWallet.Application.Extensions
 {
     public class ModelStateValidator : ActionFilterAttribute
     {

@@ -3,15 +3,14 @@ using System.Collections.Generic;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
-    public class Role : BaseEntity
+    public class RoleEntity : BaseEntity
     {
         #region Ctor
-        Role() { }
+        RoleEntity() { }
 
-        public Role(string name, string title = null,
+        public RoleEntity(string name, string title = null,
             string description = null)
         {
-            Id = Guid.NewGuid().ToString();
             Name = name;
             Name = title;
             Description = description;
@@ -19,7 +18,6 @@ namespace DigitalWallet.Domain.Entities.Identity
         }
         #endregion
 
-        public string Id { get; set; }
         public string Name { get; set; }
         public DateTime CreatedDateTime { get; set; }
 #nullable enable
@@ -28,6 +26,6 @@ namespace DigitalWallet.Domain.Entities.Identity
 
 #nullable disable
 
-        public virtual ICollection<UserRole> UserRoles { get; set; }
+        public virtual ICollection<UserRoleEntity> UserRoles { get; set; }
     }
 }

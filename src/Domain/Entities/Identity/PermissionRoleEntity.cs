@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
-    public class PermissionRole : BaseEntity
+    public class PermissionRoleEntity : BaseEntity
     {
         #region Ctor
-        PermissionRole() { }
+        PermissionRoleEntity() { }
 
-        public PermissionRole(string roleId, string permissionId)
+        public PermissionRoleEntity(Guid roleId, Guid permissionId)
         {
             RoleId = roleId;
             PermissionId = permissionId;
@@ -19,11 +19,11 @@ namespace DigitalWallet.Domain.Entities.Identity
         public DateTime AssignedDateTime { get; set; }
 
         [ForeignKey("Role")]
-        public string RoleId { get; set; }
-        public virtual Role Role { get; set; }
+        public Guid RoleId { get; set; }
+        public virtual RoleEntity Role { get; set; }
 
         [ForeignKey("Permission")]
-        public string PermissionId { get; set; }
-        public virtual Permission Permission { get; set; }
+        public Guid PermissionId { get; set; }
+        public virtual PermissionEntity Permission { get; set; }
     }
 }

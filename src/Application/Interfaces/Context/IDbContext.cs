@@ -11,13 +11,13 @@ namespace  DigitalWallet.Application.Interfaces.Context
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
         DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
-        DbSet<User> Users { get; set; }
-        DbSet<Role> Roles { get; set; }
-        DbSet<Permission> Permissions { get; set; }
+        DbSet<UserEntity> Users { get; set; }
+        DbSet<RoleEntity> Roles { get; set; }
+        DbSet<PermissionEntity> Permissions { get; set; }
 
-        DbSet<Bank> Banks { get; set; }
-        DbSet<Wallet> Wallets { get; set; }
-        DbSet<Deposit> Deposits { get; set; }
-        DbSet<Transfer> Transfers { get; set; }
+        DbSet<BankEntity> Banks { get; set; }
+        DbSet<WalletEntity> Wallets { get; set; }
+        DbSet<DepositEntity> Deposits { get; set; }
+        DbSet<TransferEntity> Transfers { get; set; }
     }
 }

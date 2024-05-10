@@ -1,13 +1,15 @@
-﻿namespace System.Security.Claims
+﻿using System.Security.Claims;
+
+namespace DigitalWallet.Application.Extensions
 {
     public static class CustomPrincipal
     {
-        public static string GetCurrentWalletId(this ClaimsPrincipal claims)
+        public static Guid GetCurrentWalletId(this ClaimsPrincipal claims)
         {
             var walletIdClaim = claims.FindFirst("wallet-id");
-            if(walletIdClaim == null)
-                return string.Empty;
-            return walletIdClaim.Value;
+            if (walletIdClaim == null)
+                return Guid.Empty;
+            return Guid.Parse(walletIdClaim.Value);
         }
     }
 }

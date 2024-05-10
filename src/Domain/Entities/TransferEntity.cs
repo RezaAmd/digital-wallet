@@ -5,15 +5,14 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities
 {
-    public class Transfer : BaseEntity
+    public class TransferEntity : BaseEntity
     {
         #region Constructors
-        Transfer() { }
+        TransferEntity() { }
 
-        public Transfer(Money amount, string originId, string destinationId, string description = null,
+        public TransferEntity(Money amount, Guid originId, Guid destinationId, string description = null,
             TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
         {
-            Id = Guid.NewGuid().ToString();
             Identify = DateTime.Now.ToString("ddMMyyfffffff");
             Amount = amount;
             OriginId = originId;
@@ -24,11 +23,10 @@ namespace DigitalWallet.Domain.Entities
             CreatedDateTime = DateTime.Now;
         }
 
-        public Transfer(Money amount, double balance,
-            string originId, string destinationId, string description = null,
+        public TransferEntity(Money amount, double balance,
+            Guid originId, Guid destinationId, string? description = null,
             TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
         {
-            Id = Guid.NewGuid().ToString();
             Identify = DateTime.Now.ToString("ddMMyyfffffff");
             Amount = amount;
             DestinationBalance = balance;
@@ -43,9 +41,8 @@ namespace DigitalWallet.Domain.Entities
         /// <summary>
         /// For deposit transfers.
         /// </summary>
-        public Transfer(Money amount, double balance, string destinationId, string description = null)
+        public TransferEntity(Money amount, double balance, Guid destinationId, string description = null)
         {
-            Id = Guid.NewGuid().ToString();
             Identify = DateTime.Now.ToString("ddMMyyfffffff");
             Amount = amount;
             DestinationBalance = balance;
@@ -57,25 +54,19 @@ namespace DigitalWallet.Domain.Entities
         }
         #endregion
 
-        public string Id { get; set; }
         public string Identify { get; set; } // Its a tracking code for user.
         public Money Amount { get; set; }
-        public string? OriginId { get; set; }
-#nullable enable
-        public double? OriginBalance { get; set; }
-#nullable disable
+        public Guid? OriginId { get; set; } = null;
+        public double? OriginBalance { get; set; } = null;
         public TransferOriginType OriginType { get; set; } // 0: wallet, 1: getway
         
         [ForeignKey("Destination")]
-        public string DestinationId { get; set; }
+        public Guid DestinationId { get; set; }
         public double DestinationBalance { get; set; }
         public DateTime CreatedDateTime { get; set; }
-        public TransferState State { get; set; }
-#nullable enable
-        public string? Description { get; set; }
-#nullable disable
+        public TransferState State { get; set; } = TransferState.Pending;
+        public string? Description { get; set; } = null;
 
-
-        public virtual Wallet Destination { get; set; }
+        public virtual WalletEntity? Destination { get; private set; } = null;
     }
 }

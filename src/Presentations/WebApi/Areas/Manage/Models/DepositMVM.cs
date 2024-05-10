@@ -2,7 +2,7 @@
 using DigitalWallet.Domain.Enums;
 using Mapster;
 
-namespace WebApi.Areas.Manage.Models;
+namespace DigitalWallet.WebApi.Areas.Manage.Models;
 #nullable disable
 public class DepositMVM
 {
@@ -14,7 +14,7 @@ public class DepositMVM
 
     public static TypeAdapterConfig MapConfig()
     {
-        return TypeAdapterConfig<Deposit, DepositMVM>.NewConfig()
+        return TypeAdapterConfig<DepositEntity, DepositMVM>.NewConfig()
             .Map(dest => dest.amount, src => src.Amount.Value).Config;
     }
 }

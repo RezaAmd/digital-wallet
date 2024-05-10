@@ -4,12 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
-    public class UserPermission : BaseEntity
+    public class UserPermissionEntity : BaseEntity
     {
         #region Ctor
-        UserPermission() { }
 
-        public UserPermission(string userId, string permissionId,
+        UserPermissionEntity() { }
+
+        public UserPermissionEntity(Guid userId, Guid permissionId,
             RelatedPermissionType type = RelatedPermissionType.General)
         {
             UserId = userId;
@@ -17,20 +18,19 @@ namespace DigitalWallet.Domain.Entities.Identity
             AssignedDateTime = DateTime.Now;
             Type = type;
         }
+
         #endregion
 
         public DateTime AssignedDateTime { get; set; }
         public RelatedPermissionType Type { get; set; }
-#nullable enable
-        public string? RelatedToId { get; set; }
-#nullable disable
+        public Guid? RelatedToId { get; set; }
 
         [ForeignKey("User")]
-        public string UserId { get; set; }
-        public virtual User User { get; set; }
+        public Guid UserId { get; set; }
+        public virtual UserEntity User { get; set; }
 
         [ForeignKey("Permission")]
-        public string PermissionId { get; set; }
-        public virtual Permission Permission { get; set; }
+        public Guid PermissionId { get; set; }
+        public virtual PermissionEntity Permission { get; set; }
     }
 }

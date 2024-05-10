@@ -1,9 +1,9 @@
 ﻿using DigitalWallet.Application.Models;
-using DigitalWallet.Application.Repositories;
+using DigitalWallet.Application.Repositories.Deposit;
+using DigitalWallet.WebApi.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Areas.Manage.Models;
 
-namespace WebApi.Areas.Manage.Controllers;
+namespace DigitalWallet.WebApi.Areas.Manage.Controllers;
 
 [Area("Manage")]
 [ApiController]

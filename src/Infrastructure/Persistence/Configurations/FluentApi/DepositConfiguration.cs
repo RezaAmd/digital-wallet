@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
 {
-    public class DepositConfiguration : IEntityTypeConfiguration<Deposit>
+    public class DepositConfiguration : IEntityTypeConfiguration<DepositEntity>
     {
-        public void Configure(EntityTypeBuilder<Deposit> b)
+        public void Configure(EntityTypeBuilder<DepositEntity> b)
         {
             b.ToTable("Deposits");
             b.HasIndex(d => d.Id)

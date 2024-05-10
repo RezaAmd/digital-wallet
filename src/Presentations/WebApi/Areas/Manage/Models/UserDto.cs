@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Areas.Manage.Models;
+namespace DigitalWallet.WebApi.Areas.Manage.Models;
 
 public class CreateUserMDto
 {

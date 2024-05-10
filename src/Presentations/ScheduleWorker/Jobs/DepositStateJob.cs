@@ -1,8 +1,8 @@
-﻿using  DigitalWallet.Application.Dao;
-using  DigitalWallet.Application.Interfaces.Context;
+﻿using DigitalWallet.Application.Dao;
+using DigitalWallet.Application.Interfaces.Context;
 using Quartz;
 
-namespace ScheduleWorker.Jobs
+namespace DigitalWallet.ScheduleWorker.Jobs
 {
     public class DepositStateJob : IJob
     {

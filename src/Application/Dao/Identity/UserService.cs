@@ -1,17 +1,13 @@
-﻿using  DigitalWallet.Application.Extentions;
-using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Extensions;
+using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
 using DigitalWallet.Domain.Enums;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Dao
+namespace DigitalWallet.Application.Dao.Identity
 {
     public class UserService : IUserService
     {
@@ -35,7 +31,7 @@ namespace  DigitalWallet.Application.Dao
         }
         #endregion
 
-        public async Task<User> FindByIdAsync(string id, CancellationToken cancellationToken = new())
+        public async Task<UserEntity?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)
         {
             return await context.Users
                 .Include(x => x.Permissions)
@@ -46,7 +42,7 @@ namespace  DigitalWallet.Application.Dao
         /// Create a new user.
         /// </summary>
         /// <param name="user">New user object model.</param>
-        public async Task<Result> CreateAsync(User user, string password, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> CreateAsync(UserEntity user, string password, CancellationToken cancellationToken = new CancellationToken())
         {
             if (user != null)
             {
@@ -63,7 +59,7 @@ namespace  DigitalWallet.Application.Dao
         /// Update an specific user.
         /// </summary>
         /// <param name="user">Modified user you want to update.</param>
-        public async Task<Result> UpdateAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> UpdateAsync(UserEntity user, CancellationToken cancellationToken = new CancellationToken())
         {
             context.Users.Update(user);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -75,7 +71,7 @@ namespace  DigitalWallet.Application.Dao
         /// Delete a specific user.
         /// </summary>
         /// <param name="user">User model object.</param>
-        public async Task<Result> DeleteAsync(User user, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(UserEntity user, CancellationToken cancellationToken = new CancellationToken())
         {
             context.Users.Remove(user);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -91,7 +87,7 @@ namespace  DigitalWallet.Application.Dao
         /// <param name="tracking">For range changes.</param>
         /// <returns>List of all users</returns>
         public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(TypeAdapterConfig config = null, int page = 1, int pageSize = 20,
-            bool withRoles = false, string keyword = null, bool tracking = false, CancellationToken cancellationToken = new CancellationToken())
+            bool withRoles = false, string? keyword = null, bool tracking = false, CancellationToken cancellationToken = new CancellationToken())
         {
             var init = context.Users.OrderBy(u => u.JoinedDate).AsQueryable();
 
@@ -117,26 +113,34 @@ namespace  DigitalWallet.Application.Dao
         /// Find user by identity (Username or Phone number or Email)
         /// </summary>
         /// <param name="identity">identity for find</param>
-        public async Task<User> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
+        public async Task<UserEntity?> FindByIdentityAsync(string identity, bool asNoTracking = false, bool withRoles = false,
             bool withPermissions = false,
-            TypeAdapterConfig config = null)
+            TypeAdapterConfig? config = null)
         {
+            if (string.IsNullOrEmpty(identity))
+                return null;
             identity = identity.ToLower();
-            var init = context.Users.Where(u => u.Username == identity
+            var query = context.Users.Where(u => u.Username == identity
             || u.PhoneNumber == identity
-            || u.Email == identity
-            || u.Id == identity);
+            || u.Email == identity).AsQueryable();
+
+            var id = Guid.Empty;
+            Guid.TryParse(identity, out id);
+            if (id != Guid.Empty)
+                query = query.Where(u => u.Id == id);
+
             #region include's
             if (asNoTracking)
-                init = init.AsNoTracking();
+                query = query.AsNoTracking();
             if (withRoles)
-                init = init.Include(u => u.UserRoles)
+                query = query.Include(u => u.UserRoles)
                     .ThenInclude(ur => ur.Role);
             if (withPermissions)
-                init = init.Include(u => u.Permissions)
+                query = query.Include(u => u.Permissions)
                     .ThenInclude(up => up.Permission);
             #endregion
-            return await init.FirstOrDefaultAsync();
+
+            return await query.FirstOrDefaultAsync();
         }
 
         /// <summary>
@@ -145,7 +149,7 @@ namespace  DigitalWallet.Application.Dao
         /// <param name="user">User model object with password.</param>
         /// <param name="password">The password you want to check.</param>
         /// <returns>true/false</returns>
-        public bool CheckPassword(User user, string password)
+        public bool CheckPassword(UserEntity user, string password)
         {
             string encryptedPassword = password.Encrypt(passwordEncryptionSalt);
             if (user.Password == encryptedPassword)
@@ -179,7 +183,7 @@ namespace  DigitalWallet.Application.Dao
 
 
         #region Permission
-        public async Task<Result> AddToPermissionAsync(User user, Permission permission,
+        public async Task<Result> AddToPermissionAsync(UserEntity user, PermissionEntity permission,
             RelatedPermissionType type = RelatedPermissionType.General)
         {
             user.Permissions.Add(new(user.Id, permission.Id, type));

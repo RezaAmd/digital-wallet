@@ -20,7 +20,7 @@ namespace  DigitalWallet.Application.Dao
         }
         #endregion
 
-        public async Task<TEntity?> FindByIdAsync(TKey id, CancellationToken cancellationToken = new())
+        public async Task<TEntity?> FindByIdAsync(TKey id, CancellationToken cancellationToken = default)
         {
             return await entities.FindAsync(id, cancellationToken);
         }

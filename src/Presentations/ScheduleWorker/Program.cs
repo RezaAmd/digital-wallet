@@ -1,12 +1,12 @@
 using DigitalWallet.Application;
 using DigitalWallet.Infrastructure;
+using DigitalWallet.ScheduleWorker.JobFactories;
+using DigitalWallet.ScheduleWorker.Jobs;
+using DigitalWallet.ScheduleWorker.Schedulers;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;
-using ScheduleWorker.JobFactories;
-using ScheduleWorker.Jobs;
-using ScheduleWorker.Models;
-using ScheduleWorker.Schedulers;
+using DigitalWallet.ScheduleWorker.Models;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>

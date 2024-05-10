@@ -1,14 +1,14 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WebApi.Areas.Manage.Models;
+namespace DigitalWallet.WebApi.Areas.Manage.Models;
 
 public class CreatePermissionMDto
 {
     [Required(ErrorMessage = "وارد کردن نام ضروری است.")]
-    public string name { get; set; }
+    public string? name { get; set; } = null;
 #nullable enable
-    public string? title { get; set; }
-    public string? description { get; set; }
+    public string? title { get; set; } = null;
+    public string? description { get; set; } = null;
 #nullable disable
-    public List<string> rolesId { get; set; } // List of role id.
+    public List<Guid> rolesId { get; set; } // List of role id.
 }

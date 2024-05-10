@@ -1,6 +1,6 @@
-﻿using  DigitalWallet.Application.Extentions;
-using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Extensions;
+using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities;
 using DigitalWallet.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Repositories
+namespace DigitalWallet.Application.Repositories.Transfer
 {
     public class TransferRepository : ITransferRepository
     {
@@ -27,7 +27,7 @@ namespace  DigitalWallet.Application.Repositories
         /// </summary>
         /// <param name="id">Transfer history id.</param>
         /// <returns>Transfer model object.</returns>
-        public async Task<Transfer> FindByIdAsync(string id)
+        public async Task<TransferEntity> FindByIdAsync(Guid id)
         {
             return await context.Transfers.FindAsync(id);
         }
@@ -37,7 +37,7 @@ namespace  DigitalWallet.Application.Repositories
         /// </summary>
         /// <param name="wallet">Wallet model object.</param>
         /// <returns>Transfer model object.</returns>
-        public async Task<(Transfer Transfer, double Balance)> GetLatestByWalletAsync(Wallet wallet, CancellationToken cancellationToken = new())
+        public async Task<(TransferEntity? Transfer, double Balance)> GetLatestByWalletAsync(WalletEntity wallet, CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers
                 .OrderBy(t => t.CreatedDateTime)
@@ -57,7 +57,8 @@ namespace  DigitalWallet.Application.Repositories
             return (transfer, balance);
         }
 
-        public async Task<(Transfer first, Transfer second)> GetTwoLatestByWalletIdAsync(string firstId, string secondId, CancellationToken cancellationToken = new())
+        public async Task<(TransferEntity? first, TransferEntity? second)> GetTwoLatestByWalletIdAsync(Guid firstId, Guid secondId,
+            CancellationToken cancellationToken = default)
         {
             var transfers = await context.Transfers
                 .OrderBy(t => t.CreatedDateTime)
@@ -76,7 +77,7 @@ namespace  DigitalWallet.Application.Repositories
         /// <param name="endDate">End date filter</param>
         /// <param name="page">Current page number.</param>
         /// <param name="pageSize">Page items count.</param>
-        public async Task<PaginatedList<Transfer>> GetHistoryByWalletIdAsync(string walletId = default,
+        public async Task<PaginatedList<TransferEntity>> GetHistoryByWalletIdAsync(Guid? walletId = null,
             DateTime startDate = default, DateTime endDate = default, int page = 1, int pageSize = 20,
             CancellationToken cancellationToken = default)
         {
@@ -85,7 +86,7 @@ namespace  DigitalWallet.Application.Repositories
                 .AsNoTracking();
 
             #region fillters
-            if (!string.IsNullOrEmpty(walletId))
+            if (walletId is not null)
                 transfers = transfers.Where(t => t.OriginId == walletId || t.DestinationId == walletId);
             if (startDate != default)
                 transfers = transfers.Where(t => t.CreatedDateTime >= startDate);
@@ -101,7 +102,8 @@ namespace  DigitalWallet.Application.Repositories
         /// </summary>
         /// <param name="walletId">Wallet id.</param>
         /// <returns>Wallet balance as double.</returns>
-        public async Task<double> GetBalanceByIdAsync(Wallet wallet, CancellationToken cancellationToken = default)
+        public async Task<double> GetBalanceByIdAsync(WalletEntity wallet,
+            CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers
                 .Where(t => t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
@@ -135,7 +137,8 @@ namespace  DigitalWallet.Application.Repositories
         /// Create a new transfer history.
         /// </summary>
         /// <param name="transfer">New transfer history model object.</param>
-        public async Task<Result> CreateAsync(Transfer transfer, CancellationToken cancellationToken = default)
+        public async Task<Result> CreateAsync(TransferEntity transfer,
+            CancellationToken cancellationToken = default)
         {
             await context.Transfers.AddAsync(transfer);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -147,7 +150,8 @@ namespace  DigitalWallet.Application.Repositories
         /// Update a Transfer history.
         /// </summary>
         /// <param name="transfer">Transfer model object.</param>
-        public async Task<Result> UpdateAsync(Transfer transfer, CancellationToken cancellationToken = default)
+        public async Task<Result> UpdateAsync(TransferEntity transfer,
+            CancellationToken cancellationToken = default)
         {
             context.Transfers.Update(transfer);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -159,7 +163,8 @@ namespace  DigitalWallet.Application.Repositories
         /// Delete a transfer history.
         /// </summary>
         /// <param name="transfer">Transfer model object.</param>
-        public async Task<Result> DeleteAsync(Transfer transfer, CancellationToken cancellationToken = default)
+        public async Task<Result> DeleteAsync(TransferEntity transfer,
+            CancellationToken cancellationToken = default)
         {
             context.Transfers.Remove(transfer);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))

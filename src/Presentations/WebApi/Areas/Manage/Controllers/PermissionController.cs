@@ -1,11 +1,11 @@
-﻿using DigitalWallet.Application.Dao;
-using DigitalWallet.Application.Extentions;
+﻿using DigitalWallet.Application.Dao.Identity;
+using DigitalWallet.Application.Extensions;
 using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
+using DigitalWallet.WebApi.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Areas.Manage.Models;
 
-namespace WebApi.Areas.Manage.Controllers;
+namespace DigitalWallet.WebApi.Areas.Manage.Controllers;
 
 [ApiController]
 [Area("Manage")]
@@ -23,7 +23,7 @@ public class PermissionController : ControllerBase
 
     [HttpGet]
     //[Authorize(Roles = "ReadPermission")]
-    public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = new())
+    public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = default)
     {
         int pageSize = 30;
         var permissions = await permissionService.GetAllAsync(keyword, page, pageSize, true, cancellationToken);
@@ -35,10 +35,10 @@ public class PermissionController : ControllerBase
     //[Authorize(Roles = "CreatePermission")]
     public async Task<ApiResult<object>> Create([FromBody] CreatePermissionMDto model)
     {
-        var newPermission = new Permission(model.name, model.title, model.description);
+        var newPermission = new PermissionEntity(model.name, model.title, model.description);
         if (model.rolesId.Count > 0)
         {
-            newPermission.PermissionRoles = new List<PermissionRole>();
+            newPermission.PermissionRoles = new List<PermissionRoleEntity>();
             foreach (var roleId in model.rolesId)
             {
                 newPermission.PermissionRoles.Add(new(roleId, newPermission.Id));
@@ -52,7 +52,7 @@ public class PermissionController : ControllerBase
 
     [HttpDelete("{id}")]
     //[Authorize(Roles = "DeletePermission")]
-    public async Task<ApiResult<object>> Delete(string id, CancellationToken cancellationToken)
+    public async Task<ApiResult<object>> Delete(Guid id, CancellationToken cancellationToken)
     {
         var permission = await permissionService.FindByIdAsync(id, cancellationToken);
         if (permission != null)

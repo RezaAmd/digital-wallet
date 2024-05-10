@@ -1,13 +1,13 @@
-﻿using DigitalWallet.Application.Dao;
-using DigitalWallet.Application.Extentions;
+﻿using DigitalWallet.Application.Dao.Identity;
+using DigitalWallet.Application.Extensions;
 using DigitalWallet.Application.Models;
-using DigitalWallet.Application.Repositories;
+using DigitalWallet.Application.Repositories.Wallet;
 using DigitalWallet.Domain.Entities;
 using DigitalWallet.Domain.Entities.Identity;
+using DigitalWallet.WebApi.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
-using WebApi.Areas.Manage.Models;
 
-namespace WebApi.Areas.Manage.Controllers;
+namespace DigitalWallet.WebApi.Areas.Manage.Controllers;
 
 [ApiController]
 [Area("Manage")]
@@ -34,7 +34,7 @@ public class UserController : ControllerBase
     #endregion
 
     [HttpGet]
-    public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = new())
+    public async Task<ApiResult<object>> GetAll(string? keyword = null, int page = 1, CancellationToken cancellationToken = default)
     {
         int pageSize = 20;
         var users = await userService.GetAllAsync<UserThumbailMVM>(keyword: keyword, page: page, pageSize: pageSize, cancellationToken: cancellationToken);
@@ -44,7 +44,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResult<object>> Get([FromRoute] string id)
+    public async Task<ApiResult<object>> Get([FromRoute] Guid id)
     {
         var user = await userService.FindByIdAsync(id);
         if (user != null)
@@ -59,19 +59,19 @@ public class UserController : ControllerBase
     {
         #region Create wallet
         // Create new wallet.
-        var newWallet = new Wallet(model.phoneNumber);
+        var newWallet = new WalletEntity(model.phoneNumber);
         var createWalletResult = await walletService.CreateAsync(newWallet);
         #endregion
 
         #region Create user
         // Create new user.
-        var newUser = new User(model.username, model.phoneNumber, model.email,
+        var newUser = new UserEntity(model.username, model.phoneNumber, model.email,
             model.name, model.surname, false, false, createWalletResult.Succeeded ? newWallet.Id : null);
         var createUserResult = await userService.CreateAsync(newUser, model.password, cancellationToken);
         if (createUserResult.Succeeded)
         {
             // If the user was created, update wallet.
-            newWallet.OwnerId = newUser.Id;
+            //newWallet.OwnerId = newUser.Id;
             var walletUpdateResult = await walletService.UpdateAsync(newWallet);
             if (!walletUpdateResult.Succeeded)
                 logger.LogError($"Wallet {newWallet.Id} has not been updated.");
@@ -93,7 +93,7 @@ public class UserController : ControllerBase
 
     [HttpPost("{id}")]
     //[Authorize(Roles = "UpdateUser")]
-    public async Task<ApiResult<object>> Edit([FromRoute] string id, [FromBody] EditUserMDto model, CancellationToken cancellationToken)
+    public async Task<ApiResult<object>> Edit([FromRoute] Guid id, [FromBody] EditUserMDto model, CancellationToken cancellationToken)
     {
         var user = await userService.FindByIdAsync(id);
         if (user != null)
@@ -146,37 +146,45 @@ public class UserController : ControllerBase
 
     [HttpDelete("{id}")]
     //[Authorize(Roles = "DeleteUser")]
-    public async Task<ApiResult<object>> Delete([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<ApiResult<object>> Delete([FromRoute] Guid id,
+        CancellationToken cancellationToken)
     {
         var user = await userService.FindByIdAsync(id);
-        if (user != null)
+        if (user is null)
+            return NotFound("کاربر مورد نظر پیدا نشد.");
+
+        if (user.WalletId.HasValue)
         {
-            var wallet = await walletService.FindByIdAsync(user.WalletId);
-            var deleteWalletResult = await walletService.DeleteAsync(wallet, cancellationToken);
-            var deleteResult = await userService.DeleteAsync(user, cancellationToken);
-            if (deleteResult.Succeeded)
-                return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
-            return BadRequest(deleteResult.Errors);
+            var wallet = await walletService.FindByIdAsync(user.WalletId.Value);
+            if (wallet is not null)
+            {
+                var walletDeleteResult = await walletService.DeleteAsync(wallet, cancellationToken);
+            }
         }
-        return NotFound("کاربر مورد نظر پیدا نشد.");
+
+        var userDeleteResult = await userService.DeleteAsync(user, cancellationToken);
+        if (userDeleteResult.Succeeded == false)
+            return BadRequest(userDeleteResult.Errors);
+
+        return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
     }
 
     [HttpGet]
-    public async Task<ApiResult<object>> AssignPermission(string userId, string permissionId, CancellationToken cancellationToken)
+    public async Task<ApiResult<object>> AssignPermission(Guid userId, Guid permissionId,
+        CancellationToken cancellationToken)
     {
         var user = await userService.FindByIdAsync(userId);
-        if (user != null)
-        {
-            var permission = await permissionService.FindByIdAsync(permissionId, cancellationToken);
-            if (permission != null)
-            {
-                var assignResult = await userService.AddToPermissionAsync(user, permission);
-                if (assignResult.Succeeded)
-                    return Ok($"نقش {permission.Title} با موفقیت به کاربر {user.Name} {user.Surname} اختصاص داده شد.");
-                return BadRequest(assignResult.Errors);
-            }
+        if (user is null)
+            return NotFound("کاربر مورد نظر پیدا نشد.");
+
+        var permission = await permissionService.FindByIdAsync(permissionId, cancellationToken);
+        if (permission is null)
             return NotFound("نقش مورد نظر پیدا نشد.");
-        }
-        return NotFound("کاربر مورد نظر پیدا نشد.");
+
+        var assignResult = await userService.AddToPermissionAsync(user, permission);
+        if (assignResult.Succeeded == false)
+            return BadRequest(assignResult.Errors);
+
+        return Ok($"نقش {permission.Title} با موفقیت به کاربر {user.Name} {user.Surname} اختصاص داده شد.");
     }
 }

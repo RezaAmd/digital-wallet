@@ -1,14 +1,10 @@
-﻿using  DigitalWallet.Application.Extentions;
-using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Extensions;
+using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities;
-using System;
 using System.Data.Entity;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Repositories
+namespace DigitalWallet.Application.Repositories.Bank
 {
     public class BankRepository : IBankRepository
     {
@@ -24,7 +20,7 @@ namespace  DigitalWallet.Application.Repositories
         /// Create a new bank for user.
         /// </summary>
         /// <param name="bank">New bank model object.</param>
-        public async Task<Result> CreateAsync(Bank bank, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> CreateAsync(BankEntity bank, CancellationToken cancellationToken = new CancellationToken())
         {
             await context.Banks.AddAsync(bank);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -39,7 +35,7 @@ namespace  DigitalWallet.Application.Repositories
         /// <param name="page">Number of page.</param>
         /// <param name="pageSize">Current page items count.</param>
         /// <param name="keyword">Keyword for search in bank name.</param>
-        public async Task<PaginatedList<Bank>> GetAllAsync(int page = 1, int pageSize = 10, string keyword = null,
+        public async Task<PaginatedList<BankEntity>> GetAllAsync(int page = 1, int pageSize = 10, string keyword = null,
             CancellationToken cancellationToken = new CancellationToken())
         {
             var banks = context.Banks.AsQueryable();
@@ -55,7 +51,7 @@ namespace  DigitalWallet.Application.Repositories
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<Bank> FindByIdAsync(string id, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<BankEntity> FindByIdAsync(Guid id, CancellationToken cancellationToken = new CancellationToken())
         {
             var banks = context.Banks.Where(b => b.Id == id);
             return await banks.FirstOrDefaultAsync(cancellationToken);
@@ -65,7 +61,7 @@ namespace  DigitalWallet.Application.Repositories
         /// Update a specific bank.
         /// </summary>
         /// <param name="bank">Bank object model to update.</param>
-        public async Task<Result> UpdateAsync(Bank bank, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> UpdateAsync(BankEntity bank, CancellationToken cancellationToken = new CancellationToken())
         {
             context.Banks.Update(bank);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -79,7 +75,7 @@ namespace  DigitalWallet.Application.Repositories
         /// <param name="bank">Bank object model to delete.</param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
-        public async Task<Result> DeleteAsync(Bank bank, CancellationToken cancellationToken = new CancellationToken())
+        public async Task<Result> DeleteAsync(BankEntity bank, CancellationToken cancellationToken = new CancellationToken())
         {
             context.Banks.Remove(bank);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))

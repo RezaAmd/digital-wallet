@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
 {
-    public class TransferConfiguration : IEntityTypeConfiguration<Transfer>
+    public class TransferConfiguration : IEntityTypeConfiguration<TransferEntity>
     {
-        public void Configure(EntityTypeBuilder<Transfer> b)
+        public void Configure(EntityTypeBuilder<TransferEntity> b)
         {
             b.ToTable("Transfers");
             b.HasIndex(d => d.Id)

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Identity
 {
-    public class PermissionRoleConfiguration : IEntityTypeConfiguration<PermissionRole>
+    public class PermissionRoleConfiguration : IEntityTypeConfiguration<PermissionRoleEntity>
     {
-        public void Configure(EntityTypeBuilder<PermissionRole> b)
+        public void Configure(EntityTypeBuilder<PermissionRoleEntity> b)
         {
             b.ToTable("PermissionRoles");
             b.HasKey(w => new { w.PermissionId, w.RoleId });

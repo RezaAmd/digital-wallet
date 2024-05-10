@@ -1,11 +1,12 @@
-﻿using  DigitalWallet.Application.Repositories;
-using  DigitalWallet.Application.Services.WebService.ZarinPal;
+﻿using DigitalWallet.Application.Repositories.Deposit;
+using DigitalWallet.Application.Repositories.Transfer;
+using DigitalWallet.Application.Services.WebService.ZarinPal;
 using DigitalWallet.Domain.Entities;
 using DigitalWallet.Domain.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
-namespace WebApi.Controllers;
+namespace DigitalWallet.WebApi.Controllers;
 
 [ApiController]
 [Route("[controller]/[action]")]
@@ -34,44 +35,45 @@ public class PaymentController : ControllerBase
     {
         // Find deposit history with authority.
         var deposit = await _depositService.FindByAuthorityAsync(Authority, includeWallet: true, cancellationToken);
-        if (deposit != null)
+        if (deposit is null)
+            return NotFound("Authority not found in deposit history!");
+
+        string redirectAddress = $"{deposit.Callback}?traceId={deposit.TraceId}";
+        // Send verify request to bank.
+        var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount.Value, deposit.Authority, cancellationToken);
+        // Update deposit state.
+        if (verifyResult.Response.StatusCode == HttpStatusCode.OK)
         {
-            string redirectAddress = $"{deposit.Callback}?traceId={deposit.TraceId}";
-            // Send verify request to bank.
-            var verifyResult = await _zarinpalService.VerifyPaymentAsync(deposit.Amount.Value, deposit.Authority, cancellationToken);
-            // Update deposit state.
-            if (verifyResult.Response.StatusCode == HttpStatusCode.OK)
+            if (verifyResult.Result.data.code == 100)
             {
-                if (verifyResult.Result.data.code == 100)
+                // Updade deposit history.
+                deposit.RefId = verifyResult.Result.data.ref_id.ToString();
+                var latestTransfer = await _transferService.GetLatestByWalletAsync(deposit.Wallet, cancellationToken);
+                var newTransfer = new TransferEntity(amount: deposit.Amount,
+                    balance: latestTransfer.Balance + deposit.Amount.Value,
+                    destinationId: deposit.DestinationId,
+                    description: deposit.Id.ToString());
+                // Increase wallet balance.
+                var increaseResult = await _transferService.CreateAsync(newTransfer, cancellationToken);
+                if (increaseResult.Succeeded)
                 {
-                    // Updade deposit history.
-                    deposit.RefId = verifyResult.Result.data.ref_id.ToString();
-                    var latestTransfer = await _transferService.GetLatestByWalletAsync(deposit.Wallet, cancellationToken);
-                    var newTransfer = new Transfer(deposit.Amount, latestTransfer.Balance + deposit.Amount.Value,
-                        deposit.DestinationId, description: deposit.Id);
-                    // Increase wallet balance.
-                    var increaseResult = await _transferService.CreateAsync(newTransfer, cancellationToken);
-                    if (increaseResult.Succeeded)
-                    {
-                        deposit.State = DepositState.Success;
-                    }
-                    else
-                    {
-                        _logger.LogError($"Increase was failed after success deposit. Authority: {deposit.TraceId}");
-                    }
+                    deposit.State = DepositState.Success;
                 }
-                else if (verifyResult.Result.data.code == 101)
+                else
                 {
-                    deposit.State = DepositState.Successed;
+                    _logger.LogError($"Increase was failed after success deposit. Authority: {deposit.TraceId}");
                 }
             }
-            else
+            else if (verifyResult.Result.data.code == 101)
             {
-                deposit.State = DepositState.Failed;
+                deposit.State = DepositState.Successed;
             }
-            var depositUpdateResult = await _depositService.UpdateAsync(deposit);
-            return Redirect(redirectAddress);
         }
-        return NotFound("Authority not found in deposit history!");
+        else
+        {
+            deposit.State = DepositState.Failed;
+        }
+        var depositUpdateResult = await _depositService.UpdateAsync(deposit);
+        return Redirect(redirectAddress);
     }
 }

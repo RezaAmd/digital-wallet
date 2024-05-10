@@ -1,14 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace  DigitalWallet.Application.Extentions
+namespace DigitalWallet.Application.Extensions
 {
     public static class StringCipher
     {
         private static string EncryptionKey = "tEsl@369";
-        public static string Encrypt(this string clearText, string salt = default)
+        public static string Encrypt(this string clearText, string? salt = null)
         {
             byte[] clearBytes = Encoding.Unicode.GetBytes(clearText);
             using (Aes encryptor = Aes.Create())
@@ -29,7 +27,7 @@ namespace  DigitalWallet.Application.Extentions
             return clearText;
         }
 
-        public static string Decrypt(this string cipherText, string salt = default)
+        public static string Decrypt(this string cipherText, string? salt = null)
         {
             cipherText = cipherText.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(cipherText);

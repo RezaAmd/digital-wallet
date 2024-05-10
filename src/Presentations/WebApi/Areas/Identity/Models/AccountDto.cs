@@ -1,4 +1,4 @@
-﻿namespace WebApi.Areas.Identity.Models;
+﻿namespace DigitalWallet.WebApi.Areas.Identity.Models;
 
 public class SignInDto
 {

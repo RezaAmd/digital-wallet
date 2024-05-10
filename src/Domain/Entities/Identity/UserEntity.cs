@@ -4,19 +4,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
-    public class User : BaseEntity
+    public class UserEntity : BaseEntity
     {
         #region Ctor
-        User() { }
-        public User(string username)
+        UserEntity() { }
+        public UserEntity(string username)
         {
             Username = username;
         }
-
-        public User(string username, string phoneNumber, string email = null, string name = null, string surname = null,
-            bool phoneNumberConfirmed = false, bool emailConfirmed = false, string walletId = null)
+        public UserEntity(string username, string phoneNumber, string email = null, string name = null, string surname = null,
+            bool phoneNumberConfirmed = false, bool emailConfirmed = false, Guid? walletId = null)
         {
-            Id = Guid.NewGuid().ToString();
             Username = username;
             PhoneNumber = phoneNumber;
 
@@ -31,13 +29,12 @@ namespace DigitalWallet.Domain.Entities.Identity
             JoinedDate = DateTime.Now;
             IsBanned = false;
 
-            if (!string.IsNullOrEmpty(walletId))
+            if (walletId.HasValue)
                 WalletId = walletId;
         }
 
         #endregion
 
-        public string Id { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string Email { get; set; }
@@ -49,16 +46,16 @@ namespace DigitalWallet.Domain.Entities.Identity
         public string? Surname { get; set; }
 
         [ForeignKey("Wallet")]
-        public string? WalletId { get; set; }
+        public Guid? WalletId { get; set; }
 #nullable disable
         public DateTime JoinedDate { get; set; }
         public bool IsBanned { get; set; }
 
         #region Relation
-        public virtual Wallet Wallet { get; set; }
-        public virtual ICollection<UserRole> UserRoles { get; set; }
-        public virtual ICollection<Bank> Banks { get; set; }
-        public virtual ICollection<UserPermission> Permissions { get; set; }
+        public virtual WalletEntity? Wallet { get; set; } = null;
+        public virtual ICollection<UserRoleEntity>? UserRoles { get; set; } = null;
+        public virtual ICollection<BankEntity>? Banks { get; set; } = null;
+        public virtual ICollection<UserPermissionEntity>? Permissions { get; set; } = null;
         #endregion
     }
 }

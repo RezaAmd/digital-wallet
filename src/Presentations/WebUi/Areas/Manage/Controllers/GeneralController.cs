@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace WebUi.Areas.Manage.Controllers
+namespace DigitalWallet.WebUi.Areas.Manage.Controllers
 {
     [Area("Manage")]
     public class GeneralController : Controller

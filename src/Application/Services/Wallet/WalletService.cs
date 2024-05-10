@@ -1,7 +1,8 @@
-﻿using DigitalWallet.Application.Dao;
+﻿using DigitalWallet.Application.Dao.Identity;
 using DigitalWallet.Application.Exceptions;
 using DigitalWallet.Application.Models;
-using DigitalWallet.Application.Repositories;
+using DigitalWallet.Application.Repositories.Wallet;
+using DigitalWallet.Domain.Entities;
 
 namespace DigitalWallet.Application.Services.Wallet;
 
@@ -19,9 +20,9 @@ public class WalletService
     }
     #endregion
 
-    public async Task<Result> CreateWalletAsync(string seed, string userId, CancellationToken stoppingToken = default)
+    public async Task<Result> CreateWalletAsync(string seed, Guid userId, CancellationToken stoppingToken = default)
     {
-        if (string.IsNullOrEmpty(userId))
+        if (userId == Guid.Empty)
         {
             throw new NotFoundException("Username cannot be null.");
         }
@@ -32,6 +33,6 @@ public class WalletService
             throw new NotFoundException("User not found.");
         }
 
-        return await _walletRepository.CreateAsync(new Domain.Entities.Wallet(seed), stoppingToken);
+        return await _walletRepository.CreateAsync(new WalletEntity(seed), stoppingToken);
     }
 }

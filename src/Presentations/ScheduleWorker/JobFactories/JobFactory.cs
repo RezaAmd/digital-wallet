@@ -1,7 +1,7 @@
 ﻿using Quartz;
 using Quartz.Spi;
 
-namespace ScheduleWorker.JobFactories
+namespace DigitalWallet.ScheduleWorker.JobFactories
 {
     public class JobFactory : IJobFactory
     {

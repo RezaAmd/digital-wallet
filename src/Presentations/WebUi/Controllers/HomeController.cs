@@ -1,13 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using DigitalWallet.WebUi.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using WebUi.Models;
 
-namespace WebUi.Controllers
+namespace DigitalWallet.WebUi.Controllers
 {
     public class HomeController : Controller
     {

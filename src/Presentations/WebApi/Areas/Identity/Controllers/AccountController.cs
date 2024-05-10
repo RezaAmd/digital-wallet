@@ -1,11 +1,11 @@
-﻿using DigitalWallet.Application.Dao;
+﻿using DigitalWallet.Application.Dao.Identity;
 using DigitalWallet.Application.Models;
 using DigitalWallet.Application.Services.Identity;
+using DigitalWallet.WebApi.Areas.Identity.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebApi.Areas.Identity.Models;
 
-namespace WebApi.Areas.Identity.Controllers;
+namespace DigitalWallet.WebApi.Areas.Identity.Controllers;
 
 [ApiController]
 [Area("Identity")]
@@ -32,7 +32,11 @@ public class AccountController : ControllerBase
             var passwordValidation = userService.CheckPassword(user, model.password);
             if (passwordValidation)
             {
-                var extraClaims = new List<Claim> { new Claim("wallet-id", user.WalletId) };
+                var extraClaims = new List<Claim>();
+                if(user.WalletId != null)
+                {
+                    extraClaims.Add(new Claim("wallet-id", user.WalletId.Value.ToString()));
+                }
                 var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
                 if (JwtBearer.Status.Succeeded)
                     return Ok(new SignInVM(JwtBearer.Token));

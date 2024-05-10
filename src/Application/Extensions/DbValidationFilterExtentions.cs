@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Data.Entity.Validation;
 
-namespace DigitalWallet.Application.Extentions;
+namespace DigitalWallet.Application.Extensions;
 
 public static class DbValidationFilterExtentions
 {

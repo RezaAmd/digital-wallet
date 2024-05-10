@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
-    public class UserRole : BaseEntity
+    public class UserRoleEntity : BaseEntity
     {
         public DateTime AssignedDateTime { get; set; }
         public RelatedPermissionType Type { get; set; }
@@ -13,10 +13,10 @@ namespace DigitalWallet.Domain.Entities.Identity
 #nullable disable
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual UserEntity User { get; set; }
 
         [ForeignKey("Role")]
         public string RoleId { get; set; }
-        public virtual Role Role { get; set; }
+        public virtual RoleEntity Role { get; set; }
     }
 }

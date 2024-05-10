@@ -1,25 +1,23 @@
-﻿using  DigitalWallet.Application.Extentions;
-using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Extensions;
+using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Repositories
+namespace DigitalWallet.Application.Repositories.Deposit
 {
     public class DepositRepository : IDepositRepository
     {
-        #region Initialize
+        #region Ctor & DI
+
         private readonly IDbContext context;
 
         public DepositRepository(IDbContext _context)
         {
             context = _context;
         }
+
         #endregion
 
         /// <summary>
@@ -31,19 +29,21 @@ namespace  DigitalWallet.Application.Repositories
         /// <param name="includeWallet">Join to wallet table?</param>
         /// <param name="asNoTracking">As no tracking items?</param>
         /// <returns>Paginated list of deposit entity.</returns>
-        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(int page = 1, int pageSize = 20, string keyword = null,
+        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(int page = 1, int pageSize = 20, string? keyword = null,
             bool includeWallet = false, bool asNoTracking = false, bool isOrderByDesending = true,
-            CancellationToken cancellationToken = default, TypeAdapterConfig config = default)
+            CancellationToken cancellationToken = default, TypeAdapterConfig? config = null)
         {
             var query = context.Deposits.AsQueryable();
 
             // Search
             if (!string.IsNullOrEmpty(keyword))
             {
+                Guid destinationId = Guid.Empty;
+                Guid.TryParse(keyword, out destinationId);
                 query = query
                     .Where(d => d.TraceId.Contains(keyword) ||
                     d.RefId.Contains(keyword) ||
-                    d.DestinationId.Contains(keyword));
+                    (destinationId != Guid.Empty ? d.DestinationId == destinationId : true));
             }
 
             // Join to wallet.
@@ -69,7 +69,7 @@ namespace  DigitalWallet.Application.Repositories
             }
 
             return await query
-                .PaginatedListAsync<Deposit, TDestination>(page, pageSize, cancellationToken, config);
+                .PaginatedListAsync<DepositEntity, TDestination>(page, pageSize, cancellationToken, config);
         }
 
         /// <summary>
@@ -77,13 +77,16 @@ namespace  DigitalWallet.Application.Repositories
         /// </summary>
         /// <param name="id">Deposit history id (GUID).</param>
         /// <returns>Deposit model object.</returns>
-        public async Task<Deposit?> FindByIdAsync(string id, CancellationToken cancellationToken = default) => await context.Deposits.FindAsync(id, cancellationToken);
+        public async Task<DepositEntity?> FindByIdAsync(Guid id,
+            CancellationToken cancellationToken = default)
+            => await context.Deposits.FindAsync(id, cancellationToken);
 
         /// <summary>
         /// Find specific deposit by traceId.
         /// </summary>
         /// <param name="traceId">Unique ref if from bank when payment request was sent.</param>
-        public async Task<Deposit?> FindByTraceIdAsync(string traceId, bool includeWallet = false, CancellationToken cancellationToken = default)
+        public async Task<DepositEntity?> FindByTraceIdAsync(string traceId, bool includeWallet = false,
+            CancellationToken cancellationToken = default)
         {
             var query = context.Deposits.Where(d => d.TraceId == traceId);
             if (includeWallet)
@@ -97,7 +100,8 @@ namespace  DigitalWallet.Application.Repositories
         /// Find specific deposit by traceId.
         /// </summary>
         /// <param name="traceId">Unique ref if from bank when payment request was sent.</param>
-        public async Task<Deposit?> FindByAuthorityAsync(string authority, bool includeWallet = false, CancellationToken cancellationToken = default)
+        public async Task<DepositEntity?> FindByAuthorityAsync(string authority, bool includeWallet = false,
+            CancellationToken cancellationToken = default)
         {
             var query = context.Deposits.Where(d => d.Authority == authority);
             if (includeWallet)
@@ -111,7 +115,7 @@ namespace  DigitalWallet.Application.Repositories
         /// Get deposit history by wallet id.
         /// </summary>
         /// <param name="walletId">Wallet id to fetch deposit history.</param>
-        public async Task<PaginatedList<Deposit>> GetByWalletIdAsync(string walletId, int page = 1, int pageSize = 20,
+        public async Task<PaginatedList<DepositEntity>> GetByWalletIdAsync(Guid walletId, int page = 1, int pageSize = 20,
             CancellationToken cancellationToken = default)
         {
             return await context.Deposits
@@ -123,7 +127,8 @@ namespace  DigitalWallet.Application.Repositories
         /// Create a new deposit history.
         /// </summary>
         /// <param name="deposit">New deposit model object.</param>
-        public async Task<Result> CreateAsync(Deposit deposit, CancellationToken cancellationToken = default)
+        public async Task<Result> CreateAsync(DepositEntity deposit,
+            CancellationToken cancellationToken = default)
         {
             await context.Deposits.AddAsync(deposit, cancellationToken);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
@@ -135,7 +140,8 @@ namespace  DigitalWallet.Application.Repositories
         /// Update a deposit history.
         /// </summary>
         /// <param name="deposit">Edited deposit history model object.</param>
-        public async Task<Result> UpdateAsync(Deposit deposit, CancellationToken cancellationToken = default)
+        public async Task<Result> UpdateAsync(DepositEntity deposit,
+            CancellationToken cancellationToken = default)
         {
             context.Deposits.Update(deposit);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
