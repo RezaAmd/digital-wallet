@@ -3,6 +3,6 @@
     public enum TransferOriginType
     {
         Wallet,
-        Getway
+        Deposit
     }
 }
