@@ -54,7 +54,7 @@ namespace DigitalWallet.Domain.Entities.Identity
         #region Relation
         public virtual WalletEntity? Wallet { get; set; } = null;
         public virtual ICollection<UserRoleEntity>? UserRoles { get; set; } = null;
-        public virtual ICollection<BankEntity>? Banks { get; set; } = null;
+        public virtual ICollection<SafeEntity>? Safes { get; set; } = null;
         public virtual ICollection<UserPermissionEntity>? Permissions { get; set; } = null;
         #endregion
     }

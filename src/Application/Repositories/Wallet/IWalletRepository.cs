@@ -11,17 +11,17 @@ namespace DigitalWallet.Application.Repositories.Wallet
         /// <summary>
         /// Get all wallets.
         /// </summary>
-        /// <param name="bankId">Bank id for get wallets of specific bank.</param>
-        Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(Guid? bankId = null, int page = 1, int pageSize = 10,
+        /// <param name="safeId">Bank id for get wallets of specific bank.</param>
+        Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(Guid? safeId = null, int page = 1, int pageSize = 10,
             CancellationToken cancellationToken = default, TypeAdapterConfig? config = null);
 
         /// <summary>
         /// Find a specific wallet with seed.
         /// </summary>
         /// <param name="seed">Wallet seed value.</param>
-        /// <param name="bankId">specific bank id.</param>
+        /// <param name="safeId">specific bank id.</param>
         /// <returns>Wallet model object.</returns>
-        Task<WalletEntity?> FindBySeedAsync(string seed, Guid? bankId = null,
+        Task<WalletEntity?> FindBySeedAsync(string seed, Guid? safeId = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>

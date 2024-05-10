@@ -1,10 +1,8 @@
 ﻿using DigitalWallet.Domain.Entities;
 using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace  DigitalWallet.Application.Interfaces.Context
+namespace DigitalWallet.Application.Interfaces.Context
 {
     public interface IDbContext
     {
@@ -15,7 +13,7 @@ namespace  DigitalWallet.Application.Interfaces.Context
         DbSet<RoleEntity> Roles { get; set; }
         DbSet<PermissionEntity> Permissions { get; set; }
 
-        DbSet<BankEntity> Banks { get; set; }
+        DbSet<SafeEntity> Safes { get; set; }
         DbSet<WalletEntity> Wallets { get; set; }
         DbSet<DepositEntity> Deposits { get; set; }
         DbSet<TransferEntity> Transfers { get; set; }

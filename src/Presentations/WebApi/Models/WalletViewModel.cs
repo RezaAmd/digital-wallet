@@ -5,16 +5,16 @@ namespace DigitalWallet.WebApi.Models;
 public class WalletDetailVM
 {
     public WalletDetailVM() { }
-    public WalletDetailVM(Guid id, double balance = 0, string bankId = null, string createdDateTime = null)
+    public WalletDetailVM(Guid id, double balance = 0, string safeId = null, string createdDateTime = null)
     {
         Id = id;
         Balance = balance;
-        BankId = bankId;
+        SafeId = safeId;
         CreatedDateTime = !string.IsNullOrEmpty(createdDateTime) ? createdDateTime : PersianDateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
     }
     public Guid Id { get; set; }
     public double Balance { get; set; }
-    public string? BankId { get; set; } = null;
+    public string? SafeId { get; set; } = null;
     public string CreatedDateTime { get; set; }
 }
 

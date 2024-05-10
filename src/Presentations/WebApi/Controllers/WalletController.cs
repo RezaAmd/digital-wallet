@@ -47,12 +47,12 @@ public class WalletController : ControllerBase
     [ModelStateValidator]
     public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = default)
     {
-        Request.Headers.TryGetValue("x-bank-id", out var bankIdString); // Get bank id from header.
-        Guid bankId = Guid.Empty;
-        Guid.TryParse(bankIdString, out bankId);
+        Request.Headers.TryGetValue("x-bank-id", out var safeIdString); // Get bank id from header.
+        Guid safeId = Guid.Empty;
+        Guid.TryParse(safeIdString, out safeId);
         #region Find
         // Find wallet in database.
-        var wallet = await walletService.FindBySeedAsync(model.Seed, bankId);
+        var wallet = await walletService.FindBySeedAsync(model.Seed, safeId);
         double balance = 0;
         if (wallet != null)
             balance = await walletService.GetBalanceAsync(wallet, cancellationToken);
@@ -62,7 +62,7 @@ public class WalletController : ControllerBase
         else
         {
             // Create a new wallet.
-            wallet = new WalletEntity(model.Seed, bankId);
+            wallet = new WalletEntity(model.Seed, safeId);
 
             var createWalletResult = await walletService.CreateAsync(wallet);
             if (!createWalletResult.Succeeded)

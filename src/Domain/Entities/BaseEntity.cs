@@ -4,6 +4,6 @@ namespace DigitalWallet.Domain.Entities
 {
     public class BaseEntity
     {
-        public Guid Id { get; set; } = Guid.NewGuid();
+        public Guid Id { get; private set; } = Guid.NewGuid();
     }
 }

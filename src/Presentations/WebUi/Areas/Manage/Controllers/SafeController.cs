@@ -3,7 +3,7 @@
 namespace DigitalWallet.WebUi.Areas.Manage.Controllers
 {
     [Area("Manage")]
-    public class BankController : Controller
+    public class SafeController : Controller
     {
         public IActionResult Index()
         {

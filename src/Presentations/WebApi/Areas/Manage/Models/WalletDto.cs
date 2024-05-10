@@ -6,5 +6,5 @@ public class CreateWalletMDto
 {
     [Required(ErrorMessage = "انتخاب یک مقدار اولیه ضروری است.")]
     public string seed { get; set; } = string.Empty;
-    public Guid? bankId { get; set; } = null;
+    public Guid? safeId { get; set; } = null;
 }
