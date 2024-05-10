@@ -1,6 +1,5 @@
 ﻿using DigitalWallet.Domain.Enums;
 using DigitalWallet.Domain.ValueObjects;
-using System;
 
 namespace DigitalWallet.Domain.Entities
 {
