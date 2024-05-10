@@ -55,7 +55,7 @@ public class PaymentController : ControllerBase
                     description: deposit.Id.ToString());
                 // Increase wallet balance.
                 var increaseResult = await _transferService.CreateAsync(newTransfer, cancellationToken);
-                if (increaseResult.Succeeded)
+                if (increaseResult.IsSuccess)
                 {
                     deposit.State = DepositState.Success;
                 }

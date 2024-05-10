@@ -35,8 +35,8 @@ namespace DigitalWallet.Infrastructure.Common.Services
                 Parameters = parameters
             });
             if (result.StatusCode == HttpStatusCode.OK)
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
             #endregion
         }
 
@@ -46,8 +46,8 @@ namespace DigitalWallet.Infrastructure.Common.Services
             #region sample
             var result = await restService.RequestAsync(baseUrl + "verify/lookup.json", Method.GET);
             if (result.StatusCode == HttpStatusCode.OK)
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
             #endregion
         }
     }

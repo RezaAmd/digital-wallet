@@ -39,9 +39,9 @@ public class RoleController : ControllerBase
     {
         var newRole = new RoleEntity(model.name, model.title, model.description);
         var result = await roleService.CreateAsync(newRole, cancellationToken);
-        if (result.Succeeded)
+        if (result.IsSuccess)
             return Ok(newRole.Id);
-        return BadRequest(result.Errors);
+        return BadRequest(result.Messages);
     }
 
     [HttpDelete("{id}")]
@@ -52,9 +52,9 @@ public class RoleController : ControllerBase
         if (role != null)
         {
             var deleteResult = await roleService.DeleteAsync(role, cancellationToken);
-            if (deleteResult.Succeeded)
+            if (deleteResult.IsSuccess)
                 return Ok($"مجوز {role.Name} با موفقیت حذف شد.");
-            return BadRequest(deleteResult.Errors);
+            return BadRequest(deleteResult.Messages);
         }
         return NotFound("مجوز مورد نظر پیدا نشد.");
     }

@@ -1,22 +1,20 @@
 ﻿using DigitalWallet.Domain.Enums;
 using DigitalWallet.Domain.ValueObjects;
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities
 {
     public class TransferEntity : BaseEntity
     {
-        public string Identify { get; set; } // Its a tracking code for user.
-        public Money Amount { get; set; }
-        public Guid? OriginId { get; set; } = null;
+        public string Identify { get; private set; } // Its a tracking code for user.
+        public Money Amount { get; private set; }
+        public TransferOriginType OriginType { get; private set; } // 0: wallet, 1: getway
+        public Guid? OriginId { get; private set; } = null; // WalletId | DepositId
         public double? OriginBalance { get; set; } = null;
-        public TransferOriginType OriginType { get; set; } // 0: wallet, 1: getway
-        
-        [ForeignKey("Destination")]
-        public Guid DestinationId { get; set; }
+
+        public Guid DestinationId { get; private set; }
         public double DestinationBalance { get; set; }
-        public DateTime CreatedDateTime { get; set; }
+        public DateTime CreatedDateTime { get; private set; } = DateTime.Now;
         public TransferState State { get; set; } = TransferState.Pending;
         public string? Description { get; set; } = null;
 
@@ -62,7 +60,7 @@ namespace DigitalWallet.Domain.Entities
             DestinationId = destinationId;
             Description = description;
             CreatedDateTime = DateTime.Now;
-            OriginType = TransferOriginType.Getway;
+            OriginType = TransferOriginType.Deposit;
             State = TransferState.Success;
         }
 

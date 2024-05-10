@@ -42,13 +42,13 @@ namespace DigitalWallet.Application.Dao.Identity
             {
                 context.Roles.AddRange(roles);
                 if (Convert.ToBoolean(await context.SaveChangesAsync(new CancellationToken())))
-                    return Result.Success;
+                    return Result.Ok();
             }
             catch (DbUpdateException ex)
             {
-                return Result.Failed(new() { ex.HandleDbExtentionFilter() });
+                return Result.Fail(ex.HandleDbExtentionFilter().Message);
             }
-            return Result.Failed();
+            return Result.Fail();
         }
 
         public async Task<RoleEntity?> FindByIdAsync(Guid id, CancellationToken cancellationToken = default)

@@ -1,14 +1,12 @@
 ﻿using DigitalWallet.Application.Dao.Identity;
-using DigitalWallet.Application.Exceptions;
-using DigitalWallet.Application.Models;
 using DigitalWallet.Application.Repositories.Wallet;
-using DigitalWallet.Domain.Entities;
 
 namespace DigitalWallet.Application.Services.Wallet;
 
 public class WalletService
 {
     #region Initialize & Ctor
+
     private readonly IWalletRepository _walletRepository;
     private readonly IUserService _userService;
 
@@ -18,21 +16,32 @@ public class WalletService
         _walletRepository = walletRepository;
         _userService = userService;
     }
+
     #endregion
 
-    public async Task<Result> CreateWalletAsync(string seed, Guid userId, CancellationToken stoppingToken = default)
+    /// <summary>
+    /// Create a new wallet with seed and owner id.
+    /// </summary>
+    /// <param name="seed">Seed for create wallet.</param>
+    /// <param name="userId">Wallet owner id.</param>
+    /// <returns>Wallet Identifier for manage.</returns>
+    public async Task<Result<string>> CreateAsync(string seed, Guid userId,
+        CancellationToken stoppingToken = default)
     {
+        if (string.IsNullOrWhiteSpace(seed))
+            return Result.Fail("Wallet seed cannot be null.");
         if (userId == Guid.Empty)
-        {
-            throw new NotFoundException("Username cannot be null.");
-        }
+            return Result.Fail("Username cannot be null.");
 
         var user = await _userService.FindByIdAsync(userId, stoppingToken);
         if (user == null)
-        {
-            throw new NotFoundException("User not found.");
-        }
+            return Result.Fail("User not found.");
 
-        return await _walletRepository.CreateAsync(new WalletEntity(seed), stoppingToken);
+        var newWallet = new WalletEntity(seed, user.Id);
+        var createWalletResult = await _walletRepository.CreateAsync(newWallet, stoppingToken);
+        if (createWalletResult.IsSuccess)
+            return Result.Ok(newWallet.Identifier);
+
+        return Result.Fail("Could not create new wallet.");
     }
 }

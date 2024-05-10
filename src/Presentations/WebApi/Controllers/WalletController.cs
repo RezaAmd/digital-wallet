@@ -45,7 +45,8 @@ public class WalletController : ControllerBase
 
     [HttpPost]
     [ModelStateValidator]
-    public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model, CancellationToken cancellationToken = default)
+    public async Task<ApiResult<object>> Create([FromBody] CreateWalletDto model,
+        CancellationToken cancellationToken = default)
     {
         Request.Headers.TryGetValue("x-bank-id", out var safeIdString); // Get bank id from header.
         Guid safeId = Guid.Empty;
@@ -65,8 +66,8 @@ public class WalletController : ControllerBase
             wallet = new WalletEntity(model.Seed, safeId);
 
             var createWalletResult = await walletService.CreateAsync(wallet);
-            if (!createWalletResult.Succeeded)
-                return BadRequest(createWalletResult.Errors);
+            if (!createWalletResult.IsSuccess)
+                return BadRequest(createWalletResult.Messages);
         }
         #endregion
 
@@ -81,7 +82,8 @@ public class WalletController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ApiResult<object>> GetBalance([FromRoute] Guid id, CancellationToken cancellationToken = default)
+    public async Task<ApiResult<object>> GetBalance([FromRoute] Guid id,
+        CancellationToken cancellationToken = default)
     {
         var wallet = await walletService.FindByIdAsync(id);
         if (wallet != null)
@@ -95,7 +97,7 @@ public class WalletController : ControllerBase
     [HttpGet]
     public async Task<ApiResult<object>> GetBalance(CancellationToken cancellationToken = default)
     {
-        Guid currentWalletId = User.GetCurrentWalletId();
+        Guid currentWalletId = User.GetSafeMasterWalletId();
         if (currentWalletId == Guid.Empty)
             return BadRequest("شما هیچ کیف پولی ندارید.");
 
@@ -110,75 +112,74 @@ public class WalletController : ControllerBase
 
     [HttpPost]
     [ModelStateValidator]
-    public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model, CancellationToken cancellationToken = default)
+    public async Task<ApiResult<object>> Increase([FromBody] IncreaseDto model,
+        CancellationToken cancellationToken = default)
     {
-        Guid originId = User.GetCurrentWalletId(); // Current user wallet id.
+        Guid originId = User.GetSafeMasterWalletId(); // Current user wallet id.
         if (originId == Guid.Empty)
             return NotFound("هیچ کیف پولی به شما اختصاص نشده است.");
         // origin wallet is first - destination wallet is second.
         var wallets = await walletService.GetTwoWalletByIdAsync(originId, model.WalletId, cancellationToken);
         // Validate origin wallet.
-        if (wallets.first != null)
+        if (wallets.first is null)
+            return NotFound($"کیف پول مبدا یافت نشد.");
+        // Validate destination wallet.
+        if (wallets.second != null)
         {
-            // Validate destination wallet.
-            if (wallets.second != null)
+            // Create a new transfer.
+            var newTransfer = new TransferEntity(new Money(model.Amount), originId, model.WalletId, model.Description, state: TransferState.Failed);
+            // Create a result.
+            var result = new IncreaseResult(newTransfer.Identify, model.Amount,
+                new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
+                newTransfer.State);
+            // Fetch origin wallet balance.
+            var originLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.first);
+            // Map origin balance to result.
+            result.OriginBalance = originLatestTransfer.Balance;
+            // Check origin balance with amount.
+            if (originLatestTransfer.Balance >= model.Amount)
             {
-                // Create a new transfer.
-                var newTransfer = new TransferEntity(new Money(model.Amount), originId, model.WalletId, model.Description, state: TransferState.Failed);
-                // Create a result.
-                var result = new IncreaseResult(newTransfer.Identify, model.Amount,
-                    new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
-                    newTransfer.State);
-                // Fetch origin wallet balance.
-                var originLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.first);
-                // Map origin balance to result.
-                result.OriginBalance = originLatestTransfer.Balance;
-                // Check origin balance with amount.
-                if (originLatestTransfer.Balance >= model.Amount)
-                {
-                    newTransfer.State = TransferState.Success;
+                newTransfer.State = TransferState.Success;
 
-                    #region origin balance
-                    // Decrease origin balance.
-                    newTransfer.OriginBalance = originLatestTransfer.Balance - model.Amount;
-                    result.OriginBalance = newTransfer.OriginBalance;
-                    #endregion
+                #region origin balance
+                // Decrease origin balance.
+                newTransfer.OriginBalance = originLatestTransfer.Balance - model.Amount;
+                result.OriginBalance = newTransfer.OriginBalance;
+                #endregion
 
-                    #region destination balance
-                    // Find destination latest transfer (Destination balance).
-                    var destinationLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.second);
-                    // Increase destination balance.
-                    newTransfer.DestinationBalance = destinationLatestTransfer.Balance + model.Amount;
-                    result.DestinationBalance = newTransfer.DestinationBalance;
-                    #endregion
-                }
-                else
-                {
-                    // Insufficient origin balance.
-                    newTransfer.DestinationBalance = 0;
-                    newTransfer.State = TransferState.InsufficientOriginBalance;
-                }
-                // Save new transfer and map the result.
-                var saveTransferResult = await transferService.CreateAsync(newTransfer, cancellationToken);
-                if (!saveTransferResult.Succeeded)
-                {
-                    return BadRequest("تراکنش با خطا مواجه شد.");
-                }
-                result.State = newTransfer.State;
-                return Ok(result);
+                #region destination balance
+                // Find destination latest transfer (Destination balance).
+                var destinationLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.second);
+                // Increase destination balance.
+                newTransfer.DestinationBalance = destinationLatestTransfer.Balance + model.Amount;
+                result.DestinationBalance = newTransfer.DestinationBalance;
+                #endregion
             }
             else
-                return NotFound($"کیف پول مقصد '{model.WalletId}' یافت نشد.");
+            {
+                // Insufficient origin balance.
+                newTransfer.DestinationBalance = 0;
+                newTransfer.State = TransferState.InsufficientOriginBalance;
+            }
+            // Save new transfer and map the result.
+            var saveTransferResult = await transferService.CreateAsync(newTransfer, cancellationToken);
+            if (!saveTransferResult.IsSuccess)
+            {
+                return BadRequest("تراکنش با خطا مواجه شد.");
+            }
+            result.State = newTransfer.State;
+            return Ok(result);
         }
         else
-            return NotFound($"کیف پول مبدا یافت نشد.");
+            return NotFound($"کیف پول مقصد '{model.WalletId}' یافت نشد.");
     }
 
     [HttpPost]
     [ModelStateValidator]
-    public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model, CancellationToken cancellationToken = default)
+    public async Task<ApiResult<object>> Decrease([FromBody] DecreaseDto model,
+        CancellationToken cancellationToken = default)
     {
-        Guid destinationId = User.GetCurrentWalletId(); // Current user wallet id.
+        Guid destinationId = User.GetSafeMasterWalletId(); // Current user wallet id.
         if (destinationId == Guid.Empty)
             return NotFound("هیچ کیف پولی به شما اختصاص نشده است.");
         // origin wallet is first - destination wallet is second.
@@ -226,7 +227,7 @@ public class WalletController : ControllerBase
                 }
                 // Save new transfer and map the result.
                 var saveTransferResult = await transferService.CreateAsync(newTransfer, cancellationToken);
-                if (!saveTransferResult.Succeeded)
+                if (!saveTransferResult.IsSuccess)
                 {
                     return BadRequest("تراکنش با خطا مواجه شد.");
                 }
@@ -242,7 +243,8 @@ public class WalletController : ControllerBase
 
     [HttpPost]
     [ModelStateValidator]
-    public async Task<ApiResult<object>> Deposit([FromBody] DepositDto depositDto, CancellationToken cancellationToken = default)
+    public async Task<ApiResult<object>> Deposit([FromBody] DepositDto depositDto,
+        CancellationToken cancellationToken = default)
     {
         var wallet = await walletService.FindByIdAsync(depositDto.WalletId);
         if (wallet != null)
@@ -256,13 +258,13 @@ public class WalletController : ControllerBase
                     paymentRequestResult.Result.data.authority, depositDto.TraceId);
                 // Create new deposit history.
                 var createDepositResult = await depositService.CreateAsync(newDeposit, cancellationToken);
-                if (createDepositResult.Succeeded)
+                if (createDepositResult.IsSuccess)
                 {
                     return Ok(new DepositVM("https://www.zarinpal.com/pg/StartPay/" + paymentRequestResult.Result.data.authority));
                 }
                 else
                 {
-                    return BadRequest(createDepositResult.Errors);
+                    return BadRequest(createDepositResult.Messages);
                 }
             }
             else

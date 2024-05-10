@@ -45,9 +45,9 @@ public class PermissionController : ControllerBase
             }
         }
         var createResult = await permissionService.CreateAsync(newPermission);
-        if (createResult.Succeeded)
+        if (createResult.IsSuccess)
             return Ok(newPermission.Id);
-        return BadRequest(createResult.Errors);
+        return BadRequest(createResult.Messages);
     }
 
     [HttpDelete("{id}")]
@@ -58,9 +58,9 @@ public class PermissionController : ControllerBase
         if (permission != null)
         {
             var deleteResult = await permissionService.DeleteAsync(permission);
-            if (deleteResult.Succeeded)
+            if (deleteResult.IsSuccess)
                 return Ok($"نقش {permission.Title} با موفقیت حذف شد.");
-            return BadRequest(deleteResult.Errors);
+            return BadRequest(deleteResult.Messages);
         }
         return NotFound("نقش مورد نظر پیدا نشد.");
     }

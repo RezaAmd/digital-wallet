@@ -39,13 +39,13 @@ namespace DigitalWallet.Infrastructure.Common.Services
                 };
                 if (expire.HasValue)
                     tokenDescriptor.Expires = expire.Value;
-                return (Result.Success, tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor)));
+                return (Result.Ok(), tokenHandler.WriteToken(tokenHandler.CreateToken(tokenDescriptor)));
             }
             catch (Exception ex)
             {
                 logger.LogError(ex.Message);
 
-                return (Result.Failed(), null);
+                return (Result.Fail(), null);
             }
         }
     }

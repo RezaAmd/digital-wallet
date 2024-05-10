@@ -65,7 +65,7 @@ namespace DigitalWallet.Application.Dao.Identity
         /// </summary>
         /// <param name="code">Otp code (one time password).</param>
         /// <returns></returns>
-        (Result Result, string PhoneNumber) VerifyOtp(string code, HttpContext httpContext);
+        Result<string?> VerifyOtp(string code, HttpContext httpContext);
 
         /// <summary>
         /// Check user password is correct or not.

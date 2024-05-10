@@ -1,5 +1,5 @@
-﻿using  DigitalWallet.Application.Interfaces.Services;
-using  DigitalWallet.Application.Models;
+﻿using DigitalWallet.Application.Interfaces.Services;
+using DigitalWallet.Application.Models;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -49,7 +49,7 @@ namespace DigitalWallet.Infrastructure.Common.Services
             catch (Exception ex)
             {
                 logger.LogWarning(ex.Message);
-                return Result.Failed();
+                return Result.Fail();
             }
         }
 
@@ -70,12 +70,12 @@ namespace DigitalWallet.Infrastructure.Common.Services
                     await cache.SetStringAsync(key, serializedObj);
 
                 logger.LogInformation($"{key} key storage in Radis was successful.");
-                return Result.Success;
+                return Result.Ok();
             }
             catch (Exception ex)
             {
                 logger.LogError($"{key} key storage failed.");
-                return Result.Failed(new() { new(0, ex.Message) });
+                return Result.Fail(ex.Message);
             }
         }
 
@@ -99,11 +99,11 @@ namespace DigitalWallet.Infrastructure.Common.Services
             try
             {
                 await cache.RemoveAsync(key);
-                return Result.Success;
+                return Result.Ok();
             }
             catch
             {
-                return Result.Failed();
+                return Result.Fail();
             }
         }
     }

@@ -113,7 +113,7 @@ namespace DigitalWallet.Application.Repositories.Transfer
             if (transfer != null)
             {
                 // Is it deposit?
-                if (transfer.OriginType == TransferOriginType.Getway)
+                if (transfer.OriginType == TransferOriginType.Deposit)
                 {
                     if (wallet.Id == transfer.DestinationId)
                         return transfer.DestinationBalance;
@@ -142,8 +142,8 @@ namespace DigitalWallet.Application.Repositories.Transfer
         {
             await context.Transfers.AddAsync(transfer);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -155,8 +155,8 @@ namespace DigitalWallet.Application.Repositories.Transfer
         {
             context.Transfers.Update(transfer);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -168,8 +168,8 @@ namespace DigitalWallet.Application.Repositories.Transfer
         {
             context.Transfers.Remove(transfer);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
     }
 }

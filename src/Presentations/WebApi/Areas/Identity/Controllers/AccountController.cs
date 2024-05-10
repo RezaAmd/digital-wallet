@@ -33,12 +33,12 @@ public class AccountController : ControllerBase
             if (passwordValidation)
             {
                 var extraClaims = new List<Claim>();
-                if(user.WalletId != null)
-                {
-                    extraClaims.Add(new Claim("wallet-id", user.WalletId.Value.ToString()));
-                }
+                //if(user.WalletId != null)
+                //{
+                //    extraClaims.Add(new Claim("wallet-id", user.WalletId.Value.ToString()));
+                //}
                 var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
-                if (JwtBearer.Status.Succeeded)
+                if (JwtBearer.Status.IsSuccess)
                     return Ok(new SignInVM(JwtBearer.Token));
             }
         }

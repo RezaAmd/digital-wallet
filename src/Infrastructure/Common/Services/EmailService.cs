@@ -48,7 +48,7 @@ namespace DigitalWallet.Infrastructure.Common.Services
                     client.Authenticate(SenderEmail.username, SenderEmail.password);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
-                    return Result.Success;
+                    return Result.Ok();
                 }
                 catch (Exception ex)
                 {
@@ -57,7 +57,7 @@ namespace DigitalWallet.Infrastructure.Common.Services
             }
             else
                 logger.LogWarning("Sender email not found!");
-            return Result.Failed();
+            return Result.Fail();
         }
     }
 }

@@ -29,24 +29,24 @@ namespace  DigitalWallet.Application.Dao
         {
             await entities.AddAsync(entry);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         public async Task<Result> UpdateAsync(TEntity entry, CancellationToken cancellationToken = new CancellationToken())
         {
             entities.Update(entry);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         public async Task<Result> DeleteAsync(TEntity role, CancellationToken cancellationToken = new CancellationToken())
         {
             entities.Remove(role);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
     }
 }

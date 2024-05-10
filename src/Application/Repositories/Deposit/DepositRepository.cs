@@ -132,8 +132,8 @@ namespace DigitalWallet.Application.Repositories.Deposit
         {
             await context.Deposits.AddAsync(deposit, cancellationToken);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -145,8 +145,8 @@ namespace DigitalWallet.Application.Repositories.Deposit
         {
             context.Deposits.Update(deposit);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
     }
 }

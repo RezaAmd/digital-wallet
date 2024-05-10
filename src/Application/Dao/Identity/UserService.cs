@@ -3,6 +3,7 @@ using DigitalWallet.Application.Interfaces.Context;
 using DigitalWallet.Application.Models;
 using DigitalWallet.Domain.Entities.Identity;
 using DigitalWallet.Domain.Enums;
+using DigitalWallet.Domain.ValueObjects;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -46,13 +47,11 @@ namespace DigitalWallet.Application.Dao.Identity
         {
             if (user != null)
             {
-                if (password != null)
-                    user.Password = password.Encrypt(passwordEncryptionSalt);
                 await context.Users.AddAsync(user);
                 if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                    return Result.Success;
+                    return Result.Ok();
             }
-            return Result.Failed();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -63,8 +62,8 @@ namespace DigitalWallet.Application.Dao.Identity
         {
             context.Users.Update(user);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -75,8 +74,8 @@ namespace DigitalWallet.Application.Dao.Identity
         {
             context.Users.Remove(user);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -86,7 +85,7 @@ namespace DigitalWallet.Application.Dao.Identity
         /// <param name="gender">Fillter as gender.</param>
         /// <param name="tracking">For range changes.</param>
         /// <returns>List of all users</returns>
-        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(TypeAdapterConfig config = null, int page = 1, int pageSize = 20,
+        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(TypeAdapterConfig? config = null, int page = 1, int pageSize = 20,
             bool withRoles = false, string? keyword = null, bool tracking = false, CancellationToken cancellationToken = new CancellationToken())
         {
             var init = context.Users.OrderBy(u => u.JoinedDate).AsQueryable();
@@ -95,12 +94,12 @@ namespace DigitalWallet.Application.Dao.Identity
                 init = init.AsNoTracking();
             // search
             if (!string.IsNullOrEmpty(keyword))
-                init = init.Where(u => keyword.Contains(u.Username) || keyword.Contains(u.Name)
-                 || keyword.Contains(u.Surname) || keyword.Contains(u.Email));
+                init = init.Where(u => keyword.Contains(u.Fullname!.Name!)
+                 || keyword.Contains(u.Fullname!.Surname!) || keyword.Contains(u.Email));
 
             // include roles
             if (withRoles)
-                init = init.Include(u => u.UserRoles)
+                init = init.Include(u => u.UserRoles!)
                     .ThenInclude(ur => ur.Role);
 
             return await init
@@ -119,10 +118,12 @@ namespace DigitalWallet.Application.Dao.Identity
         {
             if (string.IsNullOrEmpty(identity))
                 return null;
-            identity = identity.ToLower();
-            var query = context.Users.Where(u => u.Username == identity
-            || u.PhoneNumber == identity
-            || u.Email == identity).AsQueryable();
+            identity = identity.ToLower().Trim();
+            var query = context.Users
+                .Where(u =>
+                (u.IsPhoneNumberConfirmed ? u.PhoneNumber == identity : false)
+            || (u.IsEmailConfirmed ? u.Email == identity : false))
+                .AsQueryable();
 
             var id = Guid.Empty;
             Guid.TryParse(identity, out id);
@@ -151,10 +152,13 @@ namespace DigitalWallet.Application.Dao.Identity
         /// <returns>true/false</returns>
         public bool CheckPassword(UserEntity user, string password)
         {
-            string encryptedPassword = password.Encrypt(passwordEncryptionSalt);
-            if (user.Password == encryptedPassword)
-                return true;
-            return false;
+            if (user is null)
+                return false;
+            if (string.IsNullOrEmpty(password))
+                return false;
+
+            PasswordHash hashedPassword = PasswordHash.Parse(passwordEncryptionSalt);
+            return (user.Password == hashedPassword);
         }
 
         #region Otp and verify
@@ -164,31 +168,31 @@ namespace DigitalWallet.Application.Dao.Identity
             httpContext.Session.SetString("SigninOtp", (code + "." + phoneNumber).Encrypt());
             return code;
         }
-        public (Result Result, string PhoneNumber) VerifyOtp(string code, HttpContext httpContext)
+        public Result<string?> VerifyOtp(string code, HttpContext httpContext)
         {
-            string otpSession = httpContext.Session.GetString("SigninOtp");
-            if (otpSession != null)
-            {
-                var otpObject = otpSession.Decrypt().Split(".");
-                if (otpObject[0] == code)
-                {
-                    httpContext.Session.Remove("SigninOtp");
-                    return (Result.Success, otpObject[1]);
-                }
-            }
-            return (Result.Failed(), null);
+            string? otpSession = httpContext.Session.GetString("SigninOtp");
+            if (otpSession == null)
+                return Result.Fail("Invalid otp code.");
+            var otpObject = otpSession.Decrypt().Split(".");
+            if (otpObject[0] != code)
+                return Result.Fail("Wrong otp code. please try again.");
+
+            httpContext.Session.Remove("SigninOtp");
+            return Result.Ok(otpObject[1]);
         }
 
         #endregion
 
 
         #region Permission
+
         public async Task<Result> AddToPermissionAsync(UserEntity user, PermissionEntity permission,
             RelatedPermissionType type = RelatedPermissionType.General)
         {
             user.Permissions.Add(new(user.Id, permission.Id, type));
             return await UpdateAsync(user);
         }
+
         #endregion
     }
 }

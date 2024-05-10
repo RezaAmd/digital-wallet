@@ -1,61 +1,128 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using DigitalWallet.Domain.ValueObjects;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
     public class UserEntity : BaseEntity
     {
-        #region Ctor
-        UserEntity() { }
-        public UserEntity(string username)
-        {
-            Username = username;
-        }
-        public UserEntity(string username, string phoneNumber, string email = null, string name = null, string surname = null,
-            bool phoneNumberConfirmed = false, bool emailConfirmed = false, Guid? walletId = null)
-        {
-            Username = username;
-            PhoneNumber = phoneNumber;
-
-            PhoneNumberConfirmed = phoneNumberConfirmed;
-            if (!string.IsNullOrEmpty(email))
-            {
-                Email = email;
-                EmailConfirmed = emailConfirmed;
-            }
-            Name = name;
-            Surname = surname;
-            JoinedDate = DateTime.Now;
-            IsBanned = false;
-
-            if (walletId.HasValue)
-                WalletId = walletId;
-        }
-
-        #endregion
-
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Email { get; set; }
-        public bool EmailConfirmed { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool PhoneNumberConfirmed { get; set; }
-#nullable enable
-        public string? Name { get; set; }
-        public string? Surname { get; set; }
-
-        [ForeignKey("Wallet")]
-        public Guid? WalletId { get; set; }
-#nullable disable
-        public DateTime JoinedDate { get; set; }
-        public bool IsBanned { get; set; }
+        public string Email { get; private set; } = null;
+        public bool IsEmailConfirmed { get; set; } = false;
+        public string PhoneNumber { get; private set; } = null;
+        public bool IsPhoneNumberConfirmed { get; set; } = false;
+        public PasswordHash Password { get; set; } = null;
+        public Fullname Fullname { get; set; } = null;
+        public DateTime JoinedDate { get; private set; } = DateTime.Now;
+        public bool IsBanned { get; set; } = false;
 
         #region Relation
-        public virtual WalletEntity? Wallet { get; set; } = null;
-        public virtual ICollection<UserRoleEntity>? UserRoles { get; set; } = null;
-        public virtual ICollection<SafeEntity>? Safes { get; set; } = null;
-        public virtual ICollection<UserPermissionEntity>? Permissions { get; set; } = null;
+
+        public virtual ICollection<UserRoleEntity> UserRoles { get; private set; } = null;
+        public virtual ICollection<SafeEntity> Safes { get; private set; } = null;
+        public virtual ICollection<UserPermissionEntity> Permissions { get; set; } = null;
+
         #endregion
+
+        #region Ctor
+
+        UserEntity() { }
+        /// <summary>
+        /// Signup with email and password.
+        /// </summary>
+        /// <param name="email">Email address for create account</param>
+        /// <param name="password">Account password for signin.</param>
+        public UserEntity(string email, PasswordHash password)
+        {
+            if (email == null)
+                throw new ArgumentNullException("Email cannot be null.");
+            Email = email;
+
+            if (password is null)
+                throw new ArgumentNullException("Password cannot be null.");
+            Password = password;
+        }
+        public UserEntity(string phoneNumber)
+        {
+            if (string.IsNullOrEmpty(phoneNumber))
+                throw new ArgumentNullException("Phone number cannot be null.");
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Set security password for signin.
+        /// </summary>
+        public UserEntity SetPassword(PasswordHash password)
+        {
+            if (password is null)
+                throw new ArgumentNullException("Password cannot be null.");
+            Password = password;
+            return this;
+        }
+        /// <summary>
+        /// Set phone number for user account.
+        /// </summary>
+        public UserEntity SetPhoneNumber(string phoneNumber)
+        {
+            if (string.IsNullOrEmpty(phoneNumber))
+                throw new ArgumentNullException("Phone number cannot be null.");
+            PhoneNumber = phoneNumber;
+            IsPhoneNumberConfirmed = false;
+            return this;
+        }
+        /// <summary>
+        /// Verify account phone number.
+        /// </summary>
+        public UserEntity ConfirmPhoneNumber()
+        {
+            IsPhoneNumberConfirmed = true;
+            return this;
+        }
+        /// <summary>
+        /// Set email for user account.
+        /// </summary>
+        /// <param name="email"></param>
+        public UserEntity SetEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                throw new ArgumentNullException("Email cannot be null.");
+            if (email.Length < 5)
+                throw new ArgumentOutOfRangeException("Invalid email address.");
+
+            Email = email.ToLower().Trim();
+            IsEmailConfirmed = false;
+            return this;
+        }
+        /// <summary>
+        /// Verify account email.
+        /// </summary>
+        public UserEntity ConfirmEmail()
+        {
+            IsEmailConfirmed = true;
+            return this;
+        }
+        /// <summary>
+        /// Limit account for activity.
+        /// </summary>
+        public UserEntity BanAccount()
+        {
+            IsBanned = true;
+            return this;
+        }
+        /// <summary>
+        /// Unban account and free to activity.
+        /// </summary>
+        /// <returns></returns>
+        public UserEntity UnbanAccount()
+        {
+            IsBanned = false;
+            return this;
+        }
+
+        public string GetIdentityName()
+            => string.IsNullOrEmpty(Email) ? PhoneNumber : Email;
+
+        #endregion
+
     }
 }

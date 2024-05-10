@@ -10,16 +10,18 @@ namespace DigitalWallet.Application.Services.Identity;
 
 public class AuthenticationService : IAuthenticationService
 {
-    #region Constructor
-    private readonly IHttpContextAccessor httpContextAccessor;
-    private readonly IJwtService jwtService;
+    #region Ctor & DI
 
-    public AuthenticationService(IJwtService _jwtService,
-         IHttpContextAccessor _httpContext)
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IJwtService _jwtService;
+
+    public AuthenticationService(IJwtService jwtService,
+         IHttpContextAccessor httpContext)
     {
-        jwtService = _jwtService;
-        httpContextAccessor = _httpContext;
+        _jwtService = jwtService;
+        _httpContextAccessor = httpContext;
     }
+
     #endregion
 
     /// <summary>
@@ -32,13 +34,17 @@ public class AuthenticationService : IAuthenticationService
         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.GetIdentityName()),
             };
         #region Roles
-        foreach (var userRole in user.UserRoles)
-        {
-            claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
-        }
+
+        // Add roles as claim.
+        if (user.UserRoles != null)
+            foreach (var userRole in user.UserRoles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, userRole.Role.Name));
+            }
+
         #endregion
 
         //var claimsIdentity = new ClaimsIdentity(
@@ -51,7 +57,7 @@ public class AuthenticationService : IAuthenticationService
             IsPersistent = isPersistent,
             IssuedUtc = DateTimeOffset.UtcNow
         };
-        await httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+        await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(new ClaimsIdentity(
             claims, CookieAuthenticationDefaults.AuthenticationScheme)),
             authProperties);
@@ -61,7 +67,7 @@ public class AuthenticationService : IAuthenticationService
     {
         var claims = new List<Claim>();
         claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-        claims.Add(new Claim(ClaimTypes.Name, user.Username));
+        claims.Add(new Claim(ClaimTypes.Name, user.GetIdentityName()));
         if (user.UserRoles != null)
             foreach (var role in user.UserRoles)
             {
@@ -77,7 +83,7 @@ public class AuthenticationService : IAuthenticationService
         //    {
         //        claims.Add(new Claim(ClaimTypes.Role, permission.ro));
         //    }
-        var jwtResult = jwtService.GenerateToken(claims, expire);
+        var jwtResult = _jwtService.GenerateToken(claims, expire);
         return jwtResult;
     }
 
@@ -91,7 +97,7 @@ public class AuthenticationService : IAuthenticationService
         var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Username),
+                new Claim(ClaimTypes.Name, user.GetIdentityName()),
             };
         #region Roles
         foreach (var userRole in user.UserRoles)
@@ -100,7 +106,7 @@ public class AuthenticationService : IAuthenticationService
         }
         #endregion
 
-        await httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+        await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(new ClaimsIdentity(
             claims, CookieAuthenticationDefaults.AuthenticationScheme)),
             authProperties);
@@ -111,6 +117,6 @@ public class AuthenticationService : IAuthenticationService
     /// </summary>
     public async Task SignOutAsync()
     {
-        await httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
 }

@@ -25,9 +25,17 @@ public class WalletController : ControllerBase
     [ModelStateValidator]
     public async Task<ApiResult<object>> Create([FromBody] CreateWalletMDto model, CancellationToken cancellationToken = new CancellationToken())
     {
-        var newWallet = new WalletEntity(model.seed, model.safeId);
+        Guid currentUserId = User.GetSafeMasterWalletId();
+        if (currentUserId == Guid.Empty)
+            return Forbid();
+
+        var newWallet = new WalletEntity(model.seed, currentUserId);
+
+        if (model.safeId.HasValue)
+            newWallet.WithSafe(model.safeId.Value);
+
         var result = await walletService.CreateAsync(newWallet, cancellationToken);
-        if (result.Succeeded)
+        if (result.IsSuccess)
             return Ok("Wallet " + newWallet.Id + " Successfully created.");
         return BadRequest();
     }
@@ -49,9 +57,9 @@ public class WalletController : ControllerBase
         if (wallet != null)
         {
             var result = await walletService.DeleteAsync(wallet, cancellationToken);
-            if (result.Succeeded)
+            if (result.IsSuccess)
                 return Ok("Wallet deleted successfully!");
-            return BadRequest(result.Errors);
+            return BadRequest(result.Messages);
         }
         return NotFound("Wallet not found.");
     }

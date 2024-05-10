@@ -4,6 +4,7 @@ using DigitalWallet.Application.Models;
 using DigitalWallet.Application.Repositories.Wallet;
 using DigitalWallet.Domain.Entities;
 using DigitalWallet.Domain.Entities.Identity;
+using DigitalWallet.Domain.ValueObjects;
 using DigitalWallet.WebApi.Areas.Manage.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -47,9 +48,10 @@ public class UserController : ControllerBase
     public async Task<ApiResult<object>> Get([FromRoute] Guid id)
     {
         var user = await userService.FindByIdAsync(id);
-        if (user != null)
-            return Ok(new UserThumbailMVM(user.Id, user.Username, user.PhoneNumber, user.Email, user.Name, user.Surname));
-        return NotFound("کاربر مورد نظر یافت نشد.");
+        if (user is null)
+            return NotFound("کاربر مورد نظر یافت نشد.");
+
+        return Ok(new UserThumbailMVM(user.Id, user.PhoneNumber, user.Email, user.Fullname!.Name, user.Fullname!.Surname));
     }
 
     [HttpPost]
@@ -57,38 +59,21 @@ public class UserController : ControllerBase
     //[Authorize(Roles = "CreateUser")]
     public async Task<ApiResult<object>> Create([FromBody] CreateUserMDto model, CancellationToken cancellationToken = new CancellationToken())
     {
-        #region Create wallet
-        // Create new wallet.
-        var newWallet = new WalletEntity(model.phoneNumber);
-        var createWalletResult = await walletService.CreateAsync(newWallet);
-        #endregion
-
-        #region Create user
         // Create new user.
-        var newUser = new UserEntity(model.username, model.phoneNumber, model.email,
-            model.name, model.surname, false, false, createWalletResult.Succeeded ? newWallet.Id : null);
+        var newUser = new UserEntity(model.email, new PasswordHash(model.password))
+            .SetPhoneNumber(model.phoneNumber);
+
+        if (!string.IsNullOrEmpty(model.name) || !string.IsNullOrEmpty(model.surname))
+            newUser.Fullname = new Fullname(model.name, model.surname);
+
         var createUserResult = await userService.CreateAsync(newUser, model.password, cancellationToken);
-        if (createUserResult.Succeeded)
+        if (createUserResult.IsSuccess == false)
         {
-            // If the user was created, update wallet.
-            //newWallet.OwnerId = newUser.Id;
-            var walletUpdateResult = await walletService.UpdateAsync(newWallet);
-            if (!walletUpdateResult.Succeeded)
-                logger.LogError($"Wallet {newWallet.Id} has not been updated.");
-            return Ok(new CreateUserMVM(newUser.Id));
+            logger.LogError("Failed to create new user.");
+            return BadRequest(createUserResult.Messages);
         }
-        #endregion
 
-        logger.LogError("Failed to create new user.");
-
-        #region Delete Wallet
-        // If user was not created so delete the wallet.
-        var deleteWalletResult = await walletService.DeleteAsync(newWallet, cancellationToken);
-        if (!deleteWalletResult.Succeeded)
-            logger.LogError($"Wallet {newWallet.Id} has not been deleted.");
-        #endregion
-
-        return BadRequest(createUserResult.Errors);
+        return Ok(new CreateUserMVM(newUser.Id));
     }
 
     [HttpPost("{id}")]
@@ -101,73 +86,64 @@ public class UserController : ControllerBase
             bool hasChanged = false;
 
             #region Validate
-            if (model.username.ToLower() != user.Username.ToLower())
-            {
-                hasChanged = true;
-                user.Username = model.username;
-            }
 
             if (model.phoneNumber.ToLower() != user.PhoneNumber.ToLower())
             {
                 hasChanged = true;
-                user.PhoneNumber = model.phoneNumber;
+                user.SetPhoneNumber(model.phoneNumber);
             }
 
             if (model.email.ToLower() != user.Email.ToLower())
             {
                 hasChanged = true;
-                user.Email = model.email;
+                user.SetEmail(model.email);
             }
 
-            if (model.name.ToLower() != user.Name.ToLower())
+            if (model.name.ToLower() != user.Fullname!.Name!.ToLower() ||
+                model.surname.ToLower() != user.Fullname!.Surname!.ToLower())
             {
                 hasChanged = true;
-                user.Name = model.name;
+                user.Fullname = new Fullname(model.name, model.surname);
             }
 
-            if (model.surname.ToLower() != user.Surname.ToLower())
-            {
-                hasChanged = true;
-                user.Surname = model.surname;
-            }
             #endregion
 
             if (hasChanged)
             {
                 var updateResult = await userService.UpdateAsync(user, cancellationToken);
-                if (updateResult.Succeeded)
+                if (updateResult.IsSuccess)
                     return Ok();
-                return BadRequest(updateResult.Errors);
+                return BadRequest(updateResult.Messages);
             }
             return BadRequest("هیچ تغییراتی صورت نگرفته است!");
         }
         return NotFound("کاربر مورد نظر پیدا نشد.");
     }
 
-    [HttpDelete("{id}")]
+    //[HttpDelete("{id}")]
     //[Authorize(Roles = "DeleteUser")]
-    public async Task<ApiResult<object>> Delete([FromRoute] Guid id,
-        CancellationToken cancellationToken)
-    {
-        var user = await userService.FindByIdAsync(id);
-        if (user is null)
-            return NotFound("کاربر مورد نظر پیدا نشد.");
+    //public async Task<ApiResult<object>> Delete([FromRoute] Guid id,
+    //    CancellationToken cancellationToken)
+    //{
+    //    var user = await userService.FindByIdAsync(id);
+    //    if (user is null)
+    //        return NotFound("کاربر مورد نظر پیدا نشد.");
 
-        if (user.WalletId.HasValue)
-        {
-            var wallet = await walletService.FindByIdAsync(user.WalletId.Value);
-            if (wallet is not null)
-            {
-                var walletDeleteResult = await walletService.DeleteAsync(wallet, cancellationToken);
-            }
-        }
+    //    if (user.WalletId.HasValue)
+    //    {
+    //        var wallet = await walletService.FindByIdAsync(user.WalletId.Value);
+    //        if (wallet is not null)
+    //        {
+    //            var walletDeleteResult = await walletService.DeleteAsync(wallet, cancellationToken);
+    //        }
+    //    }
 
-        var userDeleteResult = await userService.DeleteAsync(user, cancellationToken);
-        if (userDeleteResult.Succeeded == false)
-            return BadRequest(userDeleteResult.Errors);
+    //    var userDeleteResult = await userService.DeleteAsync(user, cancellationToken);
+    //    if (userDeleteResult.IsSuccess == false)
+    //        return BadRequest(userDeleteResult.Messages);
 
-        return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
-    }
+    //    return Ok("کاربر " + user.Username + " با موفقیت حذف گردید.");
+    //}
 
     [HttpGet]
     public async Task<ApiResult<object>> AssignPermission(Guid userId, Guid permissionId,
@@ -182,9 +158,9 @@ public class UserController : ControllerBase
             return NotFound("نقش مورد نظر پیدا نشد.");
 
         var assignResult = await userService.AddToPermissionAsync(user, permission);
-        if (assignResult.Succeeded == false)
-            return BadRequest(assignResult.Errors);
+        if (assignResult.IsSuccess == false)
+            return BadRequest(assignResult.Messages);
 
-        return Ok($"نقش {permission.Title} با موفقیت به کاربر {user.Name} {user.Surname} اختصاص داده شد.");
+        return Ok($"نقش {permission.Title} با موفقیت به کاربر {user.GetIdentityName()} اختصاص داده شد.");
     }
 }

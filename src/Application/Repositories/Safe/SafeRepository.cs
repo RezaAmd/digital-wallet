@@ -24,8 +24,8 @@ namespace DigitalWallet.Application.Repositories.Safe
         {
             await context.Safes.AddAsync(safe);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -65,8 +65,8 @@ namespace DigitalWallet.Application.Repositories.Safe
         {
             context.Safes.Update(safe);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -79,8 +79,8 @@ namespace DigitalWallet.Application.Repositories.Safe
         {
             context.Safes.Remove(safe);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
     }
 }

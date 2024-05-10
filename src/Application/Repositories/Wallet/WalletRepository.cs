@@ -69,10 +69,17 @@ namespace DigitalWallet.Application.Repositories.Wallet
         public async Task<Result> CreateAsync(WalletEntity wallet,
             CancellationToken cancellationToken = default)
         {
-            await context.Wallets.AddAsync(wallet);
-            if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+            try
+            {
+                await context.Wallets.AddAsync(wallet);
+                if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
+                    return Result.Ok();
+                return Result.Fail();
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail(ex.Message);
+            }
         }
 
         /// <summary>
@@ -84,8 +91,8 @@ namespace DigitalWallet.Application.Repositories.Wallet
         {
             context.Wallets.Update(wallet);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>
@@ -97,8 +104,8 @@ namespace DigitalWallet.Application.Repositories.Wallet
         {
             context.Wallets.Remove(wallet);
             if (Convert.ToBoolean(await context.SaveChangesAsync(cancellationToken)))
-                return Result.Success;
-            return Result.Failed();
+                return Result.Ok();
+            return Result.Fail();
         }
 
         /// <summary>

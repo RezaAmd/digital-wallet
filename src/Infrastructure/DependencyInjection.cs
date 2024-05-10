@@ -1,19 +1,13 @@
-﻿using  DigitalWallet.Application.Interfaces.Context;
-using  DigitalWallet.Application.Interfaces.Services;
-using DigitalWallet.Infrastructure.Common.Interfaces;
-using DigitalWallet.Infrastructure.Common.Models;
-using DigitalWallet.Infrastructure.Common.Services;
+﻿using DigitalWallet.Application.Interfaces.Context;
+using DigitalWallet.Application.Interfaces.Services;
 using DigitalWallet.Infrastructure.Persistence.Configs;
 using DigitalWallet.Infrastructure.Persistence.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using RestSharp;
-using System;
-using System.Text;
 
 namespace DigitalWallet.Infrastructure
 {

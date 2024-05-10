@@ -9,14 +9,14 @@ namespace DigitalWallet.Domain.Entities.Identity
         public DateTime AssignedDateTime { get; set; }
         public RelatedPermissionType Type { get; set; }
 #nullable enable
-        public string? RelatedToId { get; set; }
+        public Guid? RelatedToId { get; set; }
 #nullable disable
         [ForeignKey("User")]
         public string UserId { get; set; }
-        public virtual UserEntity User { get; set; }
+        public virtual UserEntity User { get; set; } = null;
 
         [ForeignKey("Role")]
         public string RoleId { get; set; }
-        public virtual RoleEntity Role { get; set; }
+        public virtual RoleEntity Role { get; set; } = null;
     }
 }
