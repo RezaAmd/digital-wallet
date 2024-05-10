@@ -10,6 +10,7 @@ builder.Services.AddInfrastructure();
 builder.Services.AddApplicationServices();
 builder.Services.AddRepositoryServices();
 builder.Services.AddJwtAuthentication();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
