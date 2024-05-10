@@ -1,4 +1,4 @@
-﻿namespace DigitalWallet.WebApi.Areas.Identity.Models;
+﻿namespace DigitalWallet.WebApi.Models;
 
 public class SignInVM
 {
