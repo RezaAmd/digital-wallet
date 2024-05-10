@@ -7,31 +7,30 @@ namespace DigitalWallet.Domain.ValueObjects
     public class Money : ValueObject
     {
         #region Constructors
+
         public Money()
         {
             Value = 0;
         }
-
         public Money(double amount)
         {
             if (amount < 0)
                 throw new ArgumentOutOfRangeException("Amout cannot be < 0");
             Value = amount;
         }
-
         public Money(long amount)
         {
             if (amount < 0)
                 throw new ArgumentOutOfRangeException("Amout cannot be < 0");
             Value = amount;
         }
-
         public Money(ulong amount)
         {
             if (amount < 0)
                 throw new ArgumentOutOfRangeException("Amout cannot be < 0");
             Value = amount;
         }
+
         #endregion
 
         public double Value { get; private set; }
@@ -40,12 +39,10 @@ namespace DigitalWallet.Domain.ValueObjects
         {
             return Value + new Money(amount);
         }
-
         public Money Increase(Money amount)
         {
             return Value + amount;
         }
-
         public Money Decrease(double amount)
         {
             // Amount cannot grater than value.
@@ -53,7 +50,6 @@ namespace DigitalWallet.Domain.ValueObjects
                 throw new ArgumentOutOfRangeException("Insuffience balance");
             return Value - new Money(amount);
         }
-
         public Money Decrease(Money amount)
         {
             // Amount cannot grater than value.
