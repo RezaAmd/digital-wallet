@@ -1,2 +1,2 @@
 # Digital Wallet
-Iranian toman wallet for personal use.
+Virtual wallet for personal use.
