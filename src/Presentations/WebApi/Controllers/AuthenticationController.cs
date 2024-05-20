@@ -28,22 +28,21 @@ namespace DigitalWallet.WebApi.Controllers
         public async Task<ApiResult<object>> SignIn([FromBody] SignInDto model)
         {
             var user = await userService.FindByIdentityAsync(model.username, withPermissions: true);
-            if (user != null)
-            {
-                var passwordValidation = userService.CheckPassword(user, model.password);
-                if (passwordValidation)
-                {
-                    var extraClaims = new List<Claim>();
-                    //if(user.WalletId != null)
-                    //{
-                    //    extraClaims.Add(new Claim("wallet-id", user.WalletId.Value.ToString()));
-                    //}
-                    var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
-                    if (JwtBearer.Status.IsSuccess)
-                        return Ok(new SignInVM(JwtBearer.Token));
-                }
-            }
-            return BadRequest("نام کاربری یا رمز ورود اشتباه است.");
+            if (user == null)
+                return BadRequest("نام کاربری یا رمز ورود اشتباه است.");
+            var isUserPasswordValid = userService.CheckPassword(user, model.password);
+            if (isUserPasswordValid == false)
+                return BadRequest("نام کاربری یا رمز ورود اشتباه است.");
+            var extraClaims = new List<Claim>();
+            //if(user.WalletId != null)
+            //{
+            //    extraClaims.Add(new Claim("wallet-id", user.WalletId.Value.ToString()));
+            //}
+            var JwtBearer = signInService.GenerateJwtToken(user, DateTime.Now.AddHours(3), extraClaims);
+            if (JwtBearer.Status.IsSuccess)
+                return BadRequest("درخواست شما با خطا مواجه شد. لطفا دقایقی دیگر تلاش کنید.");
+
+            return Ok(new SignInVM(JwtBearer.Token));
         }
     }
 }
