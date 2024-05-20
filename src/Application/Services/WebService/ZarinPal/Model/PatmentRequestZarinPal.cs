@@ -3,7 +3,7 @@
     public class PatmentRequestZarinPal : ZarinpalBaseAuthorize
     {
         #region Constructors
-        public PatmentRequestZarinPal(double amount = 1000, string description = null,
+        public PatmentRequestZarinPal(decimal amount = 1000, string description = null,
             string callback = null, string mobile = null, string email = null)
         {
             this.amount = amount;
@@ -14,7 +14,7 @@
         }
         #endregion
 
-        public double amount { get; set; }
+        public decimal amount { get; set; }
         public string description { get; set; }
         public string callback_url { get; set; }
         public string mobile { get; set; }

@@ -9,10 +9,10 @@ namespace DigitalWallet.Domain.Entities
         public Money Amount { get; private set; }
         public TransferOriginType OriginType { get; private set; } // 0: wallet, 1: getway
         public Guid? OriginId { get; private set; } = null; // WalletId | DepositId
-        public double? OriginBalance { get; set; } = null;
+        public decimal? OriginBalance { get; set; } = null;
 
         public Guid DestinationId { get; private set; }
-        public double DestinationBalance { get; set; }
+        public decimal DestinationBalance { get; set; }
         public DateTime CreatedDateTime { get; private set; } = DateTime.Now;
         public TransferState State { get; set; } = TransferState.Pending;
         public string? Description { get; set; } = null;
@@ -34,7 +34,7 @@ namespace DigitalWallet.Domain.Entities
             State = state;
             CreatedDateTime = DateTime.Now;
         }
-        public TransferEntity(Money amount, double balance,
+        public TransferEntity(Money amount, decimal balance,
             Guid originId, Guid destinationId, string? description = null,
             TransferOriginType originType = TransferOriginType.Wallet, TransferState state = TransferState.Failed)
         {
@@ -51,7 +51,7 @@ namespace DigitalWallet.Domain.Entities
         /// <summary>
         /// For deposit transfers.
         /// </summary>
-        public TransferEntity(Money amount, double balance, Guid destinationId, string description = null)
+        public TransferEntity(Money amount, decimal balance, Guid destinationId, string description = null)
         {
             Identify = DateTime.Now.ToString("ddMMyyfffffff");
             Amount = amount;

@@ -5,7 +5,7 @@ namespace DigitalWallet.WebApi.Models;
 public class WalletDetailVM
 {
     public WalletDetailVM() { }
-    public WalletDetailVM(Guid id, double balance = 0, string safeId = null, string createdDateTime = null)
+    public WalletDetailVM(Guid id, decimal balance = 0, string safeId = null, string createdDateTime = null)
     {
         Id = id;
         Balance = balance;
@@ -13,14 +13,14 @@ public class WalletDetailVM
         CreatedDateTime = !string.IsNullOrEmpty(createdDateTime) ? createdDateTime : PersianDateTime.Now.ToString("yyyy/MM/dd HH:mm:ss");
     }
     public Guid Id { get; set; }
-    public double Balance { get; set; }
+    public decimal Balance { get; set; }
     public string? SafeId { get; set; } = null;
     public string CreatedDateTime { get; set; }
 }
 
 public class GetBalanceVM
 {
-    public GetBalanceVM(double balance)
+    public GetBalanceVM(decimal balance)
     {
         if (balance <= 0)
         {
@@ -30,14 +30,14 @@ public class GetBalanceVM
             Balance = balance;
     }
 
-    public double Balance { get; set; }
+    public decimal Balance { get; set; }
 }
 
 public class IncreaseResult
 {
     #region Constructors
-    public IncreaseResult(string identify, double amount = 0, string dateTime = null,
-        TransferState state = TransferState.Failed, double? originBalance = null, double? destinationBalance = null)
+    public IncreaseResult(string identify, decimal amount = 0, string dateTime = null,
+        TransferState state = TransferState.Failed, decimal? originBalance = null, decimal? destinationBalance = null)
     {
         Identify = identify;
         Amount = amount;
@@ -50,18 +50,18 @@ public class IncreaseResult
     #endregion
 
     public string Identify { get; set; }
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
     public string DateTime { get; set; }
     public TransferState State { get; set; }
-    public double? OriginBalance { get; set; }
-    public double? DestinationBalance { get; set; }
+    public decimal? OriginBalance { get; set; }
+    public decimal? DestinationBalance { get; set; }
 }
 
 public class DecreaseResult
 {
     #region Constructors
-    public DecreaseResult(string identify, double amount = 0, string dateTime = null,
-        TransferState state = TransferState.Success, double? originBalance = null, double? destinationBalance = null, string description = null)
+    public DecreaseResult(string identify, decimal amount = 0, string dateTime = null,
+        TransferState state = TransferState.Success, decimal? originBalance = null, decimal? destinationBalance = null, string description = null)
     {
         Identify = identify;
         Amount = amount;
@@ -75,11 +75,11 @@ public class DecreaseResult
     #endregion
 
     public string Identify { get; set; }
-    public double Amount { get; set; }
+    public decimal Amount { get; set; }
     public string DateTime { get; set; }
     public TransferState State { get; set; }
-    public double? OriginBalance { get; set; }
-    public double? DestinationBalance { get; set; }
+    public decimal? OriginBalance { get; set; }
+    public decimal? DestinationBalance { get; set; }
     public string Description { get; set; }
 }
 

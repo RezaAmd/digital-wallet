@@ -54,7 +54,7 @@ public class WalletController : ControllerBase
         #region Find
         // Find wallet in database.
         var wallet = await walletService.FindBySeedAsync(model.Seed, safeId);
-        double balance = 0;
+        decimal balance = 0;
         if (wallet != null)
             balance = await walletService.GetBalanceAsync(wallet, cancellationToken);
         #endregion

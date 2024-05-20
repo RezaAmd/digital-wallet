@@ -37,14 +37,14 @@ namespace DigitalWallet.Application.Repositories.Transfer
         /// </summary>
         /// <param name="wallet">Wallet model object.</param>
         /// <returns>Transfer model object.</returns>
-        public async Task<(TransferEntity? Transfer, double Balance)> GetLatestByWalletAsync(WalletEntity wallet, CancellationToken cancellationToken = default)
+        public async Task<(TransferEntity? Transfer, decimal Balance)> GetLatestByWalletAsync(WalletEntity wallet, CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers
                 .OrderBy(t => t.CreatedDateTime)
                 .Where(t => (t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
                 && t.State == TransferState.Success)
                 .LastOrDefaultAsync(cancellationToken);
-            double balance = 0;
+            decimal balance = 0;
             if (transfer != null)
             {
                 if (!transfer.OriginBalance.HasValue && wallet.Id != transfer.DestinationId)
@@ -101,8 +101,8 @@ namespace DigitalWallet.Application.Repositories.Transfer
         /// Get wallet balance from latest transfer.
         /// </summary>
         /// <param name="walletId">Wallet id.</param>
-        /// <returns>Wallet balance as double.</returns>
-        public async Task<double> GetBalanceByIdAsync(WalletEntity wallet,
+        /// <returns>Wallet balance.</returns>
+        public async Task<decimal> GetBalanceByIdAsync(WalletEntity wallet,
             CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers

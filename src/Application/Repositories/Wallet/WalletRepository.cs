@@ -113,7 +113,7 @@ namespace DigitalWallet.Application.Repositories.Wallet
         /// </summary>
         /// <param name="wallet">Wallet model object.</param>
         /// <returns>Wallet balance.</returns>
-        public async Task<double> GetBalanceAsync(WalletEntity wallet,
+        public async Task<decimal> GetBalanceAsync(WalletEntity wallet,
             CancellationToken cancellationToken = default)
         {
             var lastTransfer = await context.Transfers

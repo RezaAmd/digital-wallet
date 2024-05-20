@@ -1,6 +1,4 @@
 ﻿using DigitalWallet.Domain.Enums;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
@@ -8,15 +6,11 @@ namespace DigitalWallet.Domain.Entities.Identity
     {
         public DateTime AssignedDateTime { get; set; }
         public RelatedPermissionType Type { get; set; }
-#nullable enable
         public Guid? RelatedToId { get; set; }
-#nullable disable
-        [ForeignKey("User")]
-        public string UserId { get; set; }
-        public virtual UserEntity User { get; set; } = null;
+        public Guid UserId { get; set; }
+        public Guid RoleId { get; set; }
 
-        [ForeignKey("Role")]
-        public string RoleId { get; set; }
-        public virtual RoleEntity Role { get; set; } = null;
+        public virtual UserEntity User { get; private set; } = null;
+        public virtual RoleEntity Role { get; private set; } = null;
     }
 }

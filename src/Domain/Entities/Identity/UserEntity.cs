@@ -18,6 +18,7 @@ namespace DigitalWallet.Domain.Entities.Identity
         public virtual ICollection<UserRoleEntity> UserRoles { get; private set; } = null;
         public virtual ICollection<SafeEntity> Safes { get; private set; } = null;
         public virtual ICollection<UserPermissionEntity> Permissions { get; set; } = null;
+        public virtual ICollection<WalletEntity> Wallets { get; private set; } = null;
 
         #endregion
 

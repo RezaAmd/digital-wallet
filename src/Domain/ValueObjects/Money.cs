@@ -12,7 +12,7 @@ namespace DigitalWallet.Domain.ValueObjects
         {
             Value = 0;
         }
-        public Money(double amount)
+        public Money(decimal amount)
         {
             if (amount < 0)
                 throw new ArgumentOutOfRangeException("Amout cannot be < 0");
@@ -33,9 +33,9 @@ namespace DigitalWallet.Domain.ValueObjects
 
         #endregion
 
-        public double Value { get; private set; }
+        public decimal Value { get; private set; }
 
-        public Money Increase(double amount)
+        public Money Increase(decimal amount)
         {
             return Value + new Money(amount);
         }
@@ -43,7 +43,7 @@ namespace DigitalWallet.Domain.ValueObjects
         {
             return Value + amount;
         }
-        public Money Decrease(double amount)
+        public Money Decrease(decimal amount)
         {
             // Amount cannot grater than value.
             if (amount > Value)
@@ -64,7 +64,7 @@ namespace DigitalWallet.Domain.ValueObjects
         }
 
         #region Operators
-        protected static bool EqualOperator(double left, Money right)
+        protected static bool EqualOperator(decimal left, Money right)
         {
             if (left is 0 ^ right is null)
             {
@@ -73,15 +73,15 @@ namespace DigitalWallet.Domain.ValueObjects
 
             return left.Equals(right.Value!) != false;
         }
-        protected static bool NotEqualOperator(double left, Money right)
+        protected static bool NotEqualOperator(decimal left, Money right)
         {
             return !(EqualOperator(left, right));
         }
 
         public static Money operator +(Money left, Money right) => new Money(left.Value + right.Value);
         public static Money operator -(Money left, Money right) => new Money(left.Value - right.Value);
-        public static Money operator +(double left, Money right) => new Money(left + right.Value);
-        public static Money operator -(double left, Money right) => new Money(left - right.Value);
+        public static Money operator +(decimal left, Money right) => new Money(left + right.Value);
+        public static Money operator -(decimal left, Money right) => new Money(left - right.Value);
         #endregion
     }
 }

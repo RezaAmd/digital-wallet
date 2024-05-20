@@ -28,7 +28,7 @@ namespace  DigitalWallet.Application.Services.WebService.ZarinPal
         }
         #endregion
 
-        public async Task<(IRestResponse Response, ResultZarinPal<PaymentRequestResultZarinPal> Result)> PaymentRequestAsync(double amount,
+        public async Task<(IRestResponse Response, ResultZarinPal<PaymentRequestResultZarinPal> Result)> PaymentRequestAsync(decimal amount,
             string description, string mobile = null, string email = null)
         {
             var paymentRequestDto = new PatmentRequestZarinPal(amount * 10, description, callbackUrl, mobile, email);
@@ -43,7 +43,7 @@ namespace  DigitalWallet.Application.Services.WebService.ZarinPal
             return (response, result);
         }
 
-        public async Task<(IRestResponse Response, ResultZarinPal<ZarinpalVerifyPaymentResponse> Result)> VerifyPaymentAsync(double amount,
+        public async Task<(IRestResponse Response, ResultZarinPal<ZarinpalVerifyPaymentResponse> Result)> VerifyPaymentAsync(decimal amount,
             string authority, CancellationToken cancellationToken = default)
         {
             var result = new ResultZarinPal<ZarinpalVerifyPaymentResponse>();

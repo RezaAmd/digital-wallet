@@ -31,7 +31,7 @@ namespace DigitalWallet.Application.Repositories.Transfer
         /// Get wallet balance from last transaction.
         /// </summary>
         /// <param name="walletId">Wallet id for get balance.</param>
-        Task<double> GetBalanceByIdAsync(WalletEntity wallet,
+        Task<decimal> GetBalanceByIdAsync(WalletEntity wallet,
             CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace DigitalWallet.Application.Repositories.Transfer
         /// </summary>
         /// <param name="wallet">Wallet object model.</param>
         /// <returns>Transfer model object.</returns>
-        Task<(TransferEntity? Transfer, double Balance)> GetLatestByWalletAsync(WalletEntity wallet,
+        Task<(TransferEntity? Transfer, decimal Balance)> GetLatestByWalletAsync(WalletEntity wallet,
             CancellationToken cancellationToken = default);
 
         /// <summary>

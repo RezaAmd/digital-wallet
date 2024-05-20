@@ -3,14 +3,14 @@
     public class ZarinpalPaymentVerifyParams : ZarinpalBaseAuthorize
     {
         #region Constructors
-        public ZarinpalPaymentVerifyParams(string authority, double amount)
+        public ZarinpalPaymentVerifyParams(string authority, decimal amount)
         {
             this.authority = authority;
             this.amount = amount;
         }
         #endregion
 
-        public double amount { get; set; }
+        public decimal amount { get; set; }
         public string authority { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using DigitalWallet.Domain.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Identity
@@ -10,14 +9,33 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
         {
             b.ToTable("Roles");
 
+            // Name
+            b.Property(r => r.Name)
+                .HasMaxLength(100);
+            b.HasIndex(r => r.Name)
+                .IsUnique();
+
+            // CreatedDateTime
+
+            // Title
+            b.Property(r => r.Title)
+                .IsRequired(false)
+                .HasMaxLength(200);
+
+            // Description
+            b.Property(r => r.Description)
+                .IsRequired(false)
+                .HasMaxLength(500);
+
+            #region Relations
+
             // Each Role can have many entries in the UserRole join table
             b.HasMany(e => e.UserRoles)
                 .WithOne(e => e.Role)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
 
-            b.HasIndex(r => r.Name)
-                .IsUnique();
+            #endregion
         }
     }
 }

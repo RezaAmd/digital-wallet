@@ -58,7 +58,7 @@ namespace DigitalWallet.Application.Repositories.Wallet
         /// </summary>
         /// <param name="wallet">Wallet model object.</param>
         /// <returns>Wallet balance.</returns>
-        Task<double> GetBalanceAsync(WalletEntity wallet,
+        Task<decimal> GetBalanceAsync(WalletEntity wallet,
             CancellationToken cancellationToken = default);
 
         /// <summary>

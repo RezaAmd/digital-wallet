@@ -10,7 +10,7 @@ public class MoneyTests
     [TestCase(15)]
     [TestCase(350000)]
     [TestCase(950000000)]
-    public void InitializeShouldBeCorrectly(double initializeBalance)
+    public void InitializeShouldBeCorrectly(decimal initializeBalance)
     {
         var amount = new Money(initializeBalance);
         amount.Value.Should().Be(initializeBalance);
@@ -21,7 +21,7 @@ public class MoneyTests
     [TestCase(-15)]
     [TestCase(-350000)]
     [TestCase(-950000000)]
-    public void InitializeShouldThrowException(double initializeBalance)
+    public void InitializeShouldThrowException(decimal initializeBalance)
     {
         // Amount should throw ArgumentOutOfRangeException.
         FluentActions.Invoking(() => new Money(initializeBalance))
@@ -36,7 +36,7 @@ public class MoneyTests
     [TestCase(250, 80, 330)]
     [TestCase(4300000, 2750000, 7050000)]
     [TestCase(45650000000, 38770000000, 84420000000)]
-    public void IncreaseShouldCalculateCorrectly(double initializeAmount, double increaseAmount, double balance)
+    public void IncreaseShouldCalculateCorrectly(decimal initializeAmount, decimal increaseAmount, decimal balance)
     {
         var initializeBalance = new Money(initializeAmount);
         initializeBalance = initializeBalance.Increase(increaseAmount);
@@ -48,7 +48,7 @@ public class MoneyTests
     [TestCase(250, 80, 330)]
     [TestCase(6700, 15500, 22200)]
     [TestCase(3750000, 1500000, 5250000)]
-    public void IncreaseShouldCalculateCorrectlyWithMoney(double initializeAmount, double increaseAmount, double balance)
+    public void IncreaseShouldCalculateCorrectlyWithMoney(decimal initializeAmount, decimal increaseAmount, decimal balance)
     {
         var initializeBalance = new Money(initializeAmount);
         initializeBalance = initializeBalance.Increase(new Money(increaseAmount));
@@ -63,7 +63,7 @@ public class MoneyTests
     [TestCase(350000, -81000)]
     [TestCase(2650000, -700000)]
     [TestCase(974000000, -175000000)]
-    public void IncreaseShouldThrowException(double initializeAmount, double cost)
+    public void IncreaseShouldThrowException(decimal initializeAmount, decimal cost)
     {
         var initializeBalance = new Money(initializeAmount);
         FluentActions.Invoking(() => initializeBalance.Increase(cost))
@@ -78,7 +78,7 @@ public class MoneyTests
     [TestCase(350000, -81000)]
     [TestCase(2650000, -700000)]
     [TestCase(974000000, -175000000)]
-    public void IncreaseShouldThrowExceptionWithMoney(double initializeAmount, double cost)
+    public void IncreaseShouldThrowExceptionWithMoney(decimal initializeAmount, decimal cost)
     {
         var initializeBalance = new Money(initializeAmount);
         FluentActions.Invoking(() => initializeBalance.Increase(new Money(cost)))
@@ -92,7 +92,7 @@ public class MoneyTests
     [TestCase(250, 80, 170)]
     [TestCase(4300000, 2750000, 1550000)]
     [TestCase(45650000000, 38770000000, 6880000000)]
-    public void DecreaseShouldCalculateCorrectly(double initializeAmount, double cost, double balance)
+    public void DecreaseShouldCalculateCorrectly(decimal initializeAmount, decimal cost, decimal balance)
     {
         var initializeBalance = new Money(initializeAmount);
         initializeBalance = initializeBalance.Decrease(cost);
@@ -104,7 +104,7 @@ public class MoneyTests
     [TestCase(250, 80, 170)]
     [TestCase(4300000, 2750000, 1550000)]
     [TestCase(45650000000, 38770000000, 6880000000)]
-    public void DecreaseShouldCalculateCorrectlyWithMoney(double initializeAmount, double cost, double balance)
+    public void DecreaseShouldCalculateCorrectlyWithMoney(decimal initializeAmount, decimal cost, decimal balance)
     {
         var initializeBalance = new Money(initializeAmount);
         initializeBalance = initializeBalance.Decrease(new Money(cost));
@@ -115,7 +115,7 @@ public class MoneyTests
     [TestCase(5, 6)]
     [TestCase(0, 8)]
     [TestCase(350000, 480000)]
-    public void DecreaseShouldThrowException(double initializeAmount, double cost)
+    public void DecreaseShouldThrowException(decimal initializeAmount, decimal cost)
     {
         // Initialize amount.
         var initializeBalance = new Money(initializeAmount);
@@ -128,7 +128,7 @@ public class MoneyTests
     [TestCase(5, 6)]
     [TestCase(0, 8)]
     [TestCase(350000, 480000)]
-    public void DecreaseShouldThrowExceptionWithMoney(double initializeAmount, double cost)
+    public void DecreaseShouldThrowExceptionWithMoney(decimal initializeAmount, decimal cost)
     {
         // Initialize amount to 20.
         var initializeBalance = new Money(initializeAmount);
