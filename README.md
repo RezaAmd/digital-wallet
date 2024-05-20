@@ -1,2 +1,2 @@
-# IRTWallet
-Iranian toman wallet for personal use.
+# Digital Wallet
+Virtual wallet for personal use.
