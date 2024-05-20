@@ -18,6 +18,16 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
             builder.HasIndex(s => s.ApiKey)
                 .IsUnique();
 
+            // Password
+            builder.OwnsOne(s => s.Password, s =>
+            {
+                s.Property(p => p.Value)
+                .HasColumnName("Password")
+                .HasMaxLength(256)
+                .IsRequired(false)
+                ;
+            });
+
             // CreatedDateTime
             builder.Property(s => s.CreatedDateTime)
                 .IsRequired();
