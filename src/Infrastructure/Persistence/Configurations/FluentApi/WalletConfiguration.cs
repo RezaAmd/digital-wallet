@@ -9,26 +9,38 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
             builder.ToTable("Wallet", DatabaseSchemaDefaults.Dbo);
 
             // Seed
-            builder.Property(w => w.Seed)
+            builder.Property(b => b.Seed)
                 .IsRequired()
                 .HasMaxLength(200);
 
             // Identifier
-            builder.Property(w => w.Identifier)
+            builder.Property(b => b.Identifier)
                 .IsRequired()
                 .HasMaxLength(50);
 
+            // ApiKey
+            builder.Property(b => b.ApiKey)
+                .IsRequired(false);
+            builder.HasIndex(b => b.ApiKey)
+                .IsUnique();
+
+            // Password
+            builder.OwnsOne(b => b.Password, w =>
+            {
+                w.Property(p => p.Value)
+                .HasColumnName("Password")
+                .HasMaxLength(256)
+                .IsRequired(false)
+                ;
+            });
+
             // CreatedDateTime
-            builder.Property(w => w.CreatedDateTime)
+            builder.Property(b => b.CreatedOn)
                 .IsRequired();
 
             // OwnerId
-            builder.Property(w => w.OwnerId)
+            builder.Property(b => b.OwnerId)
                 .IsRequired();
-
-            // SafeId
-            builder.Property(w => w.SafeId)
-                .IsRequired(false);
 
             #region Relations
 
@@ -36,11 +48,6 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
             builder.HasOne(w => w.Owner)
                 .WithMany(u => u.Wallets)
                 .HasForeignKey(w => w.OwnerId);
-
-            // Safe
-            builder.HasOne(w => w.Safe)
-                .WithMany(s => s.Wallets)
-                .HasForeignKey(w => w.SafeId);
 
             // Deposits
             builder.HasMany(w => w.Deposits)

@@ -1,11 +1,22 @@
 ﻿using DigitalWallet.Domain.Enums;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DigitalWallet.Domain.Entities.Identity
 {
     public class UserPermissionEntity : BaseEntity
     {
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
+        public RelatedPermissionType Type { get; private set; }
+        public Guid? RelatedToId { get; private set; }
+        public Guid UserId { get; private set; }
+        public Guid PermissionId { get; private set; }
+
+        #region Relations
+
+        public virtual UserEntity User { get; private set; }
+        public virtual PermissionEntity Permission { get; private set; }
+
+        #endregion
+
         #region Ctor
 
         UserPermissionEntity() { }
@@ -15,22 +26,9 @@ namespace DigitalWallet.Domain.Entities.Identity
         {
             UserId = userId;
             PermissionId = permissionId;
-            AssignedDateTime = DateTime.Now;
             Type = type;
         }
 
         #endregion
-
-        public DateTime AssignedDateTime { get; set; }
-        public RelatedPermissionType Type { get; set; }
-        public Guid? RelatedToId { get; set; }
-
-        [ForeignKey("User")]
-        public Guid UserId { get; set; }
-        public virtual UserEntity User { get; set; }
-
-        [ForeignKey("Permission")]
-        public Guid PermissionId { get; set; }
-        public virtual PermissionEntity Permission { get; set; }
     }
 }

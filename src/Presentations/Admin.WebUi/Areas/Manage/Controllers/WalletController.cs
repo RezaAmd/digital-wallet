@@ -30,8 +30,8 @@ public class WalletController : Controller
 
         var newWallet = new WalletEntity(model.seed, currentUserId);
 
-        if (model.safeId.HasValue)
-            newWallet.WithSafe(model.safeId.Value);
+        if (model.masterWalletId.HasValue)
+            newWallet.MasterWalletId = model.masterWalletId.Value;
 
         var result = await walletService.CreateAsync(newWallet, cancellationToken);
         if (result.IsSuccess)

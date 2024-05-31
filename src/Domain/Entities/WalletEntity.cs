@@ -1,6 +1,5 @@
 ﻿using DigitalWallet.Domain.Entities.Identity;
-using System;
-using System.Collections.Generic;
+using DigitalWallet.Domain.ValueObjects;
 
 namespace DigitalWallet.Domain.Entities
 {
@@ -8,14 +7,20 @@ namespace DigitalWallet.Domain.Entities
     {
         public string Seed { get; private set; }
         public string Identifier { get; private set; } = DateTime.Now.ToString("fffffmmssHHMM");
-        public DateTime CreatedDateTime { get; private set; } = DateTime.Now;
+        public string ApiKey { get; private set; }
+        public PasswordHash Password { get; private set; }
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
         public Guid OwnerId { get; private set; }
-        public Guid? SafeId { get; private set; } = null;
+        public Guid? MasterWalletId { get; set; }
 
-        public virtual UserEntity? Owner { get; private set; } = null;
-        public virtual SafeEntity? Safe { get; private set; } = null;
-        public virtual ICollection<DepositEntity>? Deposits { get; private set; } = null;
+        #region Relations
 
+        public virtual UserEntity Owner { get; private set; } = null;
+        public virtual ICollection<DepositEntity> Deposits { get; private set; } = null;
+        public virtual WalletEntity MasterWallet { get; private set; } = null;
+        public virtual ICollection<WalletEntity> SubWallets { get; set; } = null;
+
+        #endregion
 
         #region Ctor
 
@@ -29,25 +34,6 @@ namespace DigitalWallet.Domain.Entities
             if (ownerId == Guid.Empty)
                 throw new ArgumentNullException("Wallet Owner id cannot be null.");
             OwnerId = ownerId;
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Connect the wallet to a specific safe.
-        /// </summary>
-        /// <param name="safeId">Safe id to connect.</param>
-        public WalletEntity WithSafe(Guid safeId)
-        {
-            if (safeId == Guid.Empty)
-                throw new ArgumentNullException("Safe id cannot be null");
-            if (SafeId != null && SafeId != safeId)
-                throw new ArgumentException("This wallet is connected with a safe.");
-            // Connect wallet to safe.
-            SafeId = safeId;
-            return this;
         }
 
         #endregion

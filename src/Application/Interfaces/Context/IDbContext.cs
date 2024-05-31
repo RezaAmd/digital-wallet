@@ -1,5 +1,4 @@
-﻿using DigitalWallet.Domain.Entities;
-using DigitalWallet.Domain.Entities.Identity;
+﻿using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace DigitalWallet.Application.Interfaces.Context
@@ -13,7 +12,6 @@ namespace DigitalWallet.Application.Interfaces.Context
         DbSet<RoleEntity> Roles { get; set; }
         DbSet<PermissionEntity> Permissions { get; set; }
 
-        DbSet<SafeEntity> Safes { get; set; }
         DbSet<WalletEntity> Wallets { get; set; }
         DbSet<DepositEntity> Deposits { get; set; }
         DbSet<TransferEntity> Transfers { get; set; }

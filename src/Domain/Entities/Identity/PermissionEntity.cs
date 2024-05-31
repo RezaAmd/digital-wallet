@@ -1,10 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace DigitalWallet.Domain.Entities.Identity
+﻿namespace DigitalWallet.Domain.Entities.Identity
 {
     public class PermissionEntity : BaseEntity
     {
+        public string Name { get; set; } // Unique name.
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
+        public string Title { get; set; } = null;
+        public string Description { get; set; } = null;
+
+        #region Relations
+
+        public virtual ICollection<PermissionRoleEntity> PermissionRoles { get; set; } = null;
+
+        #endregion
+
         #region Ctor
         PermissionEntity() { }
 
@@ -13,15 +21,7 @@ namespace DigitalWallet.Domain.Entities.Identity
             Name = name;
             Title = title;
             Description = description;
-            CreatedDate = DateTime.Now;
         }
         #endregion
-
-        public string Name { get; set; } // Unique name.
-        public DateTime CreatedDate { get; set; }
-        public string Title { get; set; } = null;
-        public string Description { get; set; } = null;
-
-        public virtual ICollection<PermissionRoleEntity>? PermissionRoles { get; set; } = null;
     }
 }

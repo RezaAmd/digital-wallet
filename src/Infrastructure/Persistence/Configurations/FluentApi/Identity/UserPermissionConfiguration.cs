@@ -1,7 +1,4 @@
-﻿
-
-using DigitalWallet.Domain.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using DigitalWallet.Domain.Entities.Identity;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Identity
@@ -10,9 +7,26 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
     {
         public void Configure(EntityTypeBuilder<UserPermissionEntity> b)
         {
-            b.ToTable("UserPermissions");
+            b.ToTable("UserPermission", DatabaseSchemaDefaults.Dbo);
 
-            b.HasKey(w => new { w.UserId, w.PermissionId });
+            // Id
+            b.HasKey(u => u.Id);
+
+            // CreatedOn
+            b.Property(up => up.CreatedOn);
+
+            // Type
+            b.Property(up => up.Type);
+
+            // RelatedToID
+            b.Property(up => up.RelatedToId)
+                .IsRequired(false);
+
+            // UserId
+            b.Property(up => up.UserId);
+
+            // PermissionId
+            b.Property(up => up.PermissionId);
         }
     }
 }

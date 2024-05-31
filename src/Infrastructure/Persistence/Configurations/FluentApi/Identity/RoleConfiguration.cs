@@ -7,7 +7,10 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
     {
         public void Configure(EntityTypeBuilder<RoleEntity> b)
         {
-            b.ToTable("Roles");
+            b.ToTable("Role", DatabaseSchemaDefaults.Dbo);
+
+            // Id
+            b.HasKey(r => r.Id);
 
             // Name
             b.Property(r => r.Name)
@@ -16,6 +19,7 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
                 .IsUnique();
 
             // CreatedDateTime
+            b.Property(r => r.CreatedOn);
 
             // Title
             b.Property(r => r.Title)

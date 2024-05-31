@@ -18,18 +18,6 @@ namespace DigitalWallet.Domain.ValueObjects
                 throw new ArgumentOutOfRangeException("Amout cannot be < 0");
             Value = amount;
         }
-        public Money(long amount)
-        {
-            if (amount < 0)
-                throw new ArgumentOutOfRangeException("Amout cannot be < 0");
-            Value = amount;
-        }
-        public Money(ulong amount)
-        {
-            if (amount < 0)
-                throw new ArgumentOutOfRangeException("Amout cannot be < 0");
-            Value = amount;
-        }
 
         #endregion
 

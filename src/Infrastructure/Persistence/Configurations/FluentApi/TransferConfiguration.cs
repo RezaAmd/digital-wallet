@@ -6,7 +6,7 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
     {
         public void Configure(EntityTypeBuilder<TransferEntity> b)
         {
-            b.ToTable("Transfers", DatabaseSchemaDefaults.Dbo);
+            b.ToTable("Transfer", DatabaseSchemaDefaults.Dbo);
 
             // Identify
             b.Property(t => t.Identify)
@@ -15,7 +15,8 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
                 .IsUnique();
 
             // Amount
-            b.OwnsOne(t => t.Amount, t => {
+            b.OwnsOne(t => t.Amount, t =>
+            {
                 t.Property(a => a.Value)
                 .HasColumnName("Amount")
                 .IsRequired();
@@ -40,8 +41,8 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
             b.Property(t => t.DestinationBalance)
                 .IsRequired();
 
-            // CreatedDateTime
-            b.Property(t => t.CreatedDateTime)
+            // CreatedOn
+            b.Property(t => t.CreatedOn)
                 .IsRequired();
 
             // State
@@ -50,6 +51,7 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
 
             // Description
             b.Property(t => t.Description)
+                .HasMaxLength(500)
                 .IsRequired(false);
 
             #region Relations

@@ -13,8 +13,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-    <Folder Include="Areas\Manage\Models\" />
-  </ItemGroup>
+	  <Compile Remove="Areas\Manage\Models\**" />
+	  <Content Remove="Areas\Manage\Models\**" />
+	  <EmbeddedResource Remove="Areas\Manage\Models\**" />
+	  <None Remove="Areas\Manage\Models\**" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.20.1" />

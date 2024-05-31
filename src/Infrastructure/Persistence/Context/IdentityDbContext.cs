@@ -1,7 +1,5 @@
-﻿using  DigitalWallet.Application.Interfaces.Context;
-using DigitalWallet.Domain.Entities;
+﻿using DigitalWallet.Application.Interfaces.Context;
 using DigitalWallet.Domain.Entities.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +21,6 @@ namespace DigitalWallet.Infrastructure.Persistence.Context
         public virtual DbSet<UserPermissionEntity> UserPermissions { get; set; }
         public virtual DbSet<PermissionRoleEntity> PermissionRoles { get; set; }
         #endregion
-        public virtual DbSet<SafeEntity> Safes { get; set; }
         public virtual DbSet<WalletEntity> Wallets { get; set; }
         public virtual DbSet<DepositEntity> Deposits { get; set; }
         public virtual DbSet<TransferEntity> Transfers { get; set; }

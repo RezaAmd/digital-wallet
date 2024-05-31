@@ -13,9 +13,9 @@ namespace DigitalWallet.Domain.Entities
 
         public Guid DestinationId { get; private set; }
         public decimal DestinationBalance { get; set; }
-        public DateTime CreatedDateTime { get; private set; } = DateTime.Now;
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
         public TransferState State { get; set; } = TransferState.Pending;
-        public string? Description { get; set; } = null;
+        public string? Description { get; private set; } = null;
 
         public virtual WalletEntity? Destination { get; private set; } = null;
 
@@ -32,7 +32,6 @@ namespace DigitalWallet.Domain.Entities
             Description = description;
             OriginType = originType;
             State = state;
-            CreatedDateTime = DateTime.Now;
         }
         public TransferEntity(Money amount, decimal balance,
             Guid originId, Guid destinationId, string? description = null,
@@ -46,7 +45,6 @@ namespace DigitalWallet.Domain.Entities
             Description = description;
             OriginType = originType;
             State = state;
-            CreatedDateTime = DateTime.Now;
         }
         /// <summary>
         /// For deposit transfers.
@@ -58,7 +56,6 @@ namespace DigitalWallet.Domain.Entities
             DestinationBalance = balance;
             DestinationId = destinationId;
             Description = description;
-            CreatedDateTime = DateTime.Now;
             OriginType = TransferOriginType.Deposit;
             State = TransferState.Success;
         }

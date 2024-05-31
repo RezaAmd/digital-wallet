@@ -40,7 +40,7 @@ namespace DigitalWallet.Application.Repositories.Transfer
         public async Task<(TransferEntity? Transfer, decimal Balance)> GetLatestByWalletAsync(WalletEntity wallet, CancellationToken cancellationToken = default)
         {
             var transfer = await context.Transfers
-                .OrderBy(t => t.CreatedDateTime)
+                .OrderBy(t => t.CreatedOn)
                 .Where(t => (t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
                 && t.State == TransferState.Success)
                 .LastOrDefaultAsync(cancellationToken);
@@ -61,7 +61,7 @@ namespace DigitalWallet.Application.Repositories.Transfer
             CancellationToken cancellationToken = default)
         {
             var transfers = await context.Transfers
-                .OrderBy(t => t.CreatedDateTime)
+                .OrderBy(t => t.CreatedOn)
                 .Where(t => t.OriginId == firstId || t.DestinationId == firstId ||
                 t.OriginId == secondId || t.DestinationId == secondId)
                 .ToListAsync(cancellationToken);
@@ -82,16 +82,16 @@ namespace DigitalWallet.Application.Repositories.Transfer
             CancellationToken cancellationToken = default)
         {
             var transfers = context.Transfers
-                .OrderByDescending(x => x.CreatedDateTime)
+                .OrderByDescending(x => x.CreatedOn)
                 .AsNoTracking();
 
             #region fillters
             if (walletId is not null)
                 transfers = transfers.Where(t => t.OriginId == walletId || t.DestinationId == walletId);
             if (startDate != default)
-                transfers = transfers.Where(t => t.CreatedDateTime >= startDate);
+                transfers = transfers.Where(t => t.CreatedOn >= startDate);
             if (endDate != default)
-                transfers = transfers.Where(t => t.CreatedDateTime <= endDate);
+                transfers = transfers.Where(t => t.CreatedOn <= endDate);
             #endregion
 
             return await transfers.PaginatedListAsync(page, pageSize, cancellationToken);
@@ -107,7 +107,7 @@ namespace DigitalWallet.Application.Repositories.Transfer
         {
             var transfer = await context.Transfers
                 .Where(t => t.OriginId == wallet.Id || t.DestinationId == wallet.Id)
-                .OrderBy(t => t.CreatedDateTime)
+                .OrderBy(t => t.CreatedOn)
                 .LastOrDefaultAsync(cancellationToken);
             // Were any transaction found?
             if (transfer != null)

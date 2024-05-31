@@ -61,11 +61,11 @@ namespace DigitalWallet.Application.Repositories.Deposit
             // Orderby
             if (isOrderByDesending)
             {
-                query = query.OrderByDescending(d => d.DateTime);
+                query = query.OrderByDescending(d => d.CreatedOn);
             }
             else
             {
-                query = query.OrderBy(d => d.DateTime);
+                query = query.OrderBy(d => d.CreatedOn);
             }
 
             return await query

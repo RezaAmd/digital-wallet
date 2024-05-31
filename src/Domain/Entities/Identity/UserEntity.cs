@@ -10,13 +10,12 @@ namespace DigitalWallet.Domain.Entities.Identity
         public bool IsPhoneNumberConfirmed { get; set; } = false;
         public PasswordHash Password { get; set; } = null;
         public Fullname Fullname { get; set; } = null;
-        public DateTime JoinedDate { get; private set; } = DateTime.Now;
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
         public bool IsBanned { get; set; } = false;
 
         #region Relation
 
         public virtual ICollection<UserRoleEntity> UserRoles { get; private set; } = null;
-        public virtual ICollection<SafeEntity> Safes { get; private set; } = null;
         public virtual ICollection<UserPermissionEntity> Permissions { get; set; } = null;
         public virtual ICollection<WalletEntity> Wallets { get; private set; } = null;
 

@@ -88,7 +88,7 @@ namespace DigitalWallet.Application.Dao.Identity
         public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(TypeAdapterConfig? config = null, int page = 1, int pageSize = 20,
             bool withRoles = false, string? keyword = null, bool tracking = false, CancellationToken cancellationToken = new CancellationToken())
         {
-            var init = context.Users.OrderBy(u => u.JoinedDate).AsQueryable();
+            var init = context.Users.OrderBy(u => u.CreatedOn).AsQueryable();
 
             if (!tracking)
                 init = init.AsNoTracking();

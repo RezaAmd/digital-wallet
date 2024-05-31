@@ -75,7 +75,7 @@ public class WalletController : ControllerBase
         var result = new WalletDetailVM();
         result.Id = wallet.Id;
         result.Balance = balance;
-        result.CreatedDateTime = new PersianDateTime(wallet.CreatedDateTime).ToString("dddd, dd MMMM yyyy");
+        result.CreatedDateTime = new PersianDateTime(wallet.CreatedOn).ToString("dddd, dd MMMM yyyy");
         #endregion
 
         return Ok(result);
@@ -130,7 +130,7 @@ public class WalletController : ControllerBase
             var newTransfer = new TransferEntity(new Money(model.Amount), originId, model.WalletId, model.Description, state: TransferState.Failed);
             // Create a result.
             var result = new IncreaseResult(newTransfer.Identify, model.Amount,
-                new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
+                new PersianDateTime(newTransfer.CreatedOn).ToString("dddd, dd MMMM yyyy"),
                 newTransfer.State);
             // Fetch origin wallet balance.
             var originLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.first);
@@ -194,7 +194,7 @@ public class WalletController : ControllerBase
                 var newTransfer = new TransferEntity(new Money(model.Amount), model.WalletId, destinationId, model.Description, state: TransferState.Failed);
                 // Create a result.
                 var result = new DecreaseResult(newTransfer.Identify, model.Amount,
-                    new PersianDateTime(newTransfer.CreatedDateTime).ToString("dddd, dd MMMM yyyy"),
+                    new PersianDateTime(newTransfer.CreatedOn).ToString("dddd, dd MMMM yyyy"),
                     newTransfer.State);
                 // Fetch origin wallet balance.
                 var originLatestTransfer = await transferService.GetLatestByWalletAsync(wallets.first);

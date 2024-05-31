@@ -7,10 +7,10 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
     {
         public void Configure(EntityTypeBuilder<UserRoleEntity> b)
         {
-            b.ToTable("UserRoles");
+            b.ToTable("UserRole", DatabaseSchemaDefaults.Dbo);
 
             // AssignedDateTime
-            b.Property(ur => ur.AssignedDateTime);
+            b.Property(ur => ur.CreatedOn);
 
             // Type
             b.Property(ur => ur.Type);

@@ -6,15 +6,16 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
     {
         public void Configure(EntityTypeBuilder<DepositEntity> b)
         {
-            b.ToTable("Deposits", DatabaseSchemaDefaults.Dbo);
+            b.ToTable("Deposit", DatabaseSchemaDefaults.Dbo);
 
             // Id
-            b.HasIndex(d => d.Id)
-                .IsUnique();
+            b.HasKey(x => x.Id);
 
             // TraceId
             b.Property(w => w.TraceId)
                 .HasMaxLength(200);
+            b.HasIndex(d => d.TraceId)
+                .IsUnique();
 
             // Authority
             b.Property(w => w.Authority)
@@ -37,7 +38,7 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi
                 .HasMaxLength(500);
 
             // DateTime
-            b.Property(w => w.DateTime)
+            b.Property(w => w.CreatedOn)
                 .IsRequired();
 
             // DestinationId - Wallet

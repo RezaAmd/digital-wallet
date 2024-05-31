@@ -54,7 +54,7 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
             });
 
             // JoinedDate
-            b.Property(u => u.JoinedDate)
+            b.Property(u => u.CreatedOn)
                 .ValueGeneratedOnAdd()
                 .IsRequired();
 
@@ -70,11 +70,6 @@ namespace DigitalWallet.Infrastructure.Persistence.Configurations.FluentApi.Iden
                 .WithOne(e => e.User)
                 .HasForeignKey(ur => ur.UserId)
                 .IsRequired();
-
-            // Safes - (OneToMany)
-            b.HasMany(u => u.Safes)
-                .WithOne(s => s.Owner)
-                .HasForeignKey(s => s.OwnerId);
 
             #endregion
         }

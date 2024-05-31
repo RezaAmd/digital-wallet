@@ -11,7 +11,7 @@ namespace DigitalWallet.Domain.Entities
         public string RefId { get; set; } // Refrence id, Track id -> on success payment from bank!
         public Money Amount { get; set; }
         public string Callback { get; set; }
-        public DateTime DateTime { get; private set; } = DateTime.Now;
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
         public DepositState State { get; set; }
         public Guid DestinationId { get; set; }
 
@@ -30,7 +30,6 @@ namespace DigitalWallet.Domain.Entities
             Amount = amount;
             TraceId = traceId;
             Authority = authority;
-            DateTime = DateTime.Now;
             DestinationId = destinationId;
             State = state;
             Callback = callback;

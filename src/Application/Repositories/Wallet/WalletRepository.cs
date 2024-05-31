@@ -22,15 +22,15 @@ namespace DigitalWallet.Application.Repositories.Wallet
         /// Get all wallets.
         /// </summary>
         /// <param name="safeId">Bank id for get wallets of specific bank.</param>
-        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(Guid? safeId = null, int page = 1, int pageSize = 10,
+        public async Task<PaginatedList<TDestination>> GetAllAsync<TDestination>(Guid? masterWalletId = null, int page = 1, int pageSize = 10,
             CancellationToken cancellationToken = default, TypeAdapterConfig? config = null)
         {
-            var walletsQuery = context.Wallets.OrderBy(w => w.CreatedDateTime)
+            var walletsQuery = context.Wallets.OrderBy(w => w.CreatedOn)
                 .AsQueryable();
-            if (safeId is not null)
-                walletsQuery = walletsQuery.Where(b => b.SafeId == safeId);
+            if (masterWalletId is not null)
+                walletsQuery = walletsQuery.Where(b => b.MasterWalletId == masterWalletId);
             else
-                walletsQuery = walletsQuery.Where(w => w.SafeId == null);
+                walletsQuery = walletsQuery.Where(w => w.MasterWalletId == null);
             return await walletsQuery.PaginatedListAsync<WalletEntity, TDestination>(page, pageSize, cancellationToken, config);
         }
 
@@ -40,13 +40,13 @@ namespace DigitalWallet.Application.Repositories.Wallet
         /// <param name="seed">Wallet seed value.</param>
         /// <param name="safeId">specific bank id.</param>
         /// <returns>Wallet model object.</returns>
-        public async Task<WalletEntity?> FindBySeedAsync(string seed, Guid? safeId = null,
+        public async Task<WalletEntity?> FindBySeedAsync(string seed, Guid? walletId = null,
             CancellationToken cancellationToken = default)
         {
             var wallet = context.Wallets.Where(w => w.Seed == seed);
             #region Filter
-            if (safeId is not null || safeId != Guid.Empty)
-                wallet = wallet.Where(w => w.SafeId == safeId);
+            if (walletId is not null || walletId != Guid.Empty)
+                wallet = wallet.Where(w => w.MasterWalletId == walletId);
             #endregion
             return await wallet.FirstOrDefaultAsync(cancellationToken);
         }
@@ -118,7 +118,7 @@ namespace DigitalWallet.Application.Repositories.Wallet
         {
             var lastTransfer = await context.Transfers
                 .Where(w => w.OriginId == wallet.Id || w.DestinationId == wallet.Id)
-                .OrderBy(t => t.CreatedDateTime)
+                .OrderBy(t => t.CreatedOn)
                 .FirstOrDefaultAsync(cancellationToken);
             if (lastTransfer != null)
                 return lastTransfer.DestinationBalance;
